@@ -88,3 +88,6 @@ fabric.properties
 
 # virtual machine crash logs
 hs_err_pid*
+
+# windows stuff
+*.ini
