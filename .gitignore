@@ -91,3 +91,4 @@ hs_err_pid*
 
 # windows stuff
 *.ini
+/build/
