@@ -9,11 +9,11 @@ public class Player {
         return false;
     }
 
-    public boolean hit(int a, int b){
+    public boolean hit(int x, int y){
         return false;
     }
 
-    public void placeShips(){
+    public void placeShips(){//in gui aufrufen
 
     }
 

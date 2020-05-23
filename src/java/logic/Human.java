@@ -1,6 +1,6 @@
 package logic;
 
-public class Human {
+public class Human extends LocalPlayer {
 
     public boolean doWhatYouHaveToDo(){
         return false;

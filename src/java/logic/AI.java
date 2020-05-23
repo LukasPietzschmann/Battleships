@@ -1,10 +1,11 @@
 package logic;
 
-public class AI {
+
+public class AI extends LocalPlayer {
 
     private Difficulty difficulty;
 
-    Public void AI(Logic i, int a, String n, Difficulty d){
+    public void AI(Logic l, int a, String n, Difficulty d){
 
     }
 

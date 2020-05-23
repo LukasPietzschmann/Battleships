@@ -1,6 +1,6 @@
 package logic;
 
-public class LocalPlayer {
+public class LocalPlayer extends Player {
 
     public boolean doWhatYouHaveToDo(){
         return false;
@@ -10,15 +10,15 @@ public class LocalPlayer {
         return false;
     }
 
-    public void LocalPlayer(Logic l, int , String name){
+    public void LocalPlayer(Logic l, int a, String name){
 
     }
 
-    public void placeShips(){
+    public void placeShips(){//bekomme x und y werte wo die schiffe landen
 
     }
 
-    public void randomShipPlacment(){
+    public void randomShipPlacment(){//random zahlen x und y erzeugen für alle boote
 
     }
 }
