@@ -6,7 +6,7 @@ public class Human extends LocalPlayer {
         return false;
     }
 
-    public void Human(Logic l,  int i, String n){
+    public void Human(Logic l,  int size, String name){
 
     }
 

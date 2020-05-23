@@ -1,5 +1,7 @@
 package logic;
 
+import logic.AI.*;
+
 public class Logic {
 
     public void Logic(Difficulty difficulty01, Difficulty difficulty02, int size){
@@ -14,7 +16,7 @@ public class Logic {
 
     }
 
-    public boolean shoot(int fieldNumberN, int fieldNUmberM, Player){
+    public boolean shoot(int x, int y, Player player){
         return false;
     }
 

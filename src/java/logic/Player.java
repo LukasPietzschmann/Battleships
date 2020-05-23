@@ -17,7 +17,8 @@ public class Player {
 
     }
 
-    public void Player(Logic l, String n){
-
+    public void Player(Logic logic, String name){
+        this.logic = logic;
+        this.name = name;
     }
 }

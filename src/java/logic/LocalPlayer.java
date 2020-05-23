@@ -6,11 +6,11 @@ public class LocalPlayer extends Player {
         return false;
     }
 
-    public boolean hit(int a, int b){
+    public boolean hit(int x, int y){
         return false;
     }
 
-    public void LocalPlayer(Logic l, int a, String name){
+    public void LocalPlayer(Logic l, int size, String name){
 
     }
 
