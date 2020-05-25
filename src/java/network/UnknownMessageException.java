@@ -1,7 +1,7 @@
 package network;
 
 public class UnknownMessageException extends Exception {
-	private String message;
+	private final String message;
 	
 	public UnknownMessageException(String message) {
 		this.message = message;

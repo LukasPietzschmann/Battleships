@@ -1,7 +1,7 @@
 package network;
 
 public class UnexpectedMessageException extends Exception {
-	Message message;
+	final Message message;
 	
 	public UnexpectedMessageException(Message message) {
 		this.message = message;
