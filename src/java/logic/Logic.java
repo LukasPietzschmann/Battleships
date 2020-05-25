@@ -23,4 +23,8 @@ public class Logic {
     public void startGame(){
 
     }
+    
+    public void ready(Player player){
+    
+    }
 }

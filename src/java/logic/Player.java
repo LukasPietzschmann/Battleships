@@ -16,6 +16,10 @@ public class Player {
     public void placeShips(){//in gui aufrufen
 
     }
+    
+    public void ready(){
+    
+    }
 
     public void Player(Logic logic, String name){
         this.logic = logic;
