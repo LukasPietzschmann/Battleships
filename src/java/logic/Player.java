@@ -1,23 +1,24 @@
 package logic;
 
-public class Player {
+import java.util.Random;
+
+public abstract class Player {
 
     protected Logic logic;
     protected String name;
 
-    public boolean doWhatYouHaveToDo(){
-        return false;
+
+    public Player(Logic l, String n) {
+        logic = l;
+        name = n;
     }
 
-    public boolean hit(int x, int y){
-        return false;
-    }
+    public abstract boolean doWhatYouHaveToDo();
 
-    public void placeShips(){//in gui aufrufen
+    public abstract Ship hit(int x, int y);
 
-    }
+    public abstract void placeShips();
 
-    public void Player(Logic l, String n){
+    public abstract boolean isAlive();
 
-    }
 }
