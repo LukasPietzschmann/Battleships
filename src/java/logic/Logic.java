@@ -16,8 +16,8 @@ public class Logic {
 
     }
 
-    public boolean shoot(int x, int y, Player player){
-        return false;
+    public Ship shoot(int x, int y, Player player){
+        return null;
     }
 
     public void startGame(){

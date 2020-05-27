@@ -91,3 +91,5 @@ hs_err_pid*
 
 # windows stuff
 *.ini
+.idea/CamelCaseConfigNew.xml
+.idea/inspectionProfiles/

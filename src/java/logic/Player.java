@@ -20,6 +20,10 @@ public class Player {
     public void ready(){
     
     }
+    
+    public boolean isAlive() {
+        return false;
+    }
 
     public void Player(Logic logic, String name){
         this.logic = logic;
