@@ -17,7 +17,7 @@ public class Logic {
 
     }
 
-    public boolean shoot(int x, int y, Player player){
+    public Ship shoot(int x, int y, Player player){
         if(player == player01){
             return player02.hit(x, y);
         }
