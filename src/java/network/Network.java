@@ -15,6 +15,10 @@ public class Network extends Player {
 	public static final String LOAD = "LOAD";
 	private NetworkCommunication networkPartner;
 	
+	public Network(Logic l, String n) {
+		super(l, n);
+	}
+	
 	@Override
 	public boolean doWhatYouHaveToDo() {
 		// warte bis gegner geschossen hat
@@ -39,7 +43,7 @@ public class Network extends Player {
 	}
 	
 	@Override
-	public boolean hit(int x, int y) {
+	public Ship hit(int x, int y) {
 		networkPartner.sendMessage(String.format("%s %d %d\n", SHOOT, y, x));
 		Message m = null;
 		try {
@@ -62,11 +66,6 @@ public class Network extends Player {
 		}catch(UnknownMessageException | UnexpectedMessageException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	@Override
-	public void ready() {
-		networkPartner.sendMessage(String.format("%s\n", CONFIRM));
 	}
 	
 	@Override
