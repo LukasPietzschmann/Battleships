@@ -1,8 +1,5 @@
 package logic;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 /**
  * Die Klasse Player modelliert einen Spieler auf der höchsten Abstraktionsebene.
  */
@@ -18,12 +15,12 @@ public abstract class Player {
 	protected String name;
 	
 	/**
-	 * @param l "Zurück-Referenz" auf das Logik Objekt.
-	 * @param n Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
+	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
+	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
 	 */
-	public Player(Logic l, String n) {
-		logic = l;
-		name = n;
+	public Player(Logic logic, String name) {
+		this.logic = logic;
+		this.name = name;
 	}
 	
 	/**

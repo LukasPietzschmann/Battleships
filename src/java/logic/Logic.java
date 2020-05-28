@@ -1,5 +1,7 @@
 package logic;
 
+import network.Network;
+
 /**
  * Die Klasse Logik steuert den kompletten Spielablauf.
  */
@@ -8,47 +10,74 @@ public class Logic {
 	/**
 	 * Referenz auf einen der beiden Spieler.
 	 */
-	private Player player01;
+	private Player ownPlayer;
 	
 	/**
 	 * Referenz auf einen der beiden Spieler.
 	 */
-	private Player player02;
+	private Player oppPlayer;
 	
 	/**
-	 * Konstruktor, falls zwei {@link AI} gegeneinander spielen.
+	 * Konstruktor, falls eine {@link AI} gegen einen Gegner übers Netzwerk spielt und man selbst der Client ist.
 	 *
-	 * @param difficulty01 Die Schwierigkeitsstufe der einen AI.
-	 * @param name01 Der Name der ersten AI.
-	 * @param difficulty02 Die Schwierigkeitsstufe der anderen AI.
-	 * @param name02 Der Name der zweiten AI.
-	 * @param size Die Größe des Spielfelds.
-	 */
-	public Logic(AI.Difficulty difficulty01, String name01, AI.Difficulty difficulty02, String name02, int size) {
-	
-	}
-	
-	/**
-	 * Konstruktor, falls zwei eine {@link AI} gegeneinander einen {@link Human} spielt.
-	 *
-	 * @param difficulty Die Schwierigkeitsstufe der AI.
 	 * @param nameAI Der Name der AI.
-	 * @param nameHuman Der Name des Spielers.
-	 * @param size Die Größe des Spielfelds.
+	 * @param nameNW Der Name des Gegners.
+	 * @param difficulty Die Schwierigkeit der AI.
+	 * @param IP Die IP Adresse des Servers.
 	 */
-	public Logic(AI.Difficulty difficulty, String nameAI, String nameHuman, int size) {
-	
+	public Logic(String nameAI, String nameNW, AI.Difficulty difficulty, String IP) {
+		oppPlayer = new Network(this, nameNW, IP);
+		ownPlayer = new AI(AI.Difficulty.easy, this, ((Network) oppPlayer).getSize(), nameNW);
 	}
 	
 	/**
-	 * Konstruktor, falls zwei {@link Human} gegeneinander spielen.
+	 * Konstruktor, falls eine {@link AI} gegen einen Gegner übers Netzwerk spielt und man selbst der Server ist.
 	 *
-	 * @param name01 Der Name des ersten Spielers.
-	 * @param name02 Der Name des zweiten Spielers.
+	 * @param nameAI Der Name der AI.
+	 * @param nameNW Der Name des Gegners.
+	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param size Die Größe des Spielfelds.
 	 */
-	public Logic(String name01, String name02, int size) {
+	public Logic(String nameAI, String nameNW, AI.Difficulty difficulty, int size) {
+		ownPlayer = new AI(difficulty, this, size, nameAI);
+		oppPlayer = new Network(this, nameNW, size);
+	}
 	
+	/**
+	 * Konstruktor, falls eine {@link AI} gegen einen {@link Human} spielt.
+	 *
+	 * @param nameAI Der Name der AI.
+	 * @param namePL Der Name des Spielers.
+	 * @param difficulty Die Schwierigkeit der AI.
+	 * @param size Die Größe des Spielfelds.
+	 */
+	public Logic(String nameAI, String namePL, int size, AI.Difficulty difficulty) {
+		ownPlayer = new Human(this, size, namePL);
+		oppPlayer = new AI(difficulty, this, size, nameAI);
+	}
+	
+	/**
+	 * Konstruktor, falls ein {@link Human} gegen einen Gegner übers Netzwerk spielt und man selbst der Client ist.
+	 *
+	 * @param namePl Der Name des Spielers.
+	 * @param nameNW Der Name des Gegners.
+	 * @param IP Die IP Adresse des Servers.
+	 */
+	public Logic(String namePl, String nameNW, String IP) {
+		oppPlayer = new Network(this, nameNW, IP);
+		ownPlayer = new Human(this, ((Network) oppPlayer).getSize(), namePl);
+	}
+	
+	/**
+	 * Konstruktor, falls ein {@link Human} gegen einen Gegner übers Netzwerk spielt und man selbst der Server ist.
+	 *
+	 * @param namePl Der Name des Spielers.
+	 * @param nameNW Der Name des Gegners.
+	 * @param size Die Größe des Spielfelds
+	 */
+	public Logic(String namePl, String nameNW, int size) {
+		ownPlayer = new Human(this, size, namePl);
+		oppPlayer = new Network(this, nameNW, size);
 	}
 	
 	/**
@@ -57,13 +86,13 @@ public class Logic {
 	 * @param x x-Koordinate auf die geschossen wird.
 	 * @param y y-Koordinate auf die geschossen wird.
 	 * @param player Referenz auf den schießenden Spieler.
-	 * @return {@code null}, falls nicht getroffen wurde. Das konkrete {@link Ship}, falls getroffen wurde.
+	 * @return {@code null}, falls nicht getroffen wurde. Das konkrete {@link Ship},falls getroffen wurde.
 	 */
 	public Ship shoot(int x, int y, Player player) {
-		if(player == player01) {
-			return player02.hit(x, y);
+		if(player == ownPlayer) {
+			return oppPlayer.hit(x, y);
 		}else {
-			return player01.hit(x, y);
+			return ownPlayer.hit(x, y);
 		}
 	}
 	

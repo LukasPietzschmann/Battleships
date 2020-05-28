@@ -33,9 +33,9 @@ public class Map {
 	public void dump() {
 		for(MapTile[] mapTiles : map) {
 			System.out.println("|");
-			for(int j = 0; j < mapTiles.length; j++) {
+			for(MapTile tile : mapTiles) {
 				String s = "";
-				switch(mapTiles[j].stat) {
+				switch(tile.stat) {
 					case MapTile.SHIP:
 						s = "S";
 						break;
