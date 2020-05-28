@@ -12,12 +12,13 @@ public class Message {
 	public static final int COL_POS = 1;
 	public static final int ANSWER_POS = 0;
 	public static final int ID_POS = 0;
+	
+	private String msg;
 	private String type;
 	private int[] args;
 	
 	public Message(String message) throws UnknownMessageException {
-		//TODO test
-		
+		msg = message;
 		String[] splitted = message.split(" ");
 		String msgType = splitted[0];
 		
@@ -52,6 +53,10 @@ public class Message {
 	
 	public int[] getArgs() {
 		return args;
+	}
+	
+	public String getMessage() {
+		return msg;
 	}
 	
 	@Override
