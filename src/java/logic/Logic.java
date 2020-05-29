@@ -88,7 +88,7 @@ public class Logic {
 	 * @param player Referenz auf den schießenden Spieler.
 	 * @return {@code null}, falls nicht getroffen wurde. Das konkrete {@link Ship},falls getroffen wurde.
 	 */
-	public boolean shoot(int x, int y, Player player) {
+	public Ship shoot(int x, int y, Player player) {
 		if(player == ownPlayer) {
 			return oppPlayer.hit(x, y);
 		}else {
