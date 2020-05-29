@@ -2,6 +2,8 @@ package logic;
 
 import network.Network;
 
+import java.util.ArrayList;
+
 /**
  * Die Klasse Logik steuert den kompletten Spielablauf.
  */
@@ -100,6 +102,39 @@ public class Logic {
 	 * Startet das Spiel.
 	 */
 	public void startGame() {
+		// grobe Implementation
+		// kannst liebend gerne anders schreiben
+		boolean hit;
+		
+		Player currPlayer = ownPlayer;
+		Player otherPlayer = oppPlayer;
+		
+		while(true) {
+			hit = true;
+			while(hit) {
+				if(!otherPlayer.isAlive()) {
+					System.out.println(String.format("%s hat gewonnen!!", currPlayer.name));
+				}
+				
+				hit = currPlayer.doWhatYouHaveToDo();
+				System.out.println(otherPlayer.name);
+				//otherPlayer.dumpMap();
+				System.out.println("\n");
+			}
+			
+			Player temp = currPlayer;
+			currPlayer = otherPlayer;
+			otherPlayer = temp;
+		}
+	}
 	
+	/**
+	 * Gibt alle Schiffe zurück, die platziert werden dürfen.
+	 *
+	 * @return Eine Liste an Schiffen, die platziert werden können.
+	 */
+	public ArrayList<Ship> getAvailableShips() {
+		//TODO implement
+		return new ArrayList<>();
 	}
 }
