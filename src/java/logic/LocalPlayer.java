@@ -26,8 +26,8 @@ public abstract class LocalPlayer extends Player {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Ship hit(int x, int y) {
-		return map.hit(x, y);
+	public boolean hit(int x, int y) {
+		return map.hit(x, y) != null;
 	}
 	
 	/**
