@@ -37,7 +37,7 @@ public abstract class Player {
 	 * @param y Die y-Koordinate des Schusses
 	 * @return {@code null}, falls nicht getroffen wurde. Das konkrete {@link Ship}, falls getroffen wurde.
 	 */
-	public abstract boolean hit(int x, int y);
+	public abstract Ship hit(int x, int y);
 	
 	/**
 	 * Weißt den Spieler darauf hin, dass er an der Reihe ist seine Schiffe zu platzieren.
