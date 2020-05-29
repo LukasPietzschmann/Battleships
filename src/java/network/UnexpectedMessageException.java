@@ -1,6 +1,6 @@
 package network;
 
-public class UnexpectedMessageException extends Exception {
+public class UnexpectedMessageException extends RuntimeException {
 	final Message message;
 	
 	public UnexpectedMessageException(Message message) {
@@ -9,6 +9,6 @@ public class UnexpectedMessageException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		return String.format("The Message-Type %s was not expected!", message.whatKindOfStringIsThis());
+		return String.format("The Message-Type %s was not expected!", message.getMessageType());
 	}
 }

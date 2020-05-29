@@ -47,7 +47,7 @@ public class Message {
 		}else throw new UnknownMessageException(message);
 	}
 	
-	public String whatKindOfStringIsThis() {
+	public String getMessageType() {
 		return type;
 	}
 	

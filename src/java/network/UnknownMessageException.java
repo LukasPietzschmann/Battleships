@@ -1,6 +1,6 @@
 package network;
 
-public class UnknownMessageException extends Exception {
+public class UnknownMessageException extends RuntimeException {
 	private final String message;
 	
 	public UnknownMessageException(String message) {
