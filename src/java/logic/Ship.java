@@ -58,6 +58,20 @@ public class Ship {
 	}
 	
 	/**
+	 * Erzeugt ein {@link Ship} welches bereitzs versenkt wurde.
+	 * @param x x-Koordinate des Schiffs.
+	 * @param y y-Koordinate des Schiffs.
+	 * @return Ein bereits versenktes Schiff.
+	 */
+	public static Ship sunkenShip(int x, int y) {
+		int size = 5;
+		Ship ship = new Ship(x, y, Direction.north, size);
+		ship.hits = size;
+		
+		return ship;
+	}
+	
+	/**
 	 * Copy-Konstruktor.
 	 *
 	 * @param ship Das zu kopierende Schiff.
