@@ -5,6 +5,7 @@ import logic.Player;
 import logic.Ship;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Die Klasse Network modelliert einen Spieler an einem anderen Computer.
@@ -47,10 +48,27 @@ public class Network extends Player {
 	 */
 	private NetworkCommunication networkPartner;
 	/**
-	 * Die Größe des Spielfelds.
+	 * Die Größe des Spielfelds. Wird nur gesetzt, falls man selbst der Client ist.
 	 */
 	private int size;
+	/**
+	 * Alle zu platzierenden Shiffe. Werden nur gesetzt, falls man selbst der Client ist.
+	 */
+	private ArrayList<Ship> ships;
 	
+	/**
+	 * Die Anzahl aller noch lebender Schiffe.
+	 */
+	private int shipCount;
+	
+	/**
+	 * Der Konstruktor, falls man selbst der Server ist.
+	 *
+	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
+	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
+	 * @param size Die Größe des Spielfelds.
+	 * @throws IOException Falls der Server nicht erstellt werden kann.
+	 */
 	public Network(Logic logic, String name, int size) throws IOException {
 		super(logic, name);
 		networkPartner = new Server(PORT);
@@ -62,19 +80,39 @@ public class Network extends Player {
 		// jetzt sind wir dran mit Schiffe platzieren
 	}
 	
+	/**
+	 * Konstruktor, falls man selbst der Client ist.
+	 *
+	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
+	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
+	 * @param ip Die IP-Adresse des Servers.
+	 */
 	public Network(Logic logic, String name, String ip) {
 		super(logic, name);
 		networkPartner = new Client(ip, PORT);
 		Message m = new Message(networkPartner.recieveMessage());
 		if(!m.getMessageType().equals(SETUP)) throw new UnexpectedMessageException(m);
 		
-		// TODO size und Shiffe in der Logik setzen
 		size = m.getArgs()[Message.SIZE_POS];
+		
+		ships = new ArrayList<>();
+		int[] posis = new int[] {Message.SHIPS2_POS, Message.SHIPS3_POS, Message.SHIPS4_POS, Message.SHIPS5_POS};
+		for(int i = 0; i < posis.length; i++) {
+			for(int j = 0; j < m.getArgs()[posis[i]]; j++) {
+				//FIXME gibt vllt Fehler, da die selben Schiffe eingefügt werden. (equals und hasCode in Ship)
+				ships.add(new Ship(0, 0, Ship.Direction.north, i + 2));
+			}
+		}
+		shipCount = ships.size();
 		networkPartner.sendMessage(CONFIRM);
 	}
 	
 	public int getSize() {
 		return size;
+	}
+	
+	public ArrayList<Ship> getShips() {
+		return ships;
 	}
 	
 	@Override
@@ -107,7 +145,8 @@ public class Network extends Player {
 		// wenn hier false dann pass senden
 		int answ = m.getArgs()[Message.ANSWER_POS];
 		if(answ == 0) networkPartner.sendMessage(String.format("%s", PASS));
-		return answ != 0;
+		
+		return Ship.sunkenShip(x, y);
 	}
 	
 	@Override
@@ -119,6 +158,6 @@ public class Network extends Player {
 	
 	@Override
 	public boolean isAlive() {
-		return true;
+		return shipCount > 0;
 	}
 }
