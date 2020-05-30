@@ -4,6 +4,9 @@ public class GuiTester {
 	
 	public static int gridSize = 10;
 	public static String theme = "Battleships";
+	public static String themeIdentifierPlural = "Schiffe";
+	public static String themeIdentifierSingular = "Schiff";
+	public static boolean soundPlaying = false;
 	
 	public static int fiveFieldElementCount = 1;
 	public static int fourFieldElementCount = 2;
@@ -21,8 +24,7 @@ public class GuiTester {
 	public static String twoFieldElementName;
 	
 	public static void main(String[] args) {
-		
-		new MainWindow().setUpMainWindow();
-		
+		MainWindow main = new MainWindow();
+		main.setUpMainWindow();
 	}
 }	

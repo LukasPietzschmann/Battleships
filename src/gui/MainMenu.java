@@ -5,24 +5,58 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 public class MainMenu {
 	
 	private JFrame frame;
 	private JPanel panel = new JPanel();
+	private JPanel themeIconTitle = new JPanel();
+		private JPanel themeIconPanel = new JPanel();
 	private JPanel modes = new JPanel();
+	private JPanel title = new JPanel();
+		JLabel themeTitle = new JLabel();
+	
 	private JPanel settings = new JPanel();
+	
 		private JPanel icons = new JPanel();
 			private ImageIcon fiveFieldElementIconFromSide;
 			private ImageIcon fourFieldElementIconFromSide;
 			private ImageIcon threeFieldElementIconFromSide;
 			private ImageIcon twoFieldElementIconFromSide;
+			private JLabel fiveFieldElementIcon = new JLabel();
+			private JLabel fourFieldElementIcon = new JLabel();
+			private JLabel threeFieldElementIcon = new JLabel();
+			private JLabel twoFieldElementIcon = new JLabel();
+			private JLabel gridIcon = new JLabel();
+			
 		private JPanel counters = new JPanel();
+			private JLabel fiveFieldElementText = new JLabel();
+			private JLabel fourFieldElementText = new JLabel();
+			private JLabel threeFieldElementText = new JLabel();
+			private JLabel twoFieldElementText = new JLabel();
 			private JPanel fiveFieldElementCountChange = new JPanel();
+				private JButton fiveFieldElementCountIncrease = new JButton();
+				private JButton fiveFieldElementCountDecrease = new JButton();
+				private JButton fourFieldElementCountIncrease = new JButton();
+				private JButton fourFieldElementCountDecrease = new JButton();
+				private JButton threeFieldElementCountIncrease = new JButton();
+				private JButton threeFieldElementCountDecrease = new JButton();
+				private JButton twoFieldElementCountIncrease = new JButton();
+				private JButton twoFieldElementCountDecrease = new JButton();
 			private JPanel fourFieldElementCountChange = new JPanel();
 			private JPanel threeFieldElementCountChange = new JPanel();
 			private JPanel twoFieldElementCountChange = new JPanel();
+			
 		private JPanel themes = new JPanel();
+			JLabel themesHeading = new JLabel("Spielstil\nwählen:");
+			JRadioButton battleshipsButton = new JRadioButton("Battleships");
+			JRadioButton battlecarsButton = new JRadioButton("Battlecars");
+	
+	Color textColor = Color.LIGHT_GRAY;
+	Color backgroundColor = new Color(35,35,35);
 	
 	ImageIcon themeIcon;
 	
@@ -33,19 +67,57 @@ public class MainMenu {
 	
 	MainMenu(JFrame frame, String theme){
 		this.frame = frame;
-		loadThemeItems(theme);
+		GuiTester.theme = theme;
+		loadThemeItems(GuiTester.theme);
 	}
 	
 	public void setUpMenu() {
 		
 		// Panel Settings
 		panel.setLayout(new BorderLayout());
-		panel.setBackground(Color.DARK_GRAY);
+		panel.setOpaque(true);
+		panel.setBackground(backgroundColor);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 10, 30, 60));
 		
 		// Panel Layout
 		panel.add(modes, BorderLayout.SOUTH);
 		panel.add(settings, BorderLayout.EAST);
+		panel.add(themeIconTitle, BorderLayout.CENTER);
+		
+		// themeIconTitle Panel Settings
+		themeIconTitle.setLayout(new BorderLayout());
+		themeIconTitle.setOpaque(false);
+					
+			// themeIcon JPanel
+			themeIconPanel = new JPanel(){
+				private static final long serialVersionUID = 1L;
+				protected void paintComponent(Graphics g) {
+					Image themeImage = themeIcon.getImage();
+					super.paintComponent(g);
+					g.drawImage(themeImage, 0, 0, getWidth(), getHeight(), this);
+					}
+				};
+			themeIconPanel.setOpaque(false);
+					
+			// Title Settings
+			title.setOpaque(false);
+					
+			// Title Elements
+			Font themeTitleFont = new Font("Arial", Font.BOLD, 70);
+			themeTitle.setFont(themeTitleFont);
+			themeTitle.setText(GuiTester.theme);
+			themeTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+			themeTitle.setForeground(textColor);
+					
+			// Title Layout
+			title.add(Box.createHorizontalGlue());
+			title.add(themeTitle);
+			title.add(Box.createHorizontalStrut(10));
+			title.add(Box.createHorizontalGlue());
+					
+			themeIconTitle.add(themeIconPanel, BorderLayout.CENTER);
+			themeIconTitle.add(title, BorderLayout.NORTH);
+			themeIconTitle.add(Box.createHorizontalStrut(2000), BorderLayout.SOUTH);
 		
 		// Modes Settings
 		modes.setLayout(new BoxLayout(modes, BoxLayout.X_AXIS));
@@ -54,7 +126,7 @@ public class MainMenu {
 		// Modes Elements
 			// Player vs. Computer Button
 			JButton pvcButton = new JButton("Spieler vs. Computer");
-			ImageIcon pvcIcon = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/PlayerVsComputer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+			ImageIcon pvcIcon = new ImageIcon(new ImageIcon("src/res/playerVsComputer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 			pvcButton.setIcon(pvcIcon);
 			pvcButton.setHorizontalAlignment(SwingConstants.LEFT);
 			pvcButton.setBorder(null);
@@ -65,13 +137,21 @@ public class MainMenu {
 			pvcButton.setPreferredSize(new Dimension(225, 150));
 			pvcButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent a) {
-					// ...
+//					boolean shipsCanFitOnGrid = Logic.shipsCanFitOnGrid();
+					boolean shipsCanFitOnGrid = true;
+					if (shipsCanFitOnGrid == false) {
+						throwErrorMessage();
+					} else {
+						panel.setVisible(false);
+						GameWindow game = new GameWindow(frame, "pvc");
+						game.setUpGameWindow();
+					}
 				}
 			});
 			
 			// Player vs. Player Button
 			JButton pvpButton = new JButton("Spieler vs. Spieler");
-			ImageIcon pvpIcon = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/PlayerVsPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+			ImageIcon pvpIcon = new ImageIcon(new ImageIcon("src/res/playerVsPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 			pvpButton.setIcon(pvpIcon);
 			pvpButton.setHorizontalAlignment(SwingConstants.LEFT);
 			pvpButton.setBorder(null);
@@ -80,10 +160,23 @@ public class MainMenu {
 			pvpButton.setMinimumSize(new Dimension(225, 150));
 			pvpButton.setMaximumSize(new Dimension(225, 150));
 			pvpButton.setPreferredSize(new Dimension(225, 150));
+			pvpButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent a) {
+//					boolean shipsCanFitOnGrid = Logic.shipsCanFitOnGrid();
+					boolean shipsCanFitOnGrid = false;
+					if (shipsCanFitOnGrid == false) {
+						throwErrorMessage();
+					} else {
+						panel.setVisible(false);
+						GameWindow game = new GameWindow(frame, "pvp");
+						game.setUpGameWindow();
+					}
+				}
+			});
 			
 			// Computer vs. Computer Button
 			JButton cvcButton = new JButton("Computer vs. Computer");
-			ImageIcon cvcIcon = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/ComputerVsComputer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+			ImageIcon cvcIcon = new ImageIcon(new ImageIcon("src/res/computerVsComputer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 			cvcButton.setIcon(cvcIcon);
 			cvcButton.setHorizontalAlignment(SwingConstants.LEFT);
 			cvcButton.setBorder(null);
@@ -92,10 +185,23 @@ public class MainMenu {
 			cvcButton.setMinimumSize(new Dimension(225, 150));
 			cvcButton.setMaximumSize(new Dimension(225, 150));
 			cvcButton.setPreferredSize(new Dimension(225, 150));
+			cvcButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent a) {
+//					boolean shipsCanFitOnGrid = Logic.shipsCanFitOnGrid();
+					boolean shipsCanFitOnGrid = false;
+					if (shipsCanFitOnGrid == false) {
+						throwErrorMessage();
+					} else {
+						panel.setVisible(false);
+						GameWindow game = new GameWindow(frame, "cvc");
+						game.setUpGameWindow();
+					}
+				}
+			});
 			
 			// Information Button
 			JButton infoButton = new JButton("Information");
-			ImageIcon infoIcon = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/info.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+			ImageIcon infoIcon = new ImageIcon(new ImageIcon("src/res/info.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 			infoButton.setIcon(infoIcon);
 			infoButton.setHorizontalAlignment(SwingConstants.LEFT);
 			infoButton.setBorder(null);
@@ -104,10 +210,16 @@ public class MainMenu {
 			infoButton.setMinimumSize(new Dimension(50, 50));
 			infoButton.setMaximumSize(new Dimension(50, 50));
 			infoButton.setPreferredSize(new Dimension(50, 50));
+			infoButton.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					showInfo();
+				}	
+			});
 			
 			// LoadFile Button
 			JButton loadButton = new JButton("Spiel laden");
-			ImageIcon loadIcon = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/Load_Save_Icon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+			ImageIcon loadIcon = new ImageIcon(new ImageIcon("src/res/loadSaveIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 			loadButton.setIcon(loadIcon);
 			loadButton.setHorizontalAlignment(SwingConstants.LEFT);
 			loadButton.setBorder(null);
@@ -116,10 +228,23 @@ public class MainMenu {
 			loadButton.setMinimumSize(new Dimension(50, 50));
 			loadButton.setMaximumSize(new Dimension(50, 50));
 			loadButton.setPreferredSize(new Dimension(50, 50));
+			loadButton.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					FileFilter filter = new FileNameExtensionFilter("Textdatei", "txt");
+					JFileChooser chooser = new JFileChooser();
+					chooser.setDialogTitle("Spielstand laden");
+					chooser.addChoosableFileFilter(filter);
+					int returnValue = chooser.showOpenDialog(frame);
+					if (returnValue == JFileChooser.APPROVE_OPTION) {
+						// Logic.verarbeiteDatei(chooser.getSelectedFile());
+					}
+				}	
+			});
 			
 			// Themes Button
 			JButton themesButton = new JButton("Spielstil wählen");
-			ImageIcon themesIcon = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/Theme_Icon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+			ImageIcon themesIcon = new ImageIcon(new ImageIcon("src/res/themeIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 			themesButton.setIcon(themesIcon);
 			themesButton.setHorizontalAlignment(SwingConstants.LEFT);
 			themesButton.setBorder(null);
@@ -135,6 +260,7 @@ public class MainMenu {
 						counters.setVisible(false);
 						settings.add(themes, BorderLayout.EAST);
 						themes.setVisible(true);
+						selectCurrentThemeButton();
 					} else {
 						themes.setVisible(false);
 						settings.add(counters, BorderLayout.EAST);
@@ -145,6 +271,75 @@ public class MainMenu {
 				}	
 			});
 			
+			// Sound Button
+//			JToggleButton soundButton = new JToggleButton("Sound an/ausschalten");
+//			Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+//			Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+//			if (GuiTester.soundPlaying == true) {
+//				soundButton.setEnabled(true);
+//				soundButton.setIcon(soundOnIcon);
+//			} else {
+//				soundButton.setEnabled(false);
+//				soundButton.setIcon(soundOffIcon);
+//			}
+//			soundButton.setHorizontalAlignment(SwingConstants.LEFT);
+//			soundButton.setBorder(null);
+//			soundButton.setToolTipText("Lautstärke anpassen");
+//			soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//			soundButton.setMinimumSize(new Dimension(50, 50));
+//			soundButton.setMaximumSize(new Dimension(50, 50));
+//			soundButton.setPreferredSize(new Dimension(50, 50));
+//			soundButton.addActionListener(new ActionListener(){
+//				@Override
+//				public void actionPerformed(ActionEvent arg0) {
+//					if (soundButton.isEnabled() == true) {
+//						MainWindow.music.stopMusic();
+//						GuiTester.soundPlaying = false;
+//						soundButton.setEnabled(false);
+//						soundButton.setDisabledIcon(soundOffIcon);
+//					} else {
+//						MainWindow.music.restartMusic();
+//						GuiTester.soundPlaying = true;
+//						soundButton.setEnabled(true);
+//						soundButton.setSelectedIcon(soundOnIcon);
+//					}
+//				}	
+//			});
+			
+			// Sound Button
+						JButton soundButton = new JButton("Lautstärke anpassen");
+						Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+						Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+						if (GuiTester.soundPlaying == true) {
+							soundButton.setIcon(soundOnIcon);
+						} else {
+							soundButton.setIcon(soundOffIcon);
+						}
+						soundButton.setHorizontalAlignment(SwingConstants.LEFT);
+						soundButton.setBorder(null);
+						soundButton.setToolTipText("Lautstärke anpassen");
+						soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+						soundButton.setMinimumSize(new Dimension(50, 50));
+						soundButton.setMaximumSize(new Dimension(50, 50));
+						soundButton.setPreferredSize(new Dimension(50, 50));
+						soundButton.addActionListener(new ActionListener(){
+							@Override
+							public void actionPerformed(ActionEvent arg0) {
+								if (GuiTester.soundPlaying == true) {
+									soundButton.setIcon(soundOffIcon);
+									soundButton.setBorder(null);
+									MainWindow.music.stopMusic();
+									GuiTester.soundPlaying = false;
+								} else {
+									soundButton.setIcon(soundOnIcon);
+									soundButton.setBorder(null);
+									MainWindow.music.restartMusic();
+									GuiTester.soundPlaying = true;
+								}
+							}	
+						});			
+			
+			
 		
 		// Modes Layout
 		modes.add(Box.createHorizontalGlue());
@@ -154,18 +349,19 @@ public class MainMenu {
 		modes.add(pvpButton);
 		modes.add(Box.createHorizontalStrut(20));
 		modes.add(cvcButton);
-		modes.add(Box.createHorizontalStrut(30));
+		modes.add(Box.createHorizontalStrut(40));
 		modes.add(infoButton);
-		modes.add(Box.createHorizontalStrut(15));
+		modes.add(Box.createHorizontalStrut(20));
 		modes.add(loadButton);
-		modes.add(Box.createHorizontalStrut(15));
+		modes.add(Box.createHorizontalStrut(20));
 		modes.add(themesButton);
+		modes.add(Box.createHorizontalStrut(20));
+		modes.add(soundButton);
 		modes.add(Box.createHorizontalGlue());
 		
 		// Settings Settings
-		settings.setLayout(new BorderLayout());
-		settings.setOpaque(true);
-		settings.setBackground(Color.cyan);
+		settings.setLayout(new BorderLayout(15, 0));
+		settings.setOpaque(false);
 		
 		// Settings Layout
 		settings.add(icons, BorderLayout.WEST);
@@ -173,50 +369,53 @@ public class MainMenu {
 				
 		// Icons Settings
 		icons.setLayout(new BoxLayout(icons, BoxLayout.Y_AXIS));
-		icons.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		icons.setOpaque(true);
+		icons.setOpaque(false);
 		
 		// Icons Elements
 			// fiveFieldElementIcon Label
-			JLabel fiveFieldElementIcon = new JLabel(fiveFieldElementIconFromSide);
-			fiveFieldElementIcon.setMinimumSize(new Dimension(175, 40));
-			fiveFieldElementIcon.setOpaque(true);
+			fiveFieldElementIcon.setIcon(fiveFieldElementIconFromSide);
+			fiveFieldElementIcon.setMinimumSize(new Dimension(250, 50));
+			fiveFieldElementIcon.setOpaque(false);
 			fiveFieldElementIcon.setBackground(Color.green);
+			fiveFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
 			// fourFieldElementIcon Label
-			JLabel fourFieldElementIcon = new JLabel(fourFieldElementIconFromSide);
-			fourFieldElementIcon.setMinimumSize(new Dimension(160, 40));
-			fourFieldElementIcon.setOpaque(true);
+			fourFieldElementIcon.setIcon(fourFieldElementIconFromSide);
+			fourFieldElementIcon.setMinimumSize(new Dimension(200, 50));
+			fourFieldElementIcon.setOpaque(false);
 			fourFieldElementIcon.setBackground(Color.blue);
+			fourFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			
 			// threeFieldElementIcon Label
-			JLabel threeFieldElementIcon = new JLabel(threeFieldElementIconFromSide, SwingConstants.RIGHT);
-			threeFieldElementIcon.setMinimumSize(new Dimension(145, 40));
-			threeFieldElementIcon.setOpaque(true);
+			threeFieldElementIcon.setIcon(threeFieldElementIconFromSide);
+			threeFieldElementIcon.setMinimumSize(new Dimension(150, 50));
+			threeFieldElementIcon.setOpaque(false);
 			threeFieldElementIcon.setBackground(Color.red);
+			threeFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			
 			// twoFieldElementIcon Label
-			JLabel twoFieldElementIcon = new JLabel(twoFieldElementIconFromSide, SwingConstants.RIGHT);
-			twoFieldElementIcon.setMinimumSize(new Dimension(125, 40));
+			twoFieldElementIcon.setIcon(twoFieldElementIconFromSide);
+			twoFieldElementIcon.setMinimumSize(new Dimension(100, 50));
+			twoFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			
 			// gridIcon Label
-			JLabel gridIcon = new JLabel();
-			ImageIcon gridSymbol = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/gridIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+			ImageIcon gridSymbol = new ImageIcon(new ImageIcon("src/res/gridIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 			gridIcon.setIcon(gridSymbol);
-			twoFieldElementIcon.setMinimumSize(new Dimension(50, 50));
+			gridIcon.setMinimumSize(new Dimension(50, 50));
+			gridIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			
 		// Icons Layout
-		icons.add(Box.createRigidArea(new Dimension(0, 46)));
+		icons.add(Box.createRigidArea(new Dimension(0, 35)));
 		icons.add(fiveFieldElementIcon);
-		icons.add(Box.createVerticalStrut(36));
+		icons.add(Box.createVerticalStrut(25));
 		icons.add(fourFieldElementIcon);
-		icons.add(Box.createVerticalStrut(36));
+		icons.add(Box.createVerticalStrut(25));
 		icons.add(threeFieldElementIcon);
-		icons.add(Box.createVerticalStrut(36));
+		icons.add(Box.createVerticalStrut(25));
 		icons.add(twoFieldElementIcon);
-		icons.add(Box.createVerticalStrut(40));
+		icons.add(Box.createVerticalStrut(55));
 		icons.add(gridIcon);
-		icons.add(Box.createRigidArea(new Dimension(20, 1000)));
+		icons.add(Box.createRigidArea(new Dimension(0, 500)));
 		
 		// Counters Settings
 		counters.setLayout(new BoxLayout(counters, BoxLayout.Y_AXIS));
@@ -227,25 +426,21 @@ public class MainMenu {
 			Font countersFont = new Font("Krungthep", Font.PLAIN, 20);
 		
 			// fiveFieldElementText Label
-			JLabel fiveFieldElementText = new JLabel(GuiTester.fiveFieldElementCount + 
-					"x " + GuiTester.fiveFieldElementName, SwingConstants.LEFT);
-			fiveFieldElementText.setMinimumSize(new Dimension(200, 20));
-			fiveFieldElementText.setPreferredSize(new Dimension(200, 20));
+			fiveFieldElementText.setText(GuiTester.fiveFieldElementCount + 
+					"x " + GuiTester.fiveFieldElementName);
+			fiveFieldElementText.setPreferredSize(new Dimension(210, 30));
 			fiveFieldElementText.setFont(countersFont);
-			fiveFieldElementText.setOpaque(true);
-			fiveFieldElementText.setBackground(Color.red);
-			JPanel fiveFieldElementPanel = new JPanel();
-			fiveFieldElementPanel.setLayout(new BoxLayout(fiveFieldElementPanel, BoxLayout.X_AXIS));
-			fiveFieldElementPanel.add(fiveFieldElementText);
+			fiveFieldElementText.setAlignmentX(Component.LEFT_ALIGNMENT);
+			fiveFieldElementText.setForeground(textColor);
 			
 			// fiveFieldElementCountChange Settings
 			fiveFieldElementCountChange.setLayout(new BoxLayout(fiveFieldElementCountChange, BoxLayout.X_AXIS));
-			fiveFieldElementCountChange.setOpaque(true);
-			fiveFieldElementCountChange.setBackground(Color.green);
+			fiveFieldElementCountChange.setOpaque(false);
+			fiveFieldElementCountChange.setAlignmentX(Component.LEFT_ALIGNMENT);
 			
 			// fiveFieldElementCountChange Elements
 				// fiveFieldElementCountIncrease Button
-				JButton fiveFieldElementCountIncrease = new JButton("+");
+				fiveFieldElementCountIncrease.setText("+");
 				fiveFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 				fiveFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 				fiveFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -265,7 +460,7 @@ public class MainMenu {
 				});
 		
 				// fiveFieldElementCountDecrease Button
-				JButton fiveFieldElementCountDecrease = new JButton("-");
+				fiveFieldElementCountDecrease.setText("-");
 				fiveFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 				fiveFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 				fiveFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -285,26 +480,28 @@ public class MainMenu {
 				});
 		
 			// fiveFieldElementCountChange Layout
-			fiveFieldElementCountChange.add(Box.createRigidArea(new Dimension(60, 30)));
+			fiveFieldElementCountChange.add(Box.createRigidArea(new Dimension(30, 30)));
 			fiveFieldElementCountChange.add(fiveFieldElementCountIncrease);
 			fiveFieldElementCountChange.add(Box.createHorizontalStrut(3));
 			fiveFieldElementCountChange.add(fiveFieldElementCountDecrease);
 			fiveFieldElementCountChange.add(Box.createHorizontalGlue());
 				
 			// fourFieldElementText Label
-			JLabel fourFieldElementText = new JLabel(GuiTester.fourFieldElementCount + 
-					"x " + GuiTester.fourFieldElementName, SwingConstants.LEFT);
-//			fourFieldElementText.setHorizontalAlignment(SwingConstants.LEFT);
-			fourFieldElementText.setPreferredSize(new Dimension(240, 30));
+			fourFieldElementText.setText(GuiTester.fourFieldElementCount + 
+					"x " + GuiTester.fourFieldElementName);
+			fourFieldElementText.setPreferredSize(new Dimension(210, 30));
 			fourFieldElementText.setFont(countersFont);
+			fourFieldElementText.setAlignmentX(Component.LEFT_ALIGNMENT);
+			fourFieldElementText.setForeground(textColor);
 				
 			// fourFieldElementCountChange Settings
 			fourFieldElementCountChange.setLayout(new BoxLayout(fourFieldElementCountChange, BoxLayout.X_AXIS));
 			fourFieldElementCountChange.setOpaque(false);
+			fourFieldElementCountChange.setAlignmentX(Component.LEFT_ALIGNMENT);
 				
 			// fourFieldElementCountChange Elements
 				// fourFieldElementCountIncrease Button
-				JButton fourFieldElementCountIncrease = new JButton("+");
+				fourFieldElementCountIncrease.setText("+");
 				fourFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 				fourFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 				fourFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -324,7 +521,7 @@ public class MainMenu {
 				});
 		
 				// fourFieldElementCountDecrease Button
-				JButton fourFieldElementCountDecrease = new JButton("-");
+				fourFieldElementCountDecrease.setText("-");
 				fourFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 				fourFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 				fourFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -344,26 +541,28 @@ public class MainMenu {
 				});
 			
 			// fourFieldElementCountChange Layout
-			fourFieldElementCountChange.add(Box.createRigidArea(new Dimension(60, 30)));
+			fourFieldElementCountChange.add(Box.createRigidArea(new Dimension(30, 30)));
 			fourFieldElementCountChange.add(fourFieldElementCountIncrease);
 			fourFieldElementCountChange.add(Box.createHorizontalStrut(3));
 			fourFieldElementCountChange.add(fourFieldElementCountDecrease);
 			fourFieldElementCountChange.add(Box.createHorizontalGlue());
 			
 			// threeFieldElementText Label
-			JLabel threeFieldElementText = new JLabel(GuiTester.threeFieldElementCount + 
-					"x " + GuiTester.threeFieldElementName, SwingConstants.LEFT);
-//			threeFieldElementText.setHorizontalAlignment(SwingConstants.LEFT);
-			threeFieldElementText.setPreferredSize(new Dimension(240, 30));
+			threeFieldElementText.setText(GuiTester.threeFieldElementCount + 
+					"x " + GuiTester.threeFieldElementName);
+			threeFieldElementText.setPreferredSize(new Dimension(210, 30));
 			threeFieldElementText.setFont(countersFont);
+			threeFieldElementText.setAlignmentX(Component.LEFT_ALIGNMENT);
+			threeFieldElementText.setForeground(textColor);
 			
 			// threeFieldElementCountChange Settings
 			threeFieldElementCountChange.setLayout(new BoxLayout(threeFieldElementCountChange, BoxLayout.X_AXIS));
 			threeFieldElementCountChange.setOpaque(false);
+			threeFieldElementCountChange.setAlignmentX(Component.LEFT_ALIGNMENT);
 			
 			// threeFieldElementCountChange Elements
 				// threeFieldElementCountIncrease Button
-				JButton threeFieldElementCountIncrease = new JButton("+");
+				threeFieldElementCountIncrease.setText("+");
 				threeFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 				threeFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 				threeFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -383,7 +582,7 @@ public class MainMenu {
 				});
 				
 				//threeFieldElementCountDecrease Button
-				JButton threeFieldElementCountDecrease = new JButton("-");
+				threeFieldElementCountDecrease.setText("-");
 				threeFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 				threeFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 				threeFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -403,26 +602,28 @@ public class MainMenu {
 				});
 				
 			// threeFieldElementCountChange Layout
-			threeFieldElementCountChange.add(Box.createRigidArea(new Dimension(60, 30)));
+			threeFieldElementCountChange.add(Box.createRigidArea(new Dimension(30, 30)));
 			threeFieldElementCountChange.add(threeFieldElementCountIncrease);
 			threeFieldElementCountChange.add(Box.createHorizontalStrut(3));
 			threeFieldElementCountChange.add(threeFieldElementCountDecrease);
 			threeFieldElementCountChange.add(Box.createHorizontalGlue());
 			
 			// twoFieldElementText Label
-			JLabel twoFieldElementText = new JLabel(GuiTester.twoFieldElementCount + 
-					"x " + GuiTester.twoFieldElementName, SwingConstants.LEFT);
-//			twoFieldElementText.setHorizontalAlignment(SwingConstants.LEFT);
-			twoFieldElementText.setPreferredSize(new Dimension(240, 30));
+			twoFieldElementText.setText(GuiTester.twoFieldElementCount + 
+					"x " + GuiTester.twoFieldElementName);
+			twoFieldElementText.setPreferredSize(new Dimension(210, 30));
 			twoFieldElementText.setFont(countersFont);
+			twoFieldElementText.setAlignmentX(Component.LEFT_ALIGNMENT);
+			twoFieldElementText.setForeground(textColor);
 			
 			// twoFieldElementCountChange Setting
 			twoFieldElementCountChange.setLayout(new BoxLayout(twoFieldElementCountChange, BoxLayout.X_AXIS));
 			twoFieldElementCountChange.setOpaque(false);
+			twoFieldElementCountChange.setAlignmentX(Component.LEFT_ALIGNMENT);
 			
 			// twoFieldElementCountChange Elements
 				// twoFieldElementCountIncrease Button
-				JButton twoFieldElementCountIncrease = new JButton("+");
+				twoFieldElementCountIncrease.setText("+");
 				twoFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 				twoFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 				twoFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -442,7 +643,7 @@ public class MainMenu {
 				});
 				
 				//twoFieldElementCountDecrease Button
-				JButton twoFieldElementCountDecrease = new JButton("-");
+				twoFieldElementCountDecrease.setText("-");
 				twoFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 				twoFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 				twoFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -462,20 +663,22 @@ public class MainMenu {
 				});
 				
 			// twoFieldElementCountChange Layout
-			twoFieldElementCountChange.add(Box.createRigidArea(new Dimension(60, 30)));
+			twoFieldElementCountChange.add(Box.createRigidArea(new Dimension(30, 30)));
 			twoFieldElementCountChange.add(twoFieldElementCountIncrease);
 			twoFieldElementCountChange.add(Box.createHorizontalStrut(3));
 			twoFieldElementCountChange.add(twoFieldElementCountDecrease);
 			twoFieldElementCountChange.add(Box.createHorizontalGlue());
 			
 			// gridText Label
-			JLabel gridText = new JLabel("Feldgröße: " + GuiTester.gridSize + "*" + GuiTester.gridSize, SwingConstants.LEFT);
-			gridText.setMinimumSize(new Dimension(200, 30));
-			gridText.setHorizontalAlignment(SwingConstants.LEFT);
+			JLabel gridText = new JLabel("Feldgröße: " + GuiTester.gridSize + "*" + GuiTester.gridSize);
+			gridText.setForeground(textColor);
+			gridText.setMinimumSize(new Dimension(210, 30));
+			gridText.setAlignmentX(Component.LEFT_ALIGNMENT);
 			gridText.setFont(countersFont);
 			
 			// gridSlider Slider
 			JSlider gridSlider = new JSlider();
+			gridSlider.setForeground(textColor);
 			gridSlider.setMinimum(5);
 			gridSlider.setMaximum(30);
 			gridSlider.setMajorTickSpacing(5);
@@ -485,7 +688,7 @@ public class MainMenu {
 			gridSlider.setPaintLabels(true);
 			gridSlider.setValue(GuiTester.gridSize);
 			gridSlider.setSnapToTicks(true);
-			gridSlider.setMaximumSize(new Dimension(200, 40));
+			gridSlider.setMaximumSize(new Dimension(210, 40));
 			gridSlider.setAlignmentX(Component.LEFT_ALIGNMENT);
 			gridSlider.setToolTipText("Spielfeldgröße auswählen");
 			gridSlider.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -497,8 +700,7 @@ public class MainMenu {
 				
 		// Counters Layout
 		counters.add(Box.createRigidArea(new Dimension(0, 30)));
-		counters.add(fiveFieldElementPanel);
-//		counters.add(fiveFieldElementText);
+		counters.add(fiveFieldElementText);
 		counters.add(Box.createVerticalStrut(3));
 		counters.add(fiveFieldElementCountChange);
 		counters.add(Box.createVerticalStrut(15));
@@ -513,9 +715,9 @@ public class MainMenu {
 		counters.add(twoFieldElementText);
 		counters.add(Box.createVerticalStrut(3));
 		counters.add(twoFieldElementCountChange);
-		counters.add(Box.createVerticalStrut(30));
+		counters.add(Box.createVerticalStrut(35));
 		counters.add(gridText);
-		counters.add(Box.createVerticalStrut(3));
+		counters.add(Box.createVerticalStrut(0));
 		counters.add(gridSlider);
 		counters.add(Box.createRigidArea(new Dimension(0, 1000)));
 		
@@ -525,24 +727,84 @@ public class MainMenu {
 		themes.setVisible(false);
 		
 		// Themes Elements
-		JRadioButton auswahl1 = new JRadioButton("gelb");
-		auswahl1.setMinimumSize(new Dimension(240, 30));
-		auswahl1.setMaximumSize(new Dimension(240, 30));
-		auswahl1.setPreferredSize(new Dimension(240, 30));
-        JRadioButton auswahl2 = new JRadioButton("blau");
+		Font themesFont = new Font("Krungthep", Font.PLAIN, 20);
+		
+		themesHeading.setFont(themesFont);
+		themesHeading.setForeground(textColor);
+		
+		battleshipsButton.setPreferredSize(new Dimension(210, 30));
+		battleshipsButton.setFont(themesFont);
+		battleshipsButton.setForeground(textColor);
+		battleshipsButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (!GuiTester.theme.equals("Battleships")) {
+					GuiTester.theme = "Battleships";
+					loadThemeItems("Battleships");
+					updateThemeItems();
+				}
+				themes.setVisible(false);
+				settings.add(counters, BorderLayout.EAST);
+				counters.setVisible(true);
+			}	
+		});
+		battlecarsButton.setPreferredSize(new Dimension(210, 30));
+		battlecarsButton.setFont(themesFont);
+		battlecarsButton.setForeground(textColor);
+		battlecarsButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (!GuiTester.theme.equals("Battlecars")) {
+					GuiTester.theme = "Battlecars";
+					loadThemeItems("Battlecars");
+					updateThemeItems();
+				}
+				themes.setVisible(false);
+				settings.add(counters, BorderLayout.EAST);
+				counters.setVisible(true);
+			}	
+		});
 		ButtonGroup themesGroup = new ButtonGroup();
-		themesGroup.add(auswahl1);
-		themesGroup.add(auswahl2);
+		themesGroup.add(battleshipsButton);
+		themesGroup.add(battlecarsButton);
 		
 		// Themes Layout
-		themes.add(auswahl1);
-		themes.add(auswahl2);
+		themes.add(Box.createVerticalGlue());
+		themes.add(themesHeading);
+		themes.add(Box.createVerticalStrut(10));
+		themes.add(battleshipsButton);
+		themes.add(battlecarsButton);
+		themes.add(Box.createVerticalGlue());
 		
 		// Frame Settings
 		frame.getContentPane().add(panel);
+		frame.setBackground(backgroundColor);
 		frame.setVisible(true);
 	}
 	
+	public void selectCurrentThemeButton() {
+		if (GuiTester.theme.equals("Battleships")) {
+			battleshipsButton.setSelected(true);
+		}
+		if (GuiTester.theme.equals("Battlecars")) {
+			battlecarsButton.setSelected(true);
+		}
+	}
+	
+	public void throwErrorMessage() {
+		JOptionPane.showMessageDialog(panel, "Zu viele " + GuiTester.themeIdentifierPlural + " für das gewählte Spielfeld!\nAnzahl der "
+				+ GuiTester.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
+			      "Fehlermeldung", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public void showInfo() {
+		ImageIcon hsaalenIcon = new ImageIcon(new ImageIcon("src/res/hsaalen.png").getImage().getScaledInstance(100, 70, Image.SCALE_SMOOTH));
+		JOptionPane.showOptionDialog(panel, "Dieses Spiel wurde als "
+				+ "Teil eines Programmierpraktikums\n"
+				+ "an der Hochschule Aalen geschrieben von:\n\n"
+				+ "Fabian Schwarz, Lukas Pietzschmann und Vincent Ugrai", 
+				"Super wichtige Information", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, hsaalenIcon, new String[] {"Wirklich toll", "Mega", "Ich bin begeistert"}, null);
+	}
 	
 	public void loadThemeItems(String theme) {
 		
@@ -550,17 +812,21 @@ public class MainMenu {
 			
 			frame.setTitle("Battleships");
 			
+			GuiTester.themeIdentifierSingular = "Schiff";
+			GuiTester.themeIdentifierPlural = "Schiffe";
+			
 			GuiTester.fiveFieldElementName = "Flugzeugträger";
 			GuiTester.fourFieldElementName = "Schlachtschiff";
 			GuiTester.threeFieldElementName = "Zerstörer";
 			GuiTester.twoFieldElementName = "U-Boot";
 			
-			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/bla.png").getImage().getScaledInstance(175, 60, Image.SCALE_SMOOTH));
-			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/bla2.png").getImage().getScaledInstance(160, 40, Image.SCALE_SMOOTH));
-			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/bla3.png").getImage().getScaledInstance(145, 40, Image.SCALE_SMOOTH));
-			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon("/Users/fabian/Documents/GitHub/Schiffeversenken/src/res/bla4.png").getImage().getScaledInstance(125, 40, Image.SCALE_SMOOTH));
+			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/carrier.png").getImage().getScaledInstance(250, 50, Image.SCALE_SMOOTH));
+			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/battleship.png").getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH));
+			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/destroyer.png").getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
+			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/submarine.png").getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
 			
-//			themeIcon = new ImageIcon(...)
+			themeIcon = new ImageIcon(new ImageIcon("src/res/battleshipsThemeIcon.png").getImage());
+//			themeIcon = new ImageIcon(new ImageIcon("src/res/battleshipsThemeIcon2.png").getImage());
 			
 		}
 		
@@ -568,19 +834,56 @@ public class MainMenu {
 			
 			frame.setTitle("Battlecars");
 			
+			GuiTester.themeIdentifierSingular = "Fahrzeug";
+			GuiTester.themeIdentifierPlural = "Fahrzeuge";
+			
 			GuiTester.fiveFieldElementName = "Bus";
-			GuiTester.fourFieldElementName = "Limousine";
+			GuiTester.fourFieldElementName = "Truck";
 			GuiTester.threeFieldElementName = "Sportwagen";
-			GuiTester.twoFieldElementName = "Mini";
+			GuiTester.twoFieldElementName = "Kombi";
 			
-//			fiveFieldElementIconFromSide = new ImageIcon(...)
-//			fourFieldElementIconFromSide = new ImageIcon(...)
-//			threeFieldElementIconFromSide = new ImageIcon(...)
-//			twoFieldElementIconFromSide = new ImageIcon(...)
+			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/bus.png").getImage().getScaledInstance(250, 50, Image.SCALE_SMOOTH));
+			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/truck.png").getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH));
+			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/sportscar.png").getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
+			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/kombi.png").getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
 			
-//			themeIcon = new ImageIcon(...)
+			themeIcon = new ImageIcon(new ImageIcon("src/res/battlecarsThemeIcon2.png").getImage());
 		}
 		
 		//...
 	}
+	
+	public void updateThemeItems() {
+		
+		// Update Title
+		themeTitle.setText(GuiTester.theme);
+		
+		// Update ThemeIcon
+		themeIconPanel.repaint();
+		themeIconPanel.revalidate();
+		
+		// Update Icons
+		fiveFieldElementIcon.setIcon(fiveFieldElementIconFromSide);
+		fourFieldElementIcon.setIcon(fourFieldElementIconFromSide);
+		threeFieldElementIcon.setIcon(threeFieldElementIconFromSide);
+		twoFieldElementIcon.setIcon(twoFieldElementIconFromSide);
+		
+		// Update Element Names
+		fiveFieldElementText.setText(GuiTester.fiveFieldElementCount + "x " + GuiTester.fiveFieldElementName);
+		fourFieldElementText.setText(GuiTester.fourFieldElementCount + "x " + GuiTester.fourFieldElementName);
+		threeFieldElementText.setText(GuiTester.threeFieldElementCount + "x " + GuiTester.threeFieldElementName);
+		twoFieldElementText.setText(GuiTester.twoFieldElementCount + "x " + GuiTester.twoFieldElementName);
+		
+		// Update Buttons
+		fiveFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + GuiTester.fiveFieldElementName);
+		fiveFieldElementCountDecrease.setToolTipText("Anzahl senken: " + GuiTester.fiveFieldElementName);
+		fourFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + GuiTester.fourFieldElementName);
+		fourFieldElementCountDecrease.setToolTipText("Anzahl senken: " + GuiTester.fourFieldElementName);
+		threeFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + GuiTester.threeFieldElementName);
+		threeFieldElementCountDecrease.setToolTipText("Anzahl senken: " + GuiTester.threeFieldElementName);
+		twoFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + GuiTester.twoFieldElementName);
+		twoFieldElementCountDecrease.setToolTipText("Anzahl senken: " + GuiTester.twoFieldElementName);
+		
+	}
+	
 }
