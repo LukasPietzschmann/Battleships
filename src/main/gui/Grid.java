@@ -1,4 +1,4 @@
-package gui;
+package main.gui;
 
 public class Grid {
 	int gridSize;
