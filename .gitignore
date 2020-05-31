@@ -93,3 +93,4 @@ hs_err_pid*
 *.ini
 .idea/CamelCaseConfigNew.xml
 .idea/inspectionProfiles/
+Schiffeversenken.iml

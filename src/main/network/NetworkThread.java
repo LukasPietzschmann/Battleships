@@ -13,10 +13,10 @@ public class NetworkThread extends Thread {
 		Host, Client
 	}
 	
-	Socket clientSocket;
-	ServerSocket serverSocket;
-	BlockingQueue<String> recieveQueue;
-	BlockingQueue<String> sendQueue;
+	private Socket clientSocket;
+	private ServerSocket serverSocket;
+	private BlockingQueue<String> recieveQueue;
+	private BlockingQueue<String> sendQueue;
 	private BufferedReader in;
 	private OutputStreamWriter out;
 	private Type type;
@@ -43,7 +43,9 @@ public class NetworkThread extends Thread {
 		
 		try {
 			if(type == Type.Host) {
-			
+				//TODO Server
+			}else{
+				//TODO Client
 			}
 		}catch(Exception e) {
 			System.err.println("NE Error");
