@@ -1,8 +1,11 @@
 package network;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 public class Client implements NetworkCommunication {
@@ -10,8 +13,8 @@ public class Client implements NetworkCommunication {
 	private final int port;
 	private Socket socket;
 
-	private DataInputStream in;
-	private DataOutputStream out;
+	private BufferedReader in;
+	private OutputStreamWriter out;
 
 	public Client(String address, int port) {
 		this.address = address;
@@ -22,8 +25,8 @@ public class Client implements NetworkCommunication {
 	private boolean connect() {
 		try {
 			socket = new Socket(address, port);
-			in = new DataInputStream(socket.getInputStream());
-			out = new DataOutputStream(socket.getOutputStream());
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			out = new OutputStreamWriter(socket.getOutputStream());
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -34,7 +37,8 @@ public class Client implements NetworkCommunication {
 	@Override
 	public boolean sendMessage(String message) {
 		try {
-			out.writeUTF(message);
+			out.write(message);
+			out.flush();
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -45,7 +49,7 @@ public class Client implements NetworkCommunication {
 	@Override
 	public String recieveMessage() {
 		try {
-			return in.readUTF();
+			return in.readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

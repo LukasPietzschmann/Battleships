@@ -8,9 +8,9 @@ public class Server implements NetworkCommunication {
 	private final int port;
 	private ServerSocket server;
 	private Socket socket;
-
-	private DataInputStream in;
-	private DataOutputStream out;
+	
+	private BufferedReader in;
+	private OutputStreamWriter out;
 
 	public Server(int port) throws IOException {
 		this.port = port;
@@ -21,8 +21,8 @@ public class Server implements NetworkCommunication {
 	private boolean waitForClient() {
 		try {
 			socket = server.accept();
-			in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-			out = new DataOutputStream(socket.getOutputStream());
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			out = new OutputStreamWriter(socket.getOutputStream());
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -33,7 +33,8 @@ public class Server implements NetworkCommunication {
 	@Override
 	public boolean sendMessage(String message) {
 		try {
-			out.writeUTF(message);
+			out.write(message);
+			out.flush();
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -44,7 +45,7 @@ public class Server implements NetworkCommunication {
 	@Override
 	public String recieveMessage() {
 		try {
-			return in.readUTF();
+			return in.readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
