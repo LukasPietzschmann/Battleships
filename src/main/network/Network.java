@@ -5,6 +5,9 @@ import logic.Player;
 import logic.Ship;
 
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.sql.Array;
 import java.util.ArrayList;
 
 /**
@@ -46,7 +49,7 @@ public class Network extends Player {
 	/**
 	 * Die Verbindung zum anderen Spieler.
 	 */
-	private NetworkCommunication networkPartner;
+	private NetworkThread networkThread;
 	/**
 	 * Die Größe des Spielfelds. Wird nur gesetzt, falls man selbst der Client ist.
 	 */
@@ -71,13 +74,13 @@ public class Network extends Player {
 	 */
 	public Network(Logic logic, String name, int size) throws IOException {
 		super(logic, name);
-		networkPartner = new Server(PORT);
-		//TODO echte Zahlen als Schiff anzahl nehmen
-		networkPartner.sendMessage(String.format("%s %d %d %d %d %d", SETUP, size, 0, 0, 0, 0));
-		Message m = new Message(networkPartner.recieveMessage());
+		networkThread = new NetworkThread(new ServerSocket(PORT), size);
+		networkThread.start();
+		int[] shipCount = new int[4];
+		for(int i = 0; i < logic.getAvailableShips().size(); i++) shipCount[logic.getAvailableShips().get(i).getSize() - 2] += 1;
+		networkThread.sendMessage(String.format("%s %d %d %d %d %d\n", SETUP, size, shipCount[0], shipCount[1], shipCount[2], shipCount[3]));
+		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(CONFIRM)) throw new UnexpectedMessageException(m);
-		
-		// jetzt sind wir dran mit Schiffe platzieren
 	}
 	
 	/**
@@ -89,8 +92,15 @@ public class Network extends Player {
 	 */
 	public Network(Logic logic, String name, String ip) {
 		super(logic, name);
-		networkPartner = new Client(ip, PORT);
-		Message m = new Message(networkPartner.recieveMessage());
+		try {
+			networkThread = new NetworkThread(new Socket(ip, PORT));
+		}catch(IOException e) {
+			e.printStackTrace();
+			System.err.println("NW Error");
+			return;
+		}
+		networkThread.start();
+		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(SETUP)) throw new UnexpectedMessageException(m);
 		
 		size = m.getArgs()[Message.SIZE_POS];
@@ -104,7 +114,7 @@ public class Network extends Player {
 			}
 		}
 		shipCount = ships.size();
-		networkPartner.sendMessage(CONFIRM);
+		networkThread.sendMessage(String.format("%s\n", CONFIRM));
 	}
 	
 	public int getSize() {
@@ -119,17 +129,17 @@ public class Network extends Player {
 	public boolean doWhatYouHaveToDo() {
 		// warte bis gegner geschossen hat
 		
-		Message m = new Message(networkPartner.recieveMessage());
+		Message m = new Message(networkThread.recieveMessage());
 		Ship ship = logic.shoot(m.getArgs()[Message.COL_POS], m.getArgs()[Message.ROW_POS], this);
 		int a;
 		if(ship != null) {
 			if(ship.isAlive()) a = 1;
 			else a = 2;
 		}else a = 0;
-		networkPartner.sendMessage(String.format("%s %d", ANSWER, a));
+		networkThread.sendMessage(String.format("%s %d\n", ANSWER, a));
 		
 		// wenn hier false dann muss auf pass gewartet werden
-		m = new Message(networkPartner.recieveMessage());
+		m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(PASS))
 			throw new UnexpectedMessageException(m);
 		return a != 0;
@@ -137,21 +147,21 @@ public class Network extends Player {
 	
 	@Override
 	public Ship hit(int x, int y) {
-		networkPartner.sendMessage(String.format("%s %d %d", SHOOT, y, x));
-		Message m = new Message(networkPartner.recieveMessage());
+		networkThread.sendMessage(String.format("%s %d %d\n", SHOOT, y, x));
+		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(ANSWER))
 			throw new UnexpectedMessageException(m);
 		
 		// wenn hier false dann pass senden
 		int answ = m.getArgs()[Message.ANSWER_POS];
-		if(answ == 0) networkPartner.sendMessage(String.format("%s", PASS));
+		if(answ == 0) networkThread.sendMessage(String.format("%s\n", PASS));
 		
 		return Ship.sunkenShip(x, y);
 	}
 	
 	@Override
 	public void placeShips() {
-		Message m = new Message(networkPartner.recieveMessage());
+		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(CONFIRM))
 			throw new UnexpectedMessageException(m);
 	}
