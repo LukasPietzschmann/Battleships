@@ -25,7 +25,7 @@ public class Launcher {
 	 */
 	public static final int PL_NW_SV = 5;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		// TODO start GUI
 		// TODO mode = GUI.getMode();
 		int mode = NW_SV_AI;

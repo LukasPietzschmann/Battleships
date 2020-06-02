@@ -35,7 +35,7 @@ public abstract class LocalPlayer extends Player {
 	 */
 	public void randomShipPlacment() {//random zahlen x und y erzeugen für alle boote
 		map.reset();
-		ArrayList<Ship> ships = new ArrayList<>();
+		ArrayList<Ship> ships = logic.getAvailableShips();
 		if(!solveForShip(ships, 0)) {
 			map.reset();
 			System.err.print("Fehlerhaftes Schiffsetzen neustarten");
@@ -75,5 +75,9 @@ public abstract class LocalPlayer extends Player {
 	@Override
 	public boolean isAlive() {
 		return map.shipsNr() > 0;
+	}
+	
+	public void dumpMap(){
+		map.dump();
 	}
 }
