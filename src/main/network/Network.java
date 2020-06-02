@@ -7,7 +7,6 @@ import logic.Ship;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Array;
 import java.util.ArrayList;
 
 /**
@@ -74,10 +73,12 @@ public class Network extends Player {
 	 */
 	public Network(Logic logic, String name, int size) throws IOException {
 		super(logic, name);
-		networkThread = new NetworkThread(new ServerSocket(PORT), size);
+		networkThread = new NetworkThread(new ServerSocket(PORT));
 		networkThread.start();
+		shipCount = logic.getAvailableShips().size();
 		int[] shipCount = new int[4];
-		for(int i = 0; i < logic.getAvailableShips().size(); i++) shipCount[logic.getAvailableShips().get(i).getSize() - 2] += 1;
+		for(int i = 0; i < logic.getAvailableShips().size(); i++)
+			shipCount[logic.getAvailableShips().get(i).getSize() - 2] += 1;
 		networkThread.sendMessage(String.format("%s %d %d %d %d %d\n", SETUP, size, shipCount[0], shipCount[1], shipCount[2], shipCount[3]));
 		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(CONFIRM)) throw new UnexpectedMessageException(m);
@@ -108,10 +109,7 @@ public class Network extends Player {
 		ships = new ArrayList<>();
 		int[] posis = new int[] {Message.SHIPS2_POS, Message.SHIPS3_POS, Message.SHIPS4_POS, Message.SHIPS5_POS};
 		for(int i = 0; i < posis.length; i++) {
-			for(int j = 0; j < m.getArgs()[posis[i]]; j++) {
-				//FIXME gibt vllt Fehler, da die selben Schiffe eingefügt werden. (equals und hasCode in Ship)
-				ships.add(new Ship(0, 0, Ship.Direction.north, i + 2));
-			}
+			for(int j = 0; j < m.getArgs()[posis[i]]; j++) ships.add(new Ship(0, 0, Ship.Direction.north, i + 2));
 		}
 		shipCount = ships.size();
 		networkThread.sendMessage(String.format("%s\n", CONFIRM));
@@ -134,14 +132,19 @@ public class Network extends Player {
 		int a;
 		if(ship != null) {
 			if(ship.isAlive()) a = 1;
-			else a = 2;
+			else {
+				a = 2;
+				shipCount -= 1;
+			}
 		}else a = 0;
 		networkThread.sendMessage(String.format("%s %d\n", ANSWER, a));
 		
 		// wenn hier false dann muss auf pass gewartet werden
-		m = new Message(networkThread.recieveMessage());
-		if(!m.getMessageType().equals(PASS))
-			throw new UnexpectedMessageException(m);
+		if(a == 0) {
+			m = new Message(networkThread.recieveMessage());
+			if(!m.getMessageType().equals(PASS))
+				throw new UnexpectedMessageException(m);
+		}
 		return a != 0;
 	}
 	
@@ -154,9 +157,12 @@ public class Network extends Player {
 		
 		// wenn hier false dann pass senden
 		int answ = m.getArgs()[Message.ANSWER_POS];
-		if(answ == 0) networkThread.sendMessage(String.format("%s\n", PASS));
-		
-		return Ship.sunkenShip(x, y);
+		if(answ == 0) {
+			networkThread.sendMessage(String.format("%s\n", PASS));
+			return null;
+		}
+		if(answ == 1) return Ship.defaultShip(x, y);
+		return Ship.defaultSunkenShip(x, y);
 	}
 	
 	@Override
