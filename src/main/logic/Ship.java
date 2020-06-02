@@ -58,16 +58,26 @@ public class Ship {
 	}
 	
 	/**
-	 * Erzeugt ein {@link Ship} welches bereitzs versenkt wurde.
+	 * Erzeugt ein Standard-{@link Ship}.
+	 *
 	 * @param x x-Koordinate des Schiffs.
 	 * @param y y-Koordinate des Schiffs.
 	 * @return Ein bereits versenktes Schiff.
 	 */
-	public static Ship sunkenShip(int x, int y) {
-		int size = 5;
-		Ship ship = new Ship(x, y, Direction.north, size);
-		ship.hits = size;
-		
+	public static Ship defaultShip(int x, int y) {
+		return new Ship(x, y, Direction.north, 2);
+	}
+	
+	/**
+	 * Erzeugt ein {@link Ship} welches bereitzs versenkt wurde.
+	 *
+	 * @param x x-Koordinate des Schiffs.
+	 * @param y y-Koordinate des Schiffs.
+	 * @return Ein bereits versenktes Schiff.
+	 */
+	public static Ship defaultSunkenShip(int x, int y) {
+		Ship ship = defaultShip(x, y);
+		ship.hits = 2;
 		return ship;
 	}
 	
