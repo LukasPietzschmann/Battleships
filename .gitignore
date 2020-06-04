@@ -4,7 +4,11 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-
+.idea/**/*.xml
+.idea/vcs.xml
+.idea/discord.xml
+.idea/inspectionProfiles/
+.idea/modules.xml
 # Generated files
 .idea/**/contentModel.xml
 
@@ -91,6 +95,7 @@ hs_err_pid*
 
 # windows stuff
 *.ini
-/build/
+.idea/CamelCaseConfigNew.xml
+.idea/inspectionProfiles/
+Schiffeversenken.iml
 .idea/discord.xml
-.idea/inspectionProfiles/Project_Default.xml
