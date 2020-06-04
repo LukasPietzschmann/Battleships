@@ -91,3 +91,7 @@ hs_err_pid*
 
 # windows stuff
 *.ini
+.idea/CamelCaseConfigNew.xml
+.idea/inspectionProfiles/
+Schiffeversenken.iml
+.idea/discord.xml
