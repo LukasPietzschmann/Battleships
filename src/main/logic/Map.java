@@ -344,6 +344,10 @@ public class Map {
 		}
 	}
 	
+	public boolean isInMap(int x, int y) {
+		return x >= 0 && x < map.length && y >= 0 && y < map.length;
+	}
+	
 	/**
 	 * Nach Außen nicht sichtbare Hilfsklasse zur modellierung des Spielfelds.
 	 */
