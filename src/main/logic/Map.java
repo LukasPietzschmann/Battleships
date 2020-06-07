@@ -106,10 +106,58 @@ public class Map {
 						}
 						break;
 					case north:
+						if(sx < 0) {
+							for(int i = 0; i < ship.getSize(); i++) {
+								map[sy + i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
+							}
+						}
+						if(sx > map.length - 1) {
+							for(int i = 0; i < ship.getSize(); i++) {
+								map[sy - i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
+							}
+						}
+						if(sy > map.length - 1) {
+							map[sy - 1][sx].stat = MapTile.DEFINITELY_NO_SHIP;
+						}
+						if((sy - ship.getSize()) + 1 < 0) {
+							map[sy + ship.getSize()][sx].stat = MapTile.DEFINITELY_NO_SHIP;
+						}
 						break;
 					case west:
+						if(sx < 0) {
+							for(int i = 0; i < ship.getSize(); i++) {
+								map[sx - i][sy - 1].stat = MapTile.DEFINITELY_NO_SHIP;
+							}
+						}
+						if(sx > map.length - 1) {
+							for(int i = 0; i < ship.getSize(); i++) {
+								map[sx - i][sy + 1].stat = MapTile.DEFINITELY_NO_SHIP;
+							}
+						}
+						if(sy > map.length - 1) {
+							map[sx + 1][sy].stat = MapTile.DEFINITELY_NO_SHIP;
+						}
+						if((sy - ship.getSize()) + 1 < 0) {
+							map[sx - ship.getSize()][sy].stat = MapTile.DEFINITELY_NO_SHIP;
+						}
 						break;
 					case east:
+						if(sx > 0) {
+							for(int i = 0; i < ship.getSize(); i++) {
+								map[sx - i][sy - 1].stat = MapTile.DEFINITELY_NO_SHIP;
+							}
+						}
+						if(sx < map.length - 1) {
+							for(int i = 0; i < ship.getSize(); i++) {
+								map[sx - i][sy + 1].stat = MapTile.DEFINITELY_NO_SHIP;
+							}
+						}
+						if(sy < map.length - 1) {
+							map[sx+ 1][sy].stat = MapTile.DEFINITELY_NO_SHIP;
+						}
+						if((sy - ship.getSize()) + 1 > 0) {
+							map[sx - ship.getSize()][sy].stat = MapTile.DEFINITELY_NO_SHIP;
+						}
 						break;
 				}//TODO Fertig machen
 			}
