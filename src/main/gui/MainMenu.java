@@ -55,8 +55,8 @@ public class MainMenu {
 			JRadioButton battleshipsButton = new JRadioButton("Battleships");
 			JRadioButton battlecarsButton = new JRadioButton("Battlecars");
 	
-	Color textColor = Color.LIGHT_GRAY;
-	Color backgroundColor = new Color(35,35,35);
+	static Color textColor = Color.LIGHT_GRAY;
+	static Color backgroundColor = new Color(35,35,35);
 	
 	ImageIcon themeIcon;
 	
@@ -139,8 +139,15 @@ public class MainMenu {
 				public void actionPerformed(ActionEvent a) {
 //					boolean shipsCanFitOnGrid = Logic.shipsCanFitOnGrid();
 					boolean shipsCanFitOnGrid = true;
-					if (shipsCanFitOnGrid == false) {
-						throwErrorMessage();
+					if (noElementsSelected() == true || shipsCanFitOnGrid == false) {
+						if (noElementsSelected() == true) {
+							throwErrorMessage(2);
+							return;
+						}
+						if (shipsCanFitOnGrid == false) {
+							throwErrorMessage(1);
+							return;
+						}
 					} else {
 						panel.setVisible(false);
 						GameWindow game = new GameWindow(frame, "pvc");
@@ -163,10 +170,18 @@ public class MainMenu {
 			pvpButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent a) {
 //					boolean shipsCanFitOnGrid = Logic.shipsCanFitOnGrid();
-					boolean shipsCanFitOnGrid = false;
-					if (shipsCanFitOnGrid == false) {
-						throwErrorMessage();
+					boolean shipsCanFitOnGrid = true;
+					if (noElementsSelected() == true || shipsCanFitOnGrid == false) {
+						if (noElementsSelected() == true) {
+							throwErrorMessage(2);
+							return;
+						}
+						if (shipsCanFitOnGrid == false) {
+							throwErrorMessage(1);
+							return;
+						}
 					} else {
+						new JOptionPaneConnect(frame).displayGui();
 						panel.setVisible(false);
 						GameWindow game = new GameWindow(frame, "pvp");
 						game.setUpGameWindow();
@@ -189,8 +204,15 @@ public class MainMenu {
 				public void actionPerformed(ActionEvent a) {
 //					boolean shipsCanFitOnGrid = Logic.shipsCanFitOnGrid();
 					boolean shipsCanFitOnGrid = false;
-					if (shipsCanFitOnGrid == false) {
-						throwErrorMessage();
+					if (noElementsSelected() == true || shipsCanFitOnGrid == false) {
+						if (noElementsSelected() == true) {
+							throwErrorMessage(2);
+							return;
+						}
+						if (shipsCanFitOnGrid == false) {
+							throwErrorMessage(1);
+							return;
+						}
 					} else {
 						panel.setVisible(false);
 						GameWindow game = new GameWindow(frame, "cvc");
@@ -272,74 +294,37 @@ public class MainMenu {
 			});
 			
 			// Sound Button
-//			JToggleButton soundButton = new JToggleButton("Sound an/ausschalten");
-//			Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-//			Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-//			if (GuiTester.soundPlaying == true) {
-//				soundButton.setEnabled(true);
-//				soundButton.setIcon(soundOnIcon);
-//			} else {
-//				soundButton.setEnabled(false);
-//				soundButton.setIcon(soundOffIcon);
-//			}
-//			soundButton.setHorizontalAlignment(SwingConstants.LEFT);
-//			soundButton.setBorder(null);
-//			soundButton.setToolTipText("Lautstärke anpassen");
-//			soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//			soundButton.setMinimumSize(new Dimension(50, 50));
-//			soundButton.setMaximumSize(new Dimension(50, 50));
-//			soundButton.setPreferredSize(new Dimension(50, 50));
-//			soundButton.addActionListener(new ActionListener(){
-//				@Override
-//				public void actionPerformed(ActionEvent arg0) {
-//					if (soundButton.isEnabled() == true) {
-//						MainWindow.music.stopMusic();
-//						GuiTester.soundPlaying = false;
-//						soundButton.setEnabled(false);
-//						soundButton.setDisabledIcon(soundOffIcon);
-//					} else {
-//						MainWindow.music.restartMusic();
-//						GuiTester.soundPlaying = true;
-//						soundButton.setEnabled(true);
-//						soundButton.setSelectedIcon(soundOnIcon);
-//					}
-//				}	
-//			});
-			
-			// Sound Button
-						JButton soundButton = new JButton("Lautstärke anpassen");
-						Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-						Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-						if (GuiTester.soundPlaying == true) {
-							soundButton.setIcon(soundOnIcon);
-						} else {
-							soundButton.setIcon(soundOffIcon);
-						}
-						soundButton.setHorizontalAlignment(SwingConstants.LEFT);
+			JButton soundButton = new JButton("Lautstärke anpassen");
+			Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+			Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+			if (GuiTester.soundPlaying == true) {
+				soundButton.setIcon(soundOnIcon);
+			} else {
+				soundButton.setIcon(soundOffIcon);
+			}
+			soundButton.setHorizontalAlignment(SwingConstants.LEFT);
+			soundButton.setBorder(null);
+			soundButton.setToolTipText("Lautstärke anpassen");
+			soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			soundButton.setMinimumSize(new Dimension(50, 50));
+			soundButton.setMaximumSize(new Dimension(50, 50));
+			soundButton.setPreferredSize(new Dimension(50, 50));
+			soundButton.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					if (GuiTester.soundPlaying == true) {
+						soundButton.setIcon(soundOffIcon);
 						soundButton.setBorder(null);
-						soundButton.setToolTipText("Lautstärke anpassen");
-						soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-						soundButton.setMinimumSize(new Dimension(50, 50));
-						soundButton.setMaximumSize(new Dimension(50, 50));
-						soundButton.setPreferredSize(new Dimension(50, 50));
-						soundButton.addActionListener(new ActionListener(){
-							@Override
-							public void actionPerformed(ActionEvent arg0) {
-								if (GuiTester.soundPlaying == true) {
-									soundButton.setIcon(soundOffIcon);
-									soundButton.setBorder(null);
-									MainWindow.music.stopMusic();
-									GuiTester.soundPlaying = false;
-								} else {
-									soundButton.setIcon(soundOnIcon);
-									soundButton.setBorder(null);
-									MainWindow.music.restartMusic();
-									GuiTester.soundPlaying = true;
-								}
-							}	
-						});			
-			
-			
+						MainWindow.music.stopMusic();
+						GuiTester.soundPlaying = false;
+					} else {
+						soundButton.setIcon(soundOnIcon);
+						soundButton.setBorder(null);
+						MainWindow.music.restartMusic();
+						GuiTester.soundPlaying = true;
+					}
+				}	
+			});			
 		
 		// Modes Layout
 		modes.add(Box.createHorizontalGlue());
@@ -452,7 +437,7 @@ public class MainMenu {
 						if (GuiTester.fiveFieldElementCount < GuiTester.fiveFieldElementMaxCount){
 							GuiTester.fiveFieldElementCount += 1;
 						}else{
-							GuiTester.fiveFieldElementCount = 1;
+							GuiTester.fiveFieldElementCount = 0;
 						}
 						fiveFieldElementText.setText(GuiTester.fiveFieldElementCount + 
 								"x " + GuiTester.fiveFieldElementName);
@@ -469,7 +454,7 @@ public class MainMenu {
 				fiveFieldElementCountDecrease.addActionListener(new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						if (GuiTester.fiveFieldElementCount > 1){
+						if (GuiTester.fiveFieldElementCount > 0){
 							GuiTester.fiveFieldElementCount -= 1;
 						}else{
 							GuiTester.fiveFieldElementCount = GuiTester.fiveFieldElementMaxCount;
@@ -513,7 +498,7 @@ public class MainMenu {
 						if (GuiTester.fourFieldElementCount < GuiTester.fourFieldElementMaxCount){
 							GuiTester.fourFieldElementCount += 1;
 						}else{
-							GuiTester.fourFieldElementCount = 1;
+							GuiTester.fourFieldElementCount = 0;
 						}
 						fourFieldElementText.setText(GuiTester.fourFieldElementCount + 
 								"x " + GuiTester.fourFieldElementName);
@@ -530,7 +515,7 @@ public class MainMenu {
 				fourFieldElementCountDecrease.addActionListener(new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						if (GuiTester.fourFieldElementCount > 1){
+						if (GuiTester.fourFieldElementCount > 0){
 							GuiTester.fourFieldElementCount -= 1;
 						}else{
 							GuiTester.fourFieldElementCount = GuiTester.fourFieldElementMaxCount;
@@ -574,7 +559,7 @@ public class MainMenu {
 						if (GuiTester.threeFieldElementCount < GuiTester.threeFieldElementMaxCount){
 							GuiTester.threeFieldElementCount += 1;
 						}else{
-							GuiTester.threeFieldElementCount = 1;
+							GuiTester.threeFieldElementCount = 0;
 						}
 						threeFieldElementText.setText(GuiTester.threeFieldElementCount + 
 								"x " + GuiTester.threeFieldElementName);
@@ -591,7 +576,7 @@ public class MainMenu {
 				threeFieldElementCountDecrease.addActionListener(new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						if (GuiTester.threeFieldElementCount > 1){
+						if (GuiTester.threeFieldElementCount > 0){
 							GuiTester.threeFieldElementCount -= 1;
 						}else{
 							GuiTester.threeFieldElementCount = GuiTester.threeFieldElementMaxCount;
@@ -635,7 +620,7 @@ public class MainMenu {
 						if (GuiTester.twoFieldElementCount < GuiTester.twoFieldElementMaxCount){
 							GuiTester.twoFieldElementCount += 1;
 						}else{
-							GuiTester.twoFieldElementCount = 1;
+							GuiTester.twoFieldElementCount = 0;
 						}
 						twoFieldElementText.setText(GuiTester.twoFieldElementCount + 
 								"x " + GuiTester.twoFieldElementName);
@@ -652,7 +637,7 @@ public class MainMenu {
 				twoFieldElementCountDecrease.addActionListener(new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						if (GuiTester.twoFieldElementCount > 1){
+						if (GuiTester.twoFieldElementCount > 0){
 							GuiTester.twoFieldElementCount -= 1;
 						}else{
 							GuiTester.twoFieldElementCount = GuiTester.twoFieldElementMaxCount;
@@ -778,7 +763,6 @@ public class MainMenu {
 		
 		// Frame Settings
 		frame.getContentPane().add(panel);
-		frame.setBackground(backgroundColor);
 		frame.setVisible(true);
 	}
 	
@@ -791,10 +775,22 @@ public class MainMenu {
 		}
 	}
 	
-	public void throwErrorMessage() {
-		JOptionPane.showMessageDialog(panel, "Zu viele " + GuiTester.themeIdentifierPlural + " für das gewählte Spielfeld!\nAnzahl der "
-				+ GuiTester.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
-			      "Fehlermeldung", JOptionPane.ERROR_MESSAGE);
+	public void throwErrorMessage(int i) {
+		// Too many ships for the specific grid
+		if (i==1) {
+			JOptionPane.showMessageDialog(panel, "Zu viele " + GuiTester.themeIdentifierPlural + " für das gewählte Spielfeld!\nAnzahl der "
+					+ GuiTester.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
+				      "Fehlermeldung: Zu viele Schiffe für das Spielfeld", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		// No ships selected at all
+		if (i==2) {
+			JOptionPane.showMessageDialog(panel, "Es wurden keine " + GuiTester.themeIdentifierPlural + " ausgewählt!\nMindestens ein "
+					+ GuiTester.themeIdentifierSingular + " auswählen, um fortzufahren.",
+				      "Fehlermeldung: Keine Schiffe ausgewählt", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
 	}
 	
 	public void showInfo() {
@@ -851,6 +847,13 @@ public class MainMenu {
 		}
 		
 		//...
+	}
+	
+	public boolean noElementsSelected() {
+		if (GuiTester.fiveFieldElementCount + GuiTester.fourFieldElementCount + GuiTester.threeFieldElementCount + GuiTester.twoFieldElementCount == 0) {
+			return true;
+		}
+		return false;
 	}
 	
 	public void updateThemeItems() {

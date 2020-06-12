@@ -1,6 +1,6 @@
 package main.gui;
 
-
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -16,7 +16,7 @@ public class MainWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(1130, 700));
 		frame.setMinimumSize(new Dimension(1130, 700));
-		frame.setVisible(true);
+		frame.setBackground(Color.DARK_GRAY);
 		createMenu();
 	}
 	
@@ -24,6 +24,7 @@ public class MainWindow {
 		gameRunning = true;
 		
 		MainMenu menu = new MainMenu(frame);
+		
 		menu.setUpMenu();
 		
 		String filepath = "src/res/sound.wav";
