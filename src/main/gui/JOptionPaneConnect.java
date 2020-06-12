@@ -18,17 +18,19 @@ import javax.swing.JTextField;
 
 public class JOptionPaneConnect {
 	private Component parentComponent;
-	Object[] options = {"Bestätigen", "Abbrechen"};
-	JTextField textfield;
-	JLabel ip;
+	private Object[] options = {"Bestätigen", "Abbrechen"};
+	private JTextField textfield;
+	private JLabel ip;
+	private char role = 's';
 	
 	public JOptionPaneConnect(Component parentComponent) {
 		this.parentComponent = parentComponent;
 	}
 	
-	public void displayGui() {
-		JOptionPane.showMessageDialog(parentComponent, getPanel(), "Verbindungseinstellungen",
-				JOptionPane.PLAIN_MESSAGE, null);
+	public int displayGui() {
+		int n = JOptionPane.showOptionDialog(parentComponent, getPanel(), "Verbindungseinstellungen",
+				JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		return n;
 	}
 	
 	private JPanel getPanel() {
@@ -36,9 +38,11 @@ public class JOptionPaneConnect {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		JRadioButton serverButton = new JRadioButton("Verbinden als Server");
 		serverButton.setPreferredSize(new Dimension(210, 30));
+		serverButton.setSelected(true);
 		serverButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				role = 's';
 				textfield.setEnabled(false);
 				ip.setEnabled(false);
 				textfield.setText("192.168.21.2");
@@ -51,6 +55,7 @@ public class JOptionPaneConnect {
 		clientButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				role = 'c';
 				textfield.setEnabled(true);
 				ip.setEnabled(true);
 				panel.validate();
@@ -78,6 +83,20 @@ public class JOptionPaneConnect {
 		panel.add(textfield);
 		panel.add(Box.createVerticalGlue());
 		return panel;
+	}
+	
+	public String getIP() {
+		if (role == 's') {
+			return null;
+		}
+		if (role == 'c') {
+			return textfield.getText();
+		}
+		return null;
+	}
+	
+	public char getRole() {
+		return role;
 	}
 	
 }

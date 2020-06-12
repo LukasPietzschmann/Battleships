@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GameWindow {
 	private JFrame frame; 
@@ -76,6 +78,27 @@ public class GameWindow {
 		// elements Panel Settings
 		elements.setLayout(new BoxLayout(elements, BoxLayout.Y_AXIS));
 		elements.setOpaque(false);
+		
+		// elements Panel Elements
+		
+		MainMenu.fiveFieldElementIcon.setTransferHandler(new TransferHandler("text"));
+		MainMenu.fiveFieldElementIcon.addMouseListener(new MouseAdapter() {
+		    public void mousePressed(MouseEvent e) {
+		      JComponent c = (JComponent)e.getSource();
+		      TransferHandler th = c.getTransferHandler();
+		      th.exportAsDrag(c, e, TransferHandler.COPY);
+		    }
+		  });
+		
+		elements.add(Box.createRigidArea(new Dimension(0, 50)));
+		elements.add(MainMenu.fiveFieldElementIcon);
+		elements.add(Box.createVerticalStrut(35));
+		elements.add(MainMenu.fourFieldElementIcon);
+		elements.add(Box.createVerticalStrut(35));
+		elements.add(MainMenu.threeFieldElementIcon);
+		elements.add(Box.createVerticalStrut(35));
+		elements.add(MainMenu.twoFieldElementIcon);
+		elements.add(Box.createRigidArea(new Dimension(0, 50)));
 		
 		// elementsCounter Panel Settings
 		elementsCounter.setLayout(new BoxLayout(elementsCounter, BoxLayout.Y_AXIS));

@@ -23,6 +23,9 @@ public class GuiTester {
 	public static String threeFieldElementName;
 	public static String twoFieldElementName;
 	
+	public static char role;
+	public static String clientIP;
+	
 	public static void main(String[] args) {
 		MainWindow main = new MainWindow();
 		main.setUpMainWindow();

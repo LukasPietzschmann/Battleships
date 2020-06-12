@@ -22,15 +22,15 @@ public class MainMenu {
 	private JPanel settings = new JPanel();
 	
 		private JPanel icons = new JPanel();
-			private ImageIcon fiveFieldElementIconFromSide;
-			private ImageIcon fourFieldElementIconFromSide;
-			private ImageIcon threeFieldElementIconFromSide;
-			private ImageIcon twoFieldElementIconFromSide;
-			private JLabel fiveFieldElementIcon = new JLabel();
-			private JLabel fourFieldElementIcon = new JLabel();
-			private JLabel threeFieldElementIcon = new JLabel();
-			private JLabel twoFieldElementIcon = new JLabel();
-			private JLabel gridIcon = new JLabel();
+			public ImageIcon fiveFieldElementIconFromSide;
+			public ImageIcon fourFieldElementIconFromSide;
+			public ImageIcon threeFieldElementIconFromSide;
+			public ImageIcon twoFieldElementIconFromSide;
+			public static JLabel fiveFieldElementIcon = new JLabel();
+			public static JLabel fourFieldElementIcon = new JLabel();
+			public static JLabel threeFieldElementIcon = new JLabel();
+			public static JLabel twoFieldElementIcon = new JLabel();
+			public static JLabel gridIcon = new JLabel();
 			
 		private JPanel counters = new JPanel();
 			private JLabel fiveFieldElementText = new JLabel();
@@ -181,10 +181,16 @@ public class MainMenu {
 							return;
 						}
 					} else {
-						new JOptionPaneConnect(frame).displayGui();
-						panel.setVisible(false);
-						GameWindow game = new GameWindow(frame, "pvp");
-						game.setUpGameWindow();
+						JOptionPaneConnect connect = new JOptionPaneConnect(frame);
+						int n = connect.displayGui();
+						if (n == 0) {
+							GuiTester.clientIP = connect.getIP();
+							GuiTester.role = connect.getRole();
+//							boolean check = Logic.checkConnectSettings(role, ip);
+							panel.setVisible(false);
+							GameWindow game = new GameWindow(frame, "pvp");
+							game.setUpGameWindow();
+						}
 					}
 				}
 			});
@@ -203,7 +209,7 @@ public class MainMenu {
 			cvcButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent a) {
 //					boolean shipsCanFitOnGrid = Logic.shipsCanFitOnGrid();
-					boolean shipsCanFitOnGrid = false;
+					boolean shipsCanFitOnGrid = true;
 					if (noElementsSelected() == true || shipsCanFitOnGrid == false) {
 						if (noElementsSelected() == true) {
 							throwErrorMessage(2);
@@ -214,9 +220,16 @@ public class MainMenu {
 							return;
 						}
 					} else {
-						panel.setVisible(false);
-						GameWindow game = new GameWindow(frame, "cvc");
-						game.setUpGameWindow();
+						JOptionPaneConnect connect = new JOptionPaneConnect(frame);
+						int n = connect.displayGui();
+						if (n == 0) {
+							GuiTester.clientIP = connect.getIP();
+							GuiTester.role = connect.getRole();
+//							boolean check = Logic.checkConnectSettings(role, ip);
+							panel.setVisible(false);
+							GameWindow game = new GameWindow(frame, "cvc");
+							game.setUpGameWindow();
+						}
 					}
 				}
 			});
@@ -360,22 +373,16 @@ public class MainMenu {
 			// fiveFieldElementIcon Label
 			fiveFieldElementIcon.setIcon(fiveFieldElementIconFromSide);
 			fiveFieldElementIcon.setMinimumSize(new Dimension(250, 50));
-			fiveFieldElementIcon.setOpaque(false);
-			fiveFieldElementIcon.setBackground(Color.green);
 			fiveFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
 			// fourFieldElementIcon Label
 			fourFieldElementIcon.setIcon(fourFieldElementIconFromSide);
 			fourFieldElementIcon.setMinimumSize(new Dimension(200, 50));
-			fourFieldElementIcon.setOpaque(false);
-			fourFieldElementIcon.setBackground(Color.blue);
 			fourFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			
 			// threeFieldElementIcon Label
 			threeFieldElementIcon.setIcon(threeFieldElementIconFromSide);
 			threeFieldElementIcon.setMinimumSize(new Dimension(150, 50));
-			threeFieldElementIcon.setOpaque(false);
-			threeFieldElementIcon.setBackground(Color.red);
 			threeFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			
 			// twoFieldElementIcon Label
@@ -844,9 +851,8 @@ public class MainMenu {
 			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/kombi.png").getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
 			
 			themeIcon = new ImageIcon(new ImageIcon("src/res/battlecarsThemeIcon2.png").getImage());
+			
 		}
-		
-		//...
 	}
 	
 	public boolean noElementsSelected() {
