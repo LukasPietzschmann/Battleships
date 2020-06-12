@@ -13,7 +13,7 @@ public class JGrid extends JPanel {
 		this.size = size;
 	}
 	
-	protected void paintComponent(Graphics g) {
-		// ...
-	}
+//	protected void paintComponent(Graphics g) {
+//		// ...
+//	}
 }
