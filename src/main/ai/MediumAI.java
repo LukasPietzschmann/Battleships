@@ -2,20 +2,16 @@ package ai;
 
 import logic.Logic;
 
+import logic.Map;
+import logic.Player;
 import logic.Ship;
 import logic.Ship.Direction;
 
 import java.util.Random;
 
-public class MediumAI extends AI {
-	/**
-	 * @param l "Zurück-Referenz" auf das Logik Objekt.
-	 * @param size Die festgelegte Größe des Spielfelds.
-	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
-	 * @param difficulty Die Schwierigkeitsstufe des Computers
-	 */
-	public MediumAI(Logic l, int size, String name, Difficulty difficulty) {
-		super(l, size, name, difficulty);
+public class MediumAI extends PlayableAI {
+	public MediumAI(Player player, Logic logic, Map map) {
+		super(player, logic, map);
 	}
 	
 	/**
@@ -25,7 +21,7 @@ public class MediumAI extends AI {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public boolean doWhatYouHaveToDo() {
+	public boolean makeMove() {
 		Random rnd = new Random();
 		int x, y;
 		Direction dir;
@@ -35,7 +31,7 @@ public class MediumAI extends AI {
 			x = rnd.nextInt(map.getSize());
 			y = rnd.nextInt(map.getSize());
 			
-			if(logic.shoot(x, y, this) == null) return false; // Wenn nicht getroffen wurde
+			if(logic.shoot(x, y, player) == null) return false; // Wenn nicht getroffen wurde
 			else {
 				// Wenn getroffen wurde, wird der Punkt gespeichert
 				lastXPos = x;
