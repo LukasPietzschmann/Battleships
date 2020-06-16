@@ -32,14 +32,18 @@ public abstract class LocalPlayer extends Player {
 	
 	/**
 	 * Platziert alle Schiffe zufällig auf dem Spielfeld.
+	 * @return {@code true}, falls die Schiffe erfolgreich platziert werden kommten. Sonst {@code false}.
 	 */
-	public void randomShipPlacment() {//random zahlen x und y erzeugen für alle boote
+	public boolean randomShipPlacment() {//random zahlen x und y erzeugen für alle boote
 		map.reset();
 		ArrayList<Ship> ships = logic.getAvailableShips();
 		if(!solveForShip(ships, 0)) {
 			map.reset();
 			System.err.print("Fehlerhaftes Schiffsetzen neustarten");
+			return false;
 		}
+		
+		return true;
 	}
 	
 	/**
