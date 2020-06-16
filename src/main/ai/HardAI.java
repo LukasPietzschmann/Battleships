@@ -1,28 +1,25 @@
 package ai;
 
 import logic.Logic;
+import logic.Map;
+import logic.Player;
 import logic.Ship;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class HardAI extends AI {
+public class HardAI extends PlayableAI {
 	private int minSize;
 	ArrayList<Ship> ships;
 	
-	/**
-	 * @param l "Zurück-Referenz" auf das Logik Objekt.
-	 * @param size Die festgelegte Größe des Spielfelds.
-	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
-	 * @param difficulty Die Schwierigkeitsstufe des Computers
-	 */
-	public HardAI(Logic l, int size, String name, Difficulty difficulty) {
-		super(l, size, name, difficulty);
-		ships = l.getAvailableShips();
+	public HardAI(Player player, Logic logic, Map map) {
+		super(player, logic, map);
+		ships = logic.getAvailableShips();
 		genMinSize();
 	}
 	
-	public boolean doWhatYouHaveToDo() {
+	@Override
+	public boolean makeMove() {
 		Random rnd = new Random();
 		int x, y;
 		Ship.Direction dir;
@@ -35,7 +32,7 @@ public class HardAI extends AI {
 				//FIXME canShipBePlaced muss auf ship!=null überprüfen und net auf status == SHIP
 			}while(x % minSize != 0 || y % minSize != 0 || !map.canShipBePlaced(new Ship(x, y, Ship.Direction.north, 1)));
 			
-			if(logic.shoot(x, y, this) == null) return false; // Wenn nicht getroffen wurde
+			if(logic.shoot(x, y, player) == null) return false; // Wenn nicht getroffen wurde
 			else {
 				// Wenn getroffen wurde, wird der Punkt gespeichert
 				lastXPos = x;
