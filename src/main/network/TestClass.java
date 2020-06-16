@@ -12,7 +12,7 @@ class ClientTest {
 
 class ServerTest {
 	public static void main(String[] args) throws Exception{
-		Logic logic = new Logic("PL", "NW", 3);
+		Logic logic = new Logic("PL", "NW", "127.0.0.1");
 		logic.ownPlayer.placeShips();
 		logic.startGame();
 	}

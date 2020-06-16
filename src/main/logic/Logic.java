@@ -146,12 +146,13 @@ public class Logic {
 			while(hit) {
 				if(!otherPlayer.isAlive()) {
 					System.out.println(String.format("%s hat gewonnen!!", currPlayer.name));
+					return;
 				}
 				
 				hit = currPlayer.doWhatYouHaveToDo();
-				//System.out.println(ownPlayer.name);
-				//((LocalPlayer)ownPlayer).dumpMap();
-				//System.out.println("\n");
+				System.out.println(ownPlayer.name);
+				((LocalPlayer)ownPlayer).dumpMap();
+				System.out.println("\n");
 			}
 			
 			Player temp = currPlayer;
