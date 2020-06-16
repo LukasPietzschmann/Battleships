@@ -8,7 +8,7 @@ import logic.Ship;
 /**
  * Die Klasse AI modelliert einen Computer-Spieler.
  */
-public abstract class AI extends LocalPlayer {
+public class AI extends LocalPlayer {
 	/**
 	 * Das tatsächlich Spielende AI-Objekt ({@link EasyAI}, {@link MediumAI}, oder {@link HardAI}).
 	 */
