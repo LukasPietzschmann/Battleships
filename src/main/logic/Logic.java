@@ -47,7 +47,7 @@ public class Logic {
 		this(Launcher.NW_CL_AI);
 		oppPlayer = new Network(this, nameNW, IP);
 		ships = ((Network)oppPlayer).getShips();
-		ownPlayer = new AI(difficulty, this, ((Network) oppPlayer).getSize(), nameNW);
+		ownPlayer = new AI(this, ((Network)oppPlayer).getSize(), nameNW, difficulty);
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class Logic {
 	 */
 	public Logic(String nameAI, String nameNW, Difficulty difficulty, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
 		this(Launcher.NW_SV_AI, ship2Count, ship3Count, ship4Count, ship5Count);
-		ownPlayer = new AI(difficulty, this, size, nameAI);
+		ownPlayer = new AI(this, size, nameAI, difficulty);
 		oppPlayer = new Network(this, nameNW, size);
 	}
 	
@@ -75,7 +75,7 @@ public class Logic {
 	public Logic(String nameAI, String namePL, int size, Difficulty difficulty, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		this(Launcher.PL_AI, ship2Count, ship3Count, ship4Count, ship5Count);
 		ownPlayer = new Human(this, size, namePL);
-		oppPlayer = new AI(difficulty, this, size, nameAI);
+		oppPlayer = new AI(this, size, nameAI, difficulty);
 	}
 	
 	/**
