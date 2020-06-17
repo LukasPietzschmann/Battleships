@@ -27,6 +27,14 @@ public class Logic {
 	
 	private Logic(int moded, int ship2Count, int ship3Count, int ship4Count, int ship5Count){
 		this(moded);
+		ships = new ArrayList<>();
+		int[] ships = {ship2Count, ship3Count, ship4Count, ship5Count};
+		
+		for(int i = 0; i < ships.length; i++) {
+			for(int j = 0; j < ships[i]; j++) {
+				this.ships.add(new Ship(0,0, Ship.Direction.north, i + 2));
+			}
+		}
 	}
 	
 	public Logic(String nameAI1, String nameAI2, Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count){
@@ -141,6 +149,8 @@ public class Logic {
 				otherPlayer = oppPlayer;
 		}
 		
+		currPlayer.placeShips();
+		otherPlayer.placeShips();
 		while(true) {
 			hit = true;
 			while(hit) {
@@ -150,8 +160,8 @@ public class Logic {
 				}
 				
 				hit = currPlayer.doWhatYouHaveToDo();
-				System.out.println(ownPlayer.name);
-				((LocalPlayer)ownPlayer).dumpMap();
+				System.out.println(otherPlayer.name);
+				((LocalPlayer)otherPlayer).dumpMap();
 				System.out.println("\n");
 			}
 			
@@ -167,10 +177,6 @@ public class Logic {
 	 * @return Eine Liste an Schiffen, die platziert werden können.
 	 */
 	public ArrayList<Ship> getAvailableShips() {
-		//TODO implement
-		if(ships != null) return ships;
-		ships = new ArrayList<>();
-		ships.add(new Ship(0, 0, Ship.Direction.north, 3));
 		return ships;
 	}
 }

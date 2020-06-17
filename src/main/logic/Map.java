@@ -32,7 +32,7 @@ public class Map {
 	 */
 	public void dump() {
 		for(MapTile[] mapTiles : map) {
-			System.out.println("|");
+			System.out.print("|");
 			for(MapTile tile : mapTiles) {
 				String s = "";
 				switch(tile.stat) {
@@ -86,80 +86,56 @@ public class Map {
 				int sx, sy;
 				sx = ship.getXPos();
 				sy = ship.getYPos();
-				switch(ship.getDirection()) {
-					case south:
-						if(sx > 0) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sy - i][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
-						}
-						if(sx < map.length - 1) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sy - i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
-						}
-						if(sy < map.length - 1) {
-							map[sy + 1][sx].stat = MapTile.DEFINITELY_NO_SHIP;
-						}
-						if((sy - ship.getSize()) + 1 > 0) {
-							map[sy - ship.getSize()][sx].stat = MapTile.DEFINITELY_NO_SHIP;
-						}
-						break;
+				switch (ship.getDirection()) {
 					case north:
-						if(sx < 0) {
-							for(int i = 0; i < ship.getSize(); i++) {
+						if (sx > 0)
+							for (int i = 0; i < ship.getSize(); i++)
+								map[sy + i][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
+						if (sx < map.length - 1)
+							for (int i = 0; i < ship.getSize(); i++)
 								map[sy + i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
-						}
-						if(sx > map.length - 1) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sy - i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
-						}
-						if(sy > map.length - 1) {
+						if (sy > 0)
 							map[sy - 1][sx].stat = MapTile.DEFINITELY_NO_SHIP;
-						}
-						if((sy - ship.getSize()) + 1 < 0) {
+						if (sy + ship.getSize() - 1 < map.length - 1)
 							map[sy + ship.getSize()][sx].stat = MapTile.DEFINITELY_NO_SHIP;
-						}
+						break;
+					case south:
+						if (sx > 0)
+							for (int i = 0; i < ship.getSize(); i++)
+								map[sy - i][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
+						if (sx < map.length - 1)
+							for (int i = 0; i < ship.getSize(); i++)
+								map[sy - i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
+						if (sy < map.length - 1)
+							map[sy + 1][sx].stat = MapTile.DEFINITELY_NO_SHIP;
+						if ((sy - ship.getSize()) + 1 > 0)
+							map[sy - ship.getSize()][sx].stat = MapTile.DEFINITELY_NO_SHIP;
 						break;
 					case west:
-						if(sx < 0) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sx - i][sy - 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
-						}
-						if(sx > map.length - 1) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sx - i][sy + 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
-						}
-						if(sy > map.length - 1) {
-							map[sx + 1][sy].stat = MapTile.DEFINITELY_NO_SHIP;
-						}
-						if((sy - ship.getSize()) + 1 < 0) {
-							map[sx - ship.getSize()][sy].stat = MapTile.DEFINITELY_NO_SHIP;
-						}
+						if (sy > 0)
+							for (int i = 0; i < ship.getSize(); i++)
+								map[sy - 1][sx + i].stat = MapTile.DEFINITELY_NO_SHIP;
+						if (sy < map.length - 1)
+							for (int i = 0; i < ship.getSize(); i++)
+								map[sy + 1][sx + i].stat = MapTile.DEFINITELY_NO_SHIP;
+						if (sx > 0)
+							map[sy][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
+						if (sx + ship.getSize() - 1 < map.length - 1)
+							map[sy][sx + ship.getSize()].stat = MapTile.DEFINITELY_NO_SHIP;
 						break;
 					case east:
-						if(sx > 0) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sx - i][sy - 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
-						}
-						if(sx < map.length - 1) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sx - i][sy + 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
-						}
-						if(sy < map.length - 1) {
-							map[sx+ 1][sy].stat = MapTile.DEFINITELY_NO_SHIP;
-						}
-						if((sy - ship.getSize()) + 1 > 0) {
-							map[sx - ship.getSize()][sy].stat = MapTile.DEFINITELY_NO_SHIP;
-						}
+						if (sy > 0)
+							for (int i = 0; i < ship.getSize(); i++)
+								map[sy - 1][sx - i].stat = MapTile.DEFINITELY_NO_SHIP;
+						if (sy < map.length - 1)
+							for (int i = 0; i < ship.getSize(); i++)
+								map[sy + 1][sx - i].stat = MapTile.DEFINITELY_NO_SHIP;
+						if (sx < map.length - 1)
+							map[sy][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
+						if ((sx - ship.getSize()) + 1 > 0)
+							map[sy][sx - ship.getSize()].stat = MapTile.DEFINITELY_NO_SHIP;
 						break;
-				}//TODO Fertig machen
+				}
 			}
 			
 			return map[y][x].ship;
@@ -276,107 +252,106 @@ public class Map {
 		int y = ship.getYPos();
 		int shipSize = ship.getSize();
 		
-		switch(ship.getDirection()) {
+		switch (ship.getDirection()) {
 			case north:
-				if(x < 0 || x >= map.length)
+				if (x < 0 || x >= map.length)
 					return false;
-				if(y < 0 || y + shipSize - 1 >= map.length)
+				if (y < 0 || y + shipSize - 1 >= map.length)
 					return false;
 				
 				try {
-					if(y - 1 >= 0 && map[y - 1][x].stat == MapTile.SHIP)
+					if (y - 1 >= 0 && map[y - 1][x].stat == MapTile.SHIP)
 						return false;
-					if(y + shipSize < map.length && map[y + shipSize][x].stat == MapTile.SHIP)
+					if (y + shipSize < map.length && map[y + shipSize][x].stat == MapTile.SHIP)
 						return false;
 					
-					for(int i = 0; i < shipSize; i++) {
-						for(int j = 0; j < 2; j++) {
-							if(x + j < map.length && map[y + i][x + j].stat == MapTile.SHIP)
+					for (int i = 0; i < shipSize; i++) {
+						for (int j = 0; j < 2; j++) {
+							if (x + j < map.length && map[y + i][x + j].stat == MapTile.SHIP)
 								return false;
-							if(x - j >= 0 && map[y + i][x - j].stat == MapTile.SHIP)
+							if (x - j >= 0 && map[y + i][x - j].stat == MapTile.SHIP)
 								return false;
 						}
 					}
-				}catch(ArrayIndexOutOfBoundsException e) {
+				} catch (ArrayIndexOutOfBoundsException e) {
 					// System.out.println("Yes schon wieder Codingarbeit gespart hehe :)");
 				}
 				break;
 			case south:
-				if(x < 0 || x >= map.length)
+				if (x < 0 || x >= map.length)
 					return false;
-				if(y - shipSize + 1 < 0 || y >= map.length)
+				if (y - shipSize + 1 < 0 || y >= map.length)
 					return false;
 				
 				try {
-					if(y - shipSize >= 0 && map[y - shipSize][x].stat == MapTile.SHIP)
+					if (y - shipSize >= 0 && map[y - shipSize][x].stat == MapTile.SHIP)
 						return false;
-					if(y + 1 < map.length && map[y + 1][x].stat == MapTile.SHIP)
+					if (y + 1 < map.length && map[y + 1][x].stat == MapTile.SHIP)
 						return false;
 					
-					for(int i = 0; i < shipSize; i++) {
-						for(int j = 0; j < 2; j++) {
-							if(x + j < map.length && map[y - i][x + j].stat == MapTile.SHIP)
+					for (int i = 0; i < shipSize; i++) {
+						for (int j = 0; j < 2; j++) {
+							if (x + j < map.length && map[y - i][x + j].stat == MapTile.SHIP)
 								return false;
-							if(x - j >= 0 && map[y - i][x - j].stat == MapTile.SHIP)
+							if (x - j >= 0 && map[y - i][x - j].stat == MapTile.SHIP)
 								return false;
 						}
 					}
-				}catch(ArrayIndexOutOfBoundsException e) {
+				} catch (ArrayIndexOutOfBoundsException e) {
 					// System.out.println("Yes schon wieder Codingarbeit gespart hehe :)");
 				}
 				break;
 			case west:
-				if(x < 0 || x + shipSize - 1 >= map.length)
+				if (x < 0 || x + shipSize - 1 >= map.length)
 					return false;
-				if(y < 0 || y >= map.length)
+				if (y < 0 || y >= map.length)
 					return false;
 				
 				try {
-					if(x - 1 >= 0 && map[y][x - 1].stat == MapTile.SHIP)
+					if (x - 1 >= 0 && map[y][x - 1].stat == MapTile.SHIP)
 						return false;
-					if(x + shipSize < map.length && map[y][x + shipSize].stat == MapTile.SHIP)
+					if (x + shipSize < map.length && map[y][x + shipSize].stat == MapTile.SHIP)
 						return false;
 					
-					for(int i = 0; i < shipSize; i++) {
-						for(int j = 0; j < 2; j++) {
-							if(y + j < map.length && map[y + j][x + i].stat == MapTile.SHIP)
+					for (int i = 0; i < shipSize; i++) {
+						for (int j = 0; j < 2; j++) {
+							if (y + j < map.length && map[y + j][x + i].stat == MapTile.SHIP)
 								return false;
-							if(y - j >= 0 && map[y - j][x + i].stat == MapTile.SHIP)
+							if (y - j >= 0 && map[y - j][x + i].stat == MapTile.SHIP)
 								return false;
 						}
 					}
-				}catch(ArrayIndexOutOfBoundsException e) {
+				} catch (ArrayIndexOutOfBoundsException e) {
 					// System.out.println("Yes schon wieder Codingarbeit gespart hehe :)");
 				}
 				break;
 			case east:
-				if(x - shipSize + 1 < 0 || x >= map.length)
+				if (x - shipSize + 1 < 0 || x >= map.length)
 					return false;
-				if(y < 0 || y >= map.length)
+				if (y < 0 || y >= map.length)
 					return false;
 				
 				try {
-					if(x - shipSize >= 0 && map[y][x - shipSize].stat == MapTile.SHIP)
+					if (x - shipSize >= 0 && map[y][x - shipSize].stat == MapTile.SHIP)
 						return false;
-					if(x + 1 < map.length && map[y][x + 1].stat == MapTile.SHIP)
+					if (x + 1 < map.length && map[y][x + 1].stat == MapTile.SHIP)
 						return false;
 					
-					for(int i = 0; i < shipSize; i++) {
-						for(int j = 0; j < 2; j++) {
-							if(y + j < map.length && map[y + j][x - i].stat == MapTile.SHIP)
+					for (int i = 0; i < shipSize; i++) {
+						for (int j = 0; j < 2; j++) {
+							if (y + j < map.length && map[y + j][x - i].stat == MapTile.SHIP)
 								return false;
-							if(y - j >= 0 && map[y - j][x - i].stat == MapTile.SHIP)
+							if (y - j >= 0 && map[y - j][x - i].stat == MapTile.SHIP)
 								return false;
 						}
 					}
-				}catch(ArrayIndexOutOfBoundsException e) {
+				} catch (ArrayIndexOutOfBoundsException e) {
 					// System.out.println("Yes schon wieder Codingarbeit gespart hehe :)");
 				}
 				break;
 		}
 		
 		return true;
-		//TODO
 	}
 	
 	/**
@@ -386,6 +361,7 @@ public class Map {
 		map = new MapTile[map.length][map.length];
 		for(int i = 0; i < map.length; i++) {
 			for(int j = 0; j < map.length; j++) {
+				map[i][j] = new MapTile();
 				map[i][j].stat = MapTile.WATER;
 				map[i][j].ship = null;
 			}
