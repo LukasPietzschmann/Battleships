@@ -146,6 +146,7 @@ public class Logic {
 			while(hit) {
 				if(!otherPlayer.isAlive()) {
 					System.out.println(String.format("%s hat gewonnen!!", currPlayer.name));
+					return;
 				}
 				
 				hit = currPlayer.doWhatYouHaveToDo();

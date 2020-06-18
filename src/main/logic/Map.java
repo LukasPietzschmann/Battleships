@@ -386,6 +386,7 @@ public class Map {
 		map = new MapTile[map.length][map.length];
 		for(int i = 0; i < map.length; i++) {
 			for(int j = 0; j < map.length; j++) {
+				map[i][j] = new MapTile();
 				map[i][j].stat = MapTile.WATER;
 				map[i][j].ship = null;
 			}
