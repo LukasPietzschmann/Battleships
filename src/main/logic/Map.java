@@ -288,10 +288,17 @@ public class Map {
 						return false;
 					if(y + shipSize < map.length && map[y + shipSize][x].stat == MapTile.SHIP)
 						return false;
-					
+
+					if(y - 1 >= 0 && map[y - 1][x+1].stat == MapTile.SHIP && map[y - 1][x - 1].stat == MapTile.SHIP){
+						return false;
+					}
+					if(y + shipSize < map.length && map[y + shipSize][x + 1].stat == MapTile.SHIP && map[y + shipSize][x - 1].stat == MapTile.SHIP){
+						return false;
+					}
+
 					for(int i = 0; i < shipSize; i++) {
 						for(int j = 0; j < 2; j++) {
-							if(x + j < map.length && map[y + i][x + j].stat == MapTile.SHIP)
+							if(x + j  < map.length && map[y + i][x + j].stat == MapTile.SHIP)
 								return false;
 							if(x - j >= 0 && map[y + i][x - j].stat == MapTile.SHIP)
 								return false;
@@ -312,7 +319,13 @@ public class Map {
 						return false;
 					if(y + 1 < map.length && map[y + 1][x].stat == MapTile.SHIP)
 						return false;
-					
+
+					if(y - 1 >= 0 && map[y + 1][x+1].stat == MapTile.SHIP && map[y + 1][x - 1].stat == MapTile.SHIP){
+						return false;
+					}
+					if(y + 1 < map.length && map[y + 1][x + 1].stat == MapTile.SHIP && map[y + 1][x - 1].stat == MapTile.SHIP){
+						return false;
+					}
 					for(int i = 0; i < shipSize; i++) {
 						for(int j = 0; j < 2; j++) {
 							if(x + j < map.length && map[y - i][x + j].stat == MapTile.SHIP)
@@ -336,7 +349,13 @@ public class Map {
 						return false;
 					if(x + shipSize < map.length && map[y][x + shipSize].stat == MapTile.SHIP)
 						return false;
-					
+
+					if(x - 1 >= 0 && map[y + 1][x - 1].stat == MapTile.SHIP && map[y - 1][x - 1].stat == MapTile.SHIP){
+						return false;
+					}
+					if(x + shipSize < map.length && map[y + 1][x + shipSize].stat == MapTile.SHIP && map[y - 1][x + shipSize].stat == MapTile.SHIP){
+						return false;
+					}
 					for(int i = 0; i < shipSize; i++) {
 						for(int j = 0; j < 2; j++) {
 							if(y + j < map.length && map[y + j][x + i].stat == MapTile.SHIP)
@@ -360,7 +379,13 @@ public class Map {
 						return false;
 					if(x + 1 < map.length && map[y][x + 1].stat == MapTile.SHIP)
 						return false;
-					
+
+					if(x - shipSize >= 0 && map[y + 1][x - shipSize].stat == MapTile.SHIP && map[y - 1][x - shipSize].stat == MapTile.SHIP){
+						return false;
+					}
+					if(x + 1 < map.length && map[y + 1][x + 1].stat == MapTile.SHIP && map[y - 1][x + 1].stat == MapTile.SHIP){
+						return false;
+					}
 					for(int i = 0; i < shipSize; i++) {
 						for(int j = 0; j < 2; j++) {
 							if(y + j < map.length && map[y + j][x - i].stat == MapTile.SHIP)
