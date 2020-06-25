@@ -1,5 +1,7 @@
 package logic;
 
+import java.awt.font.LineBreakMeasurer;
+
 /**
  * Die Klasse Map modelliert das Spielfeld eines {@link LocalPlayer}.
  */
@@ -83,83 +85,108 @@ public class Map {
 			if(!map[y][x].ship.isAlive()) {
 				shipsNr -= 1;
 				Ship ship = map[y][x].ship;
-				int sx, sy;
+				int sx, sy, start, end;
 				sx = ship.getXPos();
 				sy = ship.getYPos();
+				
 				switch(ship.getDirection()) {
-					case south:
+					case north:
+						start = sy;
+						end = (sy + ship.getSize()) - 1;
+						//Kucken on oben Platz ist
+						if(start > 0) {
+							start -= 1;
+							map[start][sx].stat = MapTile.DEFINITELY_NO_SHIP;
+						}
+						//Kucken ob unten Platz ist
+						if(end < map.length - 1) {
+							end -= 1;
+							map[end][sx].stat = MapTile.DEFINITELY_NO_SHIP;
+						}
+						//Kucken ob links Platz ist
 						if(sx > 0) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sy - i][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
+							//Links setzen, wenn oben Platz ist, auch oben linkts, wenn unten Platz ist auch unten links
+							for(start = start; start <= end; start++) map[start][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
+						//Kucken ob rechts Platz ist
 						if(sx < map.length - 1) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sy - i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
-						}
-						if(sy < map.length - 1) {
-							map[sy + 1][sx].stat = MapTile.DEFINITELY_NO_SHIP;
-						}
-						if((sy - ship.getSize()) + 1 > 0) {
-							map[sy - ship.getSize()][sx].stat = MapTile.DEFINITELY_NO_SHIP;
+							//Rechts setzen, wenn oben Platz ist, auch oben rechts, wenn unten Platz ist auch unten rechts
+							for(start = start; start <= end; start++) map[start][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						break;
-					case north:
-						if(sx < 0) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sy + i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
+					case south:
+						start = sy;
+						end = (sy - ship.getSize()) + 1;
+						//Kucken on oben Platz ist
+						if(start < map.length - 1) {
+							start += 1;
+							map[start][sx].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
-						if(sx > map.length - 1) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sy - i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
+						//Kucken ob unten Platz ist
+						if(end > 0) {
+							end -= 1;
+							map[end][sx].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
-						if(sy > map.length - 1) {
-							map[sy - 1][sx].stat = MapTile.DEFINITELY_NO_SHIP;
+						//Kucken ob links Platz ist
+						if(sx > 0) {
+							//Links setzen, wenn oben Platz ist, auch oben linkts, wenn unten Platz ist auch unten links
+							for(start = start; start <= end; start--) map[start][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
-						if((sy - ship.getSize()) + 1 < 0) {
-							map[sy + ship.getSize()][sx].stat = MapTile.DEFINITELY_NO_SHIP;
+						//Kucken ob rechts Platz ist
+						if(sx < map.length - 1) {
+							//Rechts setzen, wenn oben Platz ist, auch oben rechts, wenn unten Platz ist auch unten rechts
+							for(start = start; start <= end; start--) map[start][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						break;
 					case west:
-						if(sx < 0) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sx - i][sy - 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
+						start = sx;
+						end = (sx + ship.getSize()) - 1;
+						//Kucken ob links Platz ist und links mittig setzen
+						if(start > 0) {
+							start -= 1;
+							map[sy][start].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
-						if(sx > map.length - 1) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sx - i][sy + 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
+						//Kucken ob rechts Platz ist und rechts mittig setzen
+						if(end < map.length - 1) {
+							end += 1;
+							map[sy][end].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
-						if(sy > map.length - 1) {
-							map[sx + 1][sy].stat = MapTile.DEFINITELY_NO_SHIP;
+						//Kucken ob oben Platz ist
+						if(sy > 0) {
+							//Oben setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
+							for(start = start; start <= end; start++) map[sy - 1][start].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
-						if((sy - ship.getSize()) + 1 < 0) {
-							map[sx - ship.getSize()][sy].stat = MapTile.DEFINITELY_NO_SHIP;
+						//Kucken ob unten Platz ist
+						if(sy < map.length - 1) {
+							//Unten setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
+							for(start = start; start <= end; start++) map[sy + 1][start].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						break;
 					case east:
-						if(sx > 0) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sx - i][sy - 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
+						start = sx;
+						end = (sx - ship.getSize()) + 1;
+						//Kucken ob rechts Platz ist und links mittig setzen
+						if(start < map.length - 1) {
+							start += 1;
+							map[sy][start].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
-						if(sx < map.length - 1) {
-							for(int i = 0; i < ship.getSize(); i++) {
-								map[sx - i][sy + 1].stat = MapTile.DEFINITELY_NO_SHIP;
-							}
+						//Kucken ob links Platz ist und rechts mittig setzen
+						if(end > 0) {
+							end -= 1;
+							map[sy][end].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
+						//Kucken ob oben Platz ist
+						if(sy > 0) {
+							//Oben setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
+							for(start = start; start <= end; start--) map[sy - 1][start].stat = MapTile.DEFINITELY_NO_SHIP;
+						}
+						//Kucken ob unten Platz ist
 						if(sy < map.length - 1) {
-							map[sx+ 1][sy].stat = MapTile.DEFINITELY_NO_SHIP;
-						}
-						if((sy - ship.getSize()) + 1 > 0) {
-							map[sx - ship.getSize()][sy].stat = MapTile.DEFINITELY_NO_SHIP;
+							//Unten setzen, wenn links Platz ist, auch unten linkts, wenn rechts Platz ist auch unten Rechts
+							for(start = start; start <= end; start--) map[sy + 1][start].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						break;
-				}//TODO Fertig machen
+				}
 			}
 			
 			return map[y][x].ship;
@@ -288,17 +315,17 @@ public class Map {
 						return false;
 					if(y + shipSize < map.length && map[y + shipSize][x].stat == MapTile.SHIP)
 						return false;
-
-					if(y - 1 >= 0 && map[y - 1][x+1].stat == MapTile.SHIP && map[y - 1][x - 1].stat == MapTile.SHIP){
+					
+					if(y - 1 >= 0 && map[y - 1][x + 1].stat == MapTile.SHIP && map[y - 1][x - 1].stat == MapTile.SHIP) {
 						return false;
 					}
-					if(y + shipSize < map.length && map[y + shipSize][x + 1].stat == MapTile.SHIP && map[y + shipSize][x - 1].stat == MapTile.SHIP){
+					if(y + shipSize < map.length && map[y + shipSize][x + 1].stat == MapTile.SHIP && map[y + shipSize][x - 1].stat == MapTile.SHIP) {
 						return false;
 					}
-
+					
 					for(int i = 0; i < shipSize; i++) {
 						for(int j = 0; j < 2; j++) {
-							if(x + j  < map.length && map[y + i][x + j].stat == MapTile.SHIP)
+							if(x + j < map.length && map[y + i][x + j].stat == MapTile.SHIP)
 								return false;
 							if(x - j >= 0 && map[y + i][x - j].stat == MapTile.SHIP)
 								return false;
@@ -319,11 +346,11 @@ public class Map {
 						return false;
 					if(y + 1 < map.length && map[y + 1][x].stat == MapTile.SHIP)
 						return false;
-
-					if(y - 1 >= 0 && map[y + 1][x+1].stat == MapTile.SHIP && map[y + 1][x - 1].stat == MapTile.SHIP){
+					
+					if(y - 1 >= 0 && map[y + 1][x + 1].stat == MapTile.SHIP && map[y + 1][x - 1].stat == MapTile.SHIP) {
 						return false;
 					}
-					if(y + 1 < map.length && map[y + 1][x + 1].stat == MapTile.SHIP && map[y + 1][x - 1].stat == MapTile.SHIP){
+					if(y + 1 < map.length && map[y + 1][x + 1].stat == MapTile.SHIP && map[y + 1][x - 1].stat == MapTile.SHIP) {
 						return false;
 					}
 					for(int i = 0; i < shipSize; i++) {
@@ -349,11 +376,11 @@ public class Map {
 						return false;
 					if(x + shipSize < map.length && map[y][x + shipSize].stat == MapTile.SHIP)
 						return false;
-
-					if(x - 1 >= 0 && map[y + 1][x - 1].stat == MapTile.SHIP && map[y - 1][x - 1].stat == MapTile.SHIP){
+					
+					if(x - 1 >= 0 && map[y + 1][x - 1].stat == MapTile.SHIP && map[y - 1][x - 1].stat == MapTile.SHIP) {
 						return false;
 					}
-					if(x + shipSize < map.length && map[y + 1][x + shipSize].stat == MapTile.SHIP && map[y - 1][x + shipSize].stat == MapTile.SHIP){
+					if(x + shipSize < map.length && map[y + 1][x + shipSize].stat == MapTile.SHIP && map[y - 1][x + shipSize].stat == MapTile.SHIP) {
 						return false;
 					}
 					for(int i = 0; i < shipSize; i++) {
@@ -379,11 +406,11 @@ public class Map {
 						return false;
 					if(x + 1 < map.length && map[y][x + 1].stat == MapTile.SHIP)
 						return false;
-
-					if(x - shipSize >= 0 && map[y + 1][x - shipSize].stat == MapTile.SHIP && map[y - 1][x - shipSize].stat == MapTile.SHIP){
+					
+					if(x - shipSize >= 0 && map[y + 1][x - shipSize].stat == MapTile.SHIP && map[y - 1][x - shipSize].stat == MapTile.SHIP) {
 						return false;
 					}
-					if(x + 1 < map.length && map[y + 1][x + 1].stat == MapTile.SHIP && map[y - 1][x + 1].stat == MapTile.SHIP){
+					if(x + 1 < map.length && map[y + 1][x + 1].stat == MapTile.SHIP && map[y - 1][x + 1].stat == MapTile.SHIP) {
 						return false;
 					}
 					for(int i = 0; i < shipSize; i++) {
