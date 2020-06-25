@@ -8,7 +8,7 @@ import logic.Ship;
 /**
  * Die Klasse AI modelliert einen Computer-Spieler.
  */
-public abstract class AI extends LocalPlayer {
+public class AI extends LocalPlayer {
 	/**
 	 * Das tatsächlich Spielende AI-Objekt ({@link EasyAI}, {@link MediumAI}, oder {@link HardAI}).
 	 */
@@ -42,8 +42,9 @@ public abstract class AI extends LocalPlayer {
 	@Override
 	public void placeShips() {
 		//noinspection StatementWithEmptyBody
-		while(!randomShipPlacment()) {
-		}
+		//while(!randomShipPlacment()) {
+		//}
+		randomShipPlacment();
 	}
 	
 	/**

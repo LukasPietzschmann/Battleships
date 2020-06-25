@@ -34,7 +34,7 @@ public class Launcher {
 	public Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, int size) throws Exception{
 		switch(mode){
 			case AI_AI:
-				return new Logic("AI1", "AI2", Difficulty.easy, Difficulty.easy, size, ship2Count, ship3Count, ship4Count, ship5Count);
+				return new Logic("AI1", "AI2", Difficulty.easy, Difficulty.medium, size, ship2Count, ship3Count, ship4Count, ship5Count);
 			case PL_AI:
 				return new Logic("AI", "Player", size, Difficulty.easy,  ship2Count, ship3Count, ship4Count, ship5Count);
 			case NW_CL_AI:

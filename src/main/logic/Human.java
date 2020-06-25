@@ -1,5 +1,9 @@
 package logic;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  * Die Klasse Human modelliert einen echten Spieler.
  */
@@ -21,7 +25,19 @@ public class Human extends LocalPlayer {
 	 */
 	@Override
 	public boolean doWhatYouHaveToDo() {
-		return false;
+		int x = 0;
+		int y = 0;
+		try {
+			BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+			System.out.print("x: ");
+			x = Integer.parseInt(bf.readLine());
+			System.out.print("y: ");
+			y = Integer.parseInt(bf.readLine());
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return logic.shoot(x, y, this) != null;
 	}
 	
 	/**
@@ -29,6 +45,6 @@ public class Human extends LocalPlayer {
 	 */
 	@Override
 	public void placeShips() {
-	
+		randomShipPlacment();
 	}
 }
