@@ -100,18 +100,18 @@ public class Map {
 						}
 						//Kucken ob unten Platz ist
 						if(end < map.length - 1) {
-							end -= 1;
+							end += 1;
 							map[end][sx].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						//Kucken ob links Platz ist
 						if(sx > 0) {
 							//Links setzen, wenn oben Platz ist, auch oben linkts, wenn unten Platz ist auch unten links
-							for(start = start; start <= end; start++) map[start][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
+							for(int i = start; i <= end; i++) map[i][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						//Kucken ob rechts Platz ist
 						if(sx < map.length - 1) {
 							//Rechts setzen, wenn oben Platz ist, auch oben rechts, wenn unten Platz ist auch unten rechts
-							for(start = start; start <= end; start++) map[start][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
+							for(int i = start; i <= end; i++) map[i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						break;
 					case south:
@@ -130,12 +130,12 @@ public class Map {
 						//Kucken ob links Platz ist
 						if(sx > 0) {
 							//Links setzen, wenn oben Platz ist, auch oben linkts, wenn unten Platz ist auch unten links
-							for(start = start; start <= end; start--) map[start][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
+							for(int i = start; i >= end; i--) map[i][sx - 1].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						//Kucken ob rechts Platz ist
 						if(sx < map.length - 1) {
 							//Rechts setzen, wenn oben Platz ist, auch oben rechts, wenn unten Platz ist auch unten rechts
-							for(start = start; start <= end; start--) map[start][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
+							for(int i = start; i >= end; i--) map[i][sx + 1].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						break;
 					case west:
@@ -154,12 +154,12 @@ public class Map {
 						//Kucken ob oben Platz ist
 						if(sy > 0) {
 							//Oben setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
-							for(start = start; start <= end; start++) map[sy - 1][start].stat = MapTile.DEFINITELY_NO_SHIP;
+							for(int i = start; i <= end; i++) map[sy - 1][i].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						//Kucken ob unten Platz ist
 						if(sy < map.length - 1) {
 							//Unten setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
-							for(start = start; start <= end; start++) map[sy + 1][start].stat = MapTile.DEFINITELY_NO_SHIP;
+							for(int i = start; i <= end; i++) map[sy + 1][i].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						break;
 					case east:
@@ -178,12 +178,12 @@ public class Map {
 						//Kucken ob oben Platz ist
 						if(sy > 0) {
 							//Oben setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
-							for(start = start; start <= end; start--) map[sy - 1][start].stat = MapTile.DEFINITELY_NO_SHIP;
+							for(int i = start; i >= end; i--) map[sy - 1][i].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						//Kucken ob unten Platz ist
 						if(sy < map.length - 1) {
 							//Unten setzen, wenn links Platz ist, auch unten linkts, wenn rechts Platz ist auch unten Rechts
-							for(start = start; start <= end; start--) map[sy + 1][start].stat = MapTile.DEFINITELY_NO_SHIP;
+							for(int i = start; i >= end; i--) map[sy + 1][i].stat = MapTile.DEFINITELY_NO_SHIP;
 						}
 						break;
 				}
