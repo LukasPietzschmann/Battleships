@@ -56,6 +56,4 @@ public class AI extends LocalPlayer {
 	public boolean doWhatYouHaveToDo() {
 		return ai.makeMove();
 	}
-	
-	
 }
