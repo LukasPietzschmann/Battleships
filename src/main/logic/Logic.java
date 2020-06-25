@@ -1,5 +1,7 @@
 package logic;
 
+import ai.AI;
+import ai.Difficulty;
 import network.Network;
 
 import java.util.ArrayList;
@@ -23,6 +25,24 @@ public class Logic {
 		this.MODE = MODE;
 	}
 	
+	private Logic(int moded, int ship2Count, int ship3Count, int ship4Count, int ship5Count){
+		this(moded);
+		ships = new ArrayList<>();
+		int[] ships = {ship2Count, ship3Count, ship4Count, ship5Count};
+		
+		for(int i = 0; i < ships.length; i++) {
+			for(int j = 0; j < ships[i]; j++) {
+				this.ships.add(new Ship(0,0, Ship.Direction.north, i + 2));
+			}
+		}
+	}
+	
+	public Logic(String nameAI1, String nameAI2, Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count){
+		this(Launcher.AI_AI, ship2Count, ship3Count, ship4Count, ship5Count);
+		ownPlayer = new AI(this, size, nameAI1, difficultyAI1);
+		oppPlayer = new AI(this, size, nameAI2, difficultyAI2);
+	}
+	
 	/**
 	 * Konstruktor, falls eine {@link AI} gegen einen Gegner übers Netzwerk spielt und man selbst der Client ist.
 	 *
@@ -31,11 +51,11 @@ public class Logic {
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param IP Die IP Adresse des Servers.
 	 */
-	public Logic(String nameAI, String nameNW, AI.Difficulty difficulty, String IP) {
+	public Logic(String nameAI, String nameNW, Difficulty difficulty, String IP) {
 		this(Launcher.NW_CL_AI);
 		oppPlayer = new Network(this, nameNW, IP);
 		ships = ((Network)oppPlayer).getShips();
-		ownPlayer = new AI(AI.Difficulty.easy, this, ((Network) oppPlayer).getSize(), nameNW);
+		ownPlayer = new AI(this, ((Network)oppPlayer).getSize(), nameNW, difficulty);
 	}
 	
 	/**
@@ -46,9 +66,9 @@ public class Logic {
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param size Die Größe des Spielfelds.
 	 */
-	public Logic(String nameAI, String nameNW, AI.Difficulty difficulty, int size) throws Exception {
-		this(Launcher.NW_SV_AI);
-		ownPlayer = new AI(difficulty, this, size, nameAI);
+	public Logic(String nameAI, String nameNW, Difficulty difficulty, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
+		this(Launcher.NW_SV_AI, ship2Count, ship3Count, ship4Count, ship5Count);
+		ownPlayer = new AI(this, size, nameAI, difficulty);
 		oppPlayer = new Network(this, nameNW, size);
 	}
 	
@@ -60,10 +80,10 @@ public class Logic {
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param size Die Größe des Spielfelds.
 	 */
-	public Logic(String nameAI, String namePL, int size, AI.Difficulty difficulty) {
-		this(Launcher.PL_AI);
+	public Logic(String nameAI, String namePL, int size, Difficulty difficulty, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
+		this(Launcher.PL_AI, ship2Count, ship3Count, ship4Count, ship5Count);
 		ownPlayer = new Human(this, size, namePL);
-		oppPlayer = new AI(difficulty, this, size, nameAI);
+		oppPlayer = new AI(this, size, nameAI, difficulty);
 	}
 	
 	/**
@@ -87,8 +107,8 @@ public class Logic {
 	 * @param nameNW Der Name des Gegners.
 	 * @param size Die Größe des Spielfelds
 	 */
-	public Logic(String namePl, String nameNW, int size) throws Exception {
-		this(Launcher.PL_NW_SV);
+	public Logic(String namePl, String nameNW, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
+		this(Launcher.PL_NW_SV, ship2Count, ship3Count, ship4Count, ship5Count);
 		ownPlayer = new Human(this, size, namePl);
 		oppPlayer = new Network(this, nameNW, size);
 	}
@@ -129,17 +149,20 @@ public class Logic {
 				otherPlayer = oppPlayer;
 		}
 		
+		currPlayer.placeShips();
+		otherPlayer.placeShips();
 		while(true) {
 			hit = true;
 			while(hit) {
 				if(!otherPlayer.isAlive()) {
 					System.out.println(String.format("%s hat gewonnen!!", currPlayer.name));
+					return;
 				}
 				
 				hit = currPlayer.doWhatYouHaveToDo();
-				//System.out.println(ownPlayer.name);
-				//((LocalPlayer)ownPlayer).dumpMap();
-				//System.out.println("\n");
+				System.out.println(otherPlayer.name);
+				((LocalPlayer)otherPlayer).dumpMap();
+				System.out.println("\n");
 			}
 			
 			Player temp = currPlayer;
@@ -154,10 +177,6 @@ public class Logic {
 	 * @return Eine Liste an Schiffen, die platziert werden können.
 	 */
 	public ArrayList<Ship> getAvailableShips() {
-		//TODO implement
-		if(ships != null) return ships;
-		ships = new ArrayList<>();
-		ships.add(new Ship(0, 0, Ship.Direction.north, 3));
 		return ships;
 	}
 }
