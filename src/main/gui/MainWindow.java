@@ -3,6 +3,11 @@ package main.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 
@@ -32,6 +37,15 @@ public class MainWindow {
 		music = new Music(filepath);
 		if (GuiTester.soundPlaying == true) {
 			music.restartMusic();
+		}
+		
+		try {
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/res/Krungthep.ttf")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (FontFormatException e) {
+			e.printStackTrace();
 		}
 	}
 }

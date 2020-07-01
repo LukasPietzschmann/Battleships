@@ -374,21 +374,29 @@ public class MainMenu {
 			fiveFieldElementIcon.setIcon(fiveFieldElementIconFromSide);
 			fiveFieldElementIcon.setMinimumSize(new Dimension(250, 50));
 			fiveFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
+			fiveFieldElementIcon.setEnabled(true);
+			fiveFieldElementIcon.setBorder(null);
 
 			// fourFieldElementIcon Label
 			fourFieldElementIcon.setIcon(fourFieldElementIconFromSide);
 			fourFieldElementIcon.setMinimumSize(new Dimension(200, 50));
 			fourFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
+			fourFieldElementIcon.setEnabled(true);
+			fourFieldElementIcon.setBorder(null);
 			
 			// threeFieldElementIcon Label
 			threeFieldElementIcon.setIcon(threeFieldElementIconFromSide);
 			threeFieldElementIcon.setMinimumSize(new Dimension(150, 50));
 			threeFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
+			threeFieldElementIcon.setEnabled(true);
+			threeFieldElementIcon.setBorder(null);
 			
 			// twoFieldElementIcon Label
 			twoFieldElementIcon.setIcon(twoFieldElementIconFromSide);
 			twoFieldElementIcon.setMinimumSize(new Dimension(100, 50));
 			twoFieldElementIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
+			twoFieldElementIcon.setEnabled(true);
+			twoFieldElementIcon.setBorder(null);
 			
 			// gridIcon Label
 			ImageIcon gridSymbol = new ImageIcon(new ImageIcon("src/res/gridIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
