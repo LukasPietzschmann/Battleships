@@ -63,6 +63,15 @@ public class Network extends Player {
 	 */
 	private int shipCount;
 	
+	public Network(Logic logic, String name, long id) throws IOException {
+		super(logic, name);
+		networkThread = new NetworkThread(new ServerSocket(PORT));
+		networkThread.start();
+		networkThread.sendMessage(String.format("%s %d", LOAD, id));
+		Message m = new Message(networkThread.recieveMessage());
+		if(!m.getMessageType().equals(CONFIRM)) throw new UnexpectedMessageException(m);
+	}
+	
 	/**
 	 * Der Konstruktor, falls man selbst der Server ist.
 	 *
@@ -102,17 +111,20 @@ public class Network extends Player {
 		}
 		networkThread.start();
 		Message m = new Message(networkThread.recieveMessage());
-		if(!m.getMessageType().equals(SETUP)) throw new UnexpectedMessageException(m);
 		
-		size = m.getArgs()[Message.SIZE_POS];
-		
-		ships = new ArrayList<>();
-		int[] posis = new int[] {Message.SHIPS2_POS, Message.SHIPS3_POS, Message.SHIPS4_POS, Message.SHIPS5_POS};
-		for(int i = 0; i < posis.length; i++) {
-			for(int j = 0; j < m.getArgs()[posis[i]]; j++) ships.add(new Ship(0, 0, Ship.Direction.north, i + 2));
-		}
-		shipCount = ships.size();
-		networkThread.sendMessage(String.format("%s\n", CONFIRM));
+		if(m.getMessageType().equals(SETUP)) {
+			size = m.getArgs()[Message.SIZE_POS];
+			
+			ships = new ArrayList<>();
+			int[] posis = new int[] {Message.SHIPS2_POS, Message.SHIPS3_POS, Message.SHIPS4_POS, Message.SHIPS5_POS};
+			for(int i = 0; i < posis.length; i++) {
+				for(int j = 0; j < m.getArgs()[posis[i]]; j++) ships.add(new Ship(0, 0, Ship.Direction.north, i + 2));
+			}
+			shipCount = ships.size();
+			networkThread.sendMessage(String.format("%s\n", CONFIRM));
+		}else if(m.getMessageType().equals(LOAD)) {
+			//TODO implement
+		}else throw new UnexpectedMessageException(m);
 	}
 	
 	public int getSize() {
