@@ -1,5 +1,7 @@
 package main.logic;
 
+import main.gui.MainWindow;
+
 /**
  * Die Klasse Launcher startet das Spiel und frägt Anfangseinstellungen ab
  */
@@ -25,8 +27,34 @@ public class Launcher {
 	 */
 	public static final int PL_NW_SV = 5;
 	
+	public static int gridSize = 10;
+	public static String theme = "Battleships";
+	public static String themeIdentifierPlural = "Schiffe";
+	public static String themeIdentifierSingular = "Schiff";
+	public static boolean soundPlaying = false;
+	
+	public static int fiveFieldElementCount = 1;
+	public static int fourFieldElementCount = 2;
+	public static int threeFieldElementCount = 3;
+	public static int twoFieldElementCount = 4;
+	
+	public static int fiveFieldElementMaxCount = 10;
+	public static int fourFieldElementMaxCount = 10;
+	public static int threeFieldElementMaxCount = 10;
+	public static int twoFieldElementMaxCount = 10;
+	
+	public static String fiveFieldElementName;
+	public static String fourFieldElementName;
+	public static String threeFieldElementName;
+	public static String twoFieldElementName;
+	
+	public static char role;
+	public static String clientIP;
+	
 	public static void main(String[] args) throws Exception{
 		// TODO start GUI
+		MainWindow main = new MainWindow();
+		main.setUpMainWindow();
 		// TODO mode = GUI.getMode();
 		int mode = NW_SV_AI;
 		

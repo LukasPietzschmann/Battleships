@@ -8,6 +8,9 @@ import javax.swing.event.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import main.logic.AI;
+import main.logic.Logic;
+
 
 public class MainMenu {
 	
@@ -900,7 +903,7 @@ public class MainMenu {
 		threeFieldElementCountDecrease.setToolTipText("Anzahl senken: " + GuiTester.threeFieldElementName);
 		twoFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + GuiTester.twoFieldElementName);
 		twoFieldElementCountDecrease.setToolTipText("Anzahl senken: " + GuiTester.twoFieldElementName);
-		
 	}
+
 	
 }
