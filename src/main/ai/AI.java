@@ -42,8 +42,9 @@ public class AI extends LocalPlayer {
 	@Override
 	public void placeShips() {
 		//noinspection StatementWithEmptyBody
-		while(!randomShipPlacment()) {
-		}
+		//while(!randomShipPlacment()) {
+		//}
+		randomShipPlacment();
 	}
 	
 	/**
@@ -55,6 +56,4 @@ public class AI extends LocalPlayer {
 	public boolean doWhatYouHaveToDo() {
 		return ai.makeMove();
 	}
-	
-	
 }

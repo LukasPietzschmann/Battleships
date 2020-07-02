@@ -1,6 +1,5 @@
 package network;
 
-import ai.Difficulty;
 import logic.Logic;
 
 class ClientTest {

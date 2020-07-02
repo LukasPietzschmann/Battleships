@@ -25,11 +25,29 @@ public class Logic {
 		this.MODE = MODE;
 	}
 	
-	private Logic(int moded, int ship2Count, int ship3Count, int ship4Count, int ship5Count){
-		this(moded);
+	/**
+	 * Konstruktor, falls ein Save-Game geladen wird.
+	 *
+	 * @param id Die ID des Save-Games.
+	 */
+	public Logic(long id) {
+		this(Launcher.SG);
+		//TODO implement
 	}
 	
-	public Logic(String nameAI1, String nameAI2, Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count){
+	private Logic(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
+		this(mode);
+		ships = new ArrayList<>();
+		int[] ships = {ship2Count, ship3Count, ship4Count, ship5Count};
+		
+		for(int i = 0; i < ships.length; i++) {
+			for(int j = 0; j < ships[i]; j++) {
+				this.ships.add(new Ship(0, 0, Ship.Direction.north, i + 2));
+			}
+		}
+	}
+	
+	public Logic(String nameAI1, String nameAI2, Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		this(Launcher.AI_AI, ship2Count, ship3Count, ship4Count, ship5Count);
 		ownPlayer = new AI(this, size, nameAI1, difficultyAI1);
 		oppPlayer = new AI(this, size, nameAI2, difficultyAI2);
@@ -46,8 +64,8 @@ public class Logic {
 	public Logic(String nameAI, String nameNW, Difficulty difficulty, String IP) {
 		this(Launcher.NW_CL_AI);
 		oppPlayer = new Network(this, nameNW, IP);
-		ships = ((Network)oppPlayer).getShips();
-		ownPlayer = new AI(this, ((Network)oppPlayer).getSize(), nameNW, difficulty);
+		ships = ((Network) oppPlayer).getShips();
+		ownPlayer = new AI(this, ((Network) oppPlayer).getSize(), nameNW, difficulty);
 	}
 	
 	/**
@@ -88,7 +106,7 @@ public class Logic {
 	public Logic(String namePl, String nameNW, String IP) {
 		this(Launcher.PL_NW_CL);
 		oppPlayer = new Network(this, nameNW, IP);
-		ships = ((Network)oppPlayer).getShips();
+		ships = ((Network) oppPlayer).getShips();
 		ownPlayer = new Human(this, ((Network) oppPlayer).getSize(), namePl);
 	}
 	
@@ -141,6 +159,8 @@ public class Logic {
 				otherPlayer = oppPlayer;
 		}
 		
+		currPlayer.placeShips();
+		otherPlayer.placeShips();
 		while(true) {
 			hit = true;
 			while(hit) {
@@ -150,9 +170,9 @@ public class Logic {
 				}
 				
 				hit = currPlayer.doWhatYouHaveToDo();
-				//System.out.println(ownPlayer.name);
-				//((LocalPlayer)ownPlayer).dumpMap();
-				//System.out.println("\n");
+				System.out.println(otherPlayer.name);
+				((LocalPlayer) otherPlayer).dumpMap();
+				System.out.println("\n");
 			}
 			
 			Player temp = currPlayer;
@@ -167,10 +187,6 @@ public class Logic {
 	 * @return Eine Liste an Schiffen, die platziert werden können.
 	 */
 	public ArrayList<Ship> getAvailableShips() {
-		//TODO implement
-		if(ships != null) return ships;
-		ships = new ArrayList<>();
-		ships.add(new Ship(0, 0, Ship.Direction.north, 3));
 		return ships;
 	}
 }
