@@ -152,9 +152,14 @@ public class MainMenu {
 							return;
 						}
 					} else {
-						panel.setVisible(false);
-						GameWindow game = new GameWindow(frame, "pvc");
-						game.setUpGameWindow();
+						JOptionPaneAI connect = new JOptionPaneAI(frame);
+						int n = connect.displayGui();
+						if (n == 0) {
+							GuiTester.difficulty = connect.getDifficulty();
+							panel.setVisible(false);
+							GameWindow game = new GameWindow(frame, "pvc");
+							game.setUpGameWindow();
+						}
 					}
 				}
 			});
@@ -189,7 +194,6 @@ public class MainMenu {
 						if (n == 0) {
 							GuiTester.clientIP = connect.getIP();
 							GuiTester.role = connect.getRole();
-//							boolean check = Logic.checkConnectSettings(role, ip);
 							panel.setVisible(false);
 							GameWindow game = new GameWindow(frame, "pvp");
 							game.setUpGameWindow();
@@ -223,12 +227,12 @@ public class MainMenu {
 							return;
 						}
 					} else {
-						JOptionPaneConnect connect = new JOptionPaneConnect(frame);
+						JOptionPaneConnectAI connect = new JOptionPaneConnectAI(frame);
 						int n = connect.displayGui();
 						if (n == 0) {
 							GuiTester.clientIP = connect.getIP();
 							GuiTester.role = connect.getRole();
-//							boolean check = Logic.checkConnectSettings(role, ip);
+							GuiTester.difficulty = connect.getDifficulty();
 							panel.setVisible(false);
 							GameWindow game = new GameWindow(frame, "cvc");
 							game.setUpGameWindow();
@@ -269,14 +273,22 @@ public class MainMenu {
 			loadButton.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					FileFilter filter = new FileNameExtensionFilter("Textdatei", "txt");
-					JFileChooser chooser = new JFileChooser();
-					chooser.setDialogTitle("Spielstand laden");
-					chooser.addChoosableFileFilter(filter);
-					int returnValue = chooser.showOpenDialog(frame);
-					if (returnValue == JFileChooser.APPROVE_OPTION) {
-						// Logic.verarbeiteDatei(chooser.getSelectedFile());
+//					FileFilter filter = new FileNameExtensionFilter("Textdatei", "txt");
+//					JFileChooser chooser = new JFileChooser();
+//					chooser.setDialogTitle("Spielstand laden");
+//					chooser.addChoosableFileFilter(filter);
+//					int returnValue = chooser.showOpenDialog(frame);
+//					if (returnValue == JFileChooser.APPROVE_OPTION) {
+//						// Logic.verarbeiteDatei(chooser.getSelectedFile());
+//					}
+					
+					JOptionPaneLoadSavegame connect = new JOptionPaneLoadSavegame(frame);
+					int n = connect.displayGui();
+					if (n == 0) {
+						String saveGameId = connect.getSavegameId();
+						//...
 					}
+					
 				}	
 			});
 			

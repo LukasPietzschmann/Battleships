@@ -1,7 +1,6 @@
 package main.gui;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -16,14 +15,15 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class JOptionPaneConnect {
+public class JOptionPaneConnectAI {
 	private Component parentComponent;
 	private Object[] options = {"Bestätigen", "Abbrechen"};
 	private JTextField textfield;
 	private JLabel ip;
 	private String role = "server";
+	private String difficulty = "medium";
 	
-	public JOptionPaneConnect(Component parentComponent) {
+	public JOptionPaneConnectAI(Component parentComponent) {
 		this.parentComponent = parentComponent;
 	}
 	
@@ -37,7 +37,6 @@ public class JOptionPaneConnect {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		JRadioButton serverButton = new JRadioButton("Verbinden als Server");
-		serverButton.setPreferredSize(new Dimension(210, 30));
 		serverButton.setSelected(true);
 		serverButton.addActionListener(new ActionListener() {
 			@Override
@@ -51,7 +50,6 @@ public class JOptionPaneConnect {
 			}
 		});
 		JRadioButton clientButton = new JRadioButton("Verbinden als Client");
-		clientButton.setPreferredSize(new Dimension(210, 30));
 		clientButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -66,6 +64,7 @@ public class JOptionPaneConnect {
 		ButtonGroup connectGroup = new ButtonGroup();
 		connectGroup.add(serverButton);
 		connectGroup.add(clientButton);
+		
 		ip = new JLabel("IP-Adresse");
 		textfield = new JTextField("192.168.21.2");
 		textfield.addMouseListener(new MouseAdapter() {
@@ -73,6 +72,39 @@ public class JOptionPaneConnect {
 				if (textfield.isEnabled() == true) textfield.setText("");
 			}
 		});
+		
+		JLabel aiDifficulty = new JLabel("AI-Schwierigkeit: ");
+		
+		JRadioButton easyButton = new JRadioButton("Leicht");
+		easyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				difficulty = "easy";
+			}
+		});
+		
+		JRadioButton mediumButton = new JRadioButton("Mittel");
+		mediumButton.setSelected(true);
+		mediumButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				difficulty = "medium";
+			}
+		});
+		
+		JRadioButton hardButton = new JRadioButton("Schwer");
+		hardButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				difficulty = "hard";
+			}
+		});
+		
+		ButtonGroup difficultyGroup = new ButtonGroup();
+		difficultyGroup.add(easyButton);
+		difficultyGroup.add(mediumButton);
+		difficultyGroup.add(hardButton);
+		
 		textfield.setEnabled(false);
 		ip.setEnabled(false);
 		panel.add(Box.createVerticalGlue());
@@ -81,12 +113,17 @@ public class JOptionPaneConnect {
 		panel.add(Box.createVerticalStrut(15));
 		panel.add(ip);
 		panel.add(textfield);
+		panel.add(Box.createVerticalStrut(15));
+		panel.add(aiDifficulty);
+		panel.add(easyButton);
+		panel.add(mediumButton);
+		panel.add(hardButton);
 		panel.add(Box.createVerticalGlue());
 		return panel;
 	}
 	
 	public String getIP() {
-		if (role == "server") {
+		if (role == "string") {
 			return null;
 		}
 		if (role == "client") {
@@ -99,10 +136,13 @@ public class JOptionPaneConnect {
 		return role;
 	}
 	
-	public static void main(String[] args) {
-		JOptionPaneConnect connect = new JOptionPaneConnect(null);
-		connect.displayGui();
+	public String getDifficulty() {
+		return difficulty;
 	}
 	
+	public static void main(String[] args) {
+		JOptionPaneConnectAI connect = new JOptionPaneConnectAI(null);
+		connect.displayGui();
+	}
 }
 
