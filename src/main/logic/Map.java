@@ -23,8 +23,8 @@ public class Map {
 	 */
 	public static final int UNSUCC_HIT = 3;
 	/**
-	 * Konstante zum Anzeigen des Bereichs um ein bereits versenktes Schiff. Dort kann auf Grund der Regeln devinitiv
-	 * kein Schiff liegen.
+	 * Konstante zum Anzeigen des Bereichs um ein bereits versenktes Schiff. Dort kann auf Grund der Regeln devinitiv kein
+	 * Schiff liegen.
 	 */
 	public static final int DEFINITELY_NO_SHIP = 4;
 	/**
@@ -330,130 +330,148 @@ public class Map {
 		
 		switch(ship.getDirection()) {
 			case north:
-				if(x < 0 || x >= map.length)
-					return false;
-				if(y < 0 || y + shipSize - 1 >= map.length)
-					return false;
-				
-				try {
-					if(y - 1 >= 0 && map[y - 1][x].stat == SHIP)
-						return false;
-					if(y + shipSize < map.length && map[y + shipSize][x].stat == SHIP)
-						return false;
-					
-					if(y - 1 >= 0 && map[y - 1][x + 1].stat == SHIP && map[y - 1][x - 1].stat == SHIP) {
-						return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y + i)) return false;
+				for(int i = 0; i < shipSize; i++) {
+					//links
+					try {
+						if(map[y + i][x - 1].stat == SHIP) return false;
+					}catch(ArrayIndexOutOfBoundsException e) {
+						break;
 					}
-					if(y + shipSize < map.length && map[y + shipSize][x + 1].stat == SHIP && map[y + shipSize][x - 1].stat == SHIP) {
-						return false;
+				}
+				for(int i = 0; i < shipSize; i++) {
+					//rechts
+					try {
+						if(map[y + i][x + 1].stat == SHIP) return false;
+					}catch(ArrayIndexOutOfBoundsException e) {
+						break;
 					}
-					
-					for(int i = 0; i < shipSize; i++) {
-						for(int j = 0; j < 2; j++) {
-							if(x + j < map.length && map[y + i][x + j].stat == SHIP)
-								return false;
-							if(x - j >= 0 && map[y + i][x - j].stat == SHIP)
-								return false;
-						}
+				}
+				for(int i = -1; i <= 1; i++) {
+					//oben
+					try {
+						if(map[y - 1][x + i].stat == SHIP) return false;
+					}catch(ArrayIndexOutOfBoundsException e) {
+						continue;
 					}
-				}catch(ArrayIndexOutOfBoundsException e) {
-					// System.out.println("Yes schon wieder Codingarbeit gespart hehe :)");
+				}
+				for(int i = -1; i <= 1; i++) {
+					//unten
+					try {
+						if(map[y + shipSize][x + i].stat == SHIP) return false;
+					}catch(ArrayIndexOutOfBoundsException e) {
+						continue;
+					}
 				}
 				break;
 			case south:
-				if(x < 0 || x >= map.length)
-					return false;
-				if(y - shipSize + 1 < 0 || y >= map.length)
-					return false;
-				
-				try {
-					if(y - shipSize >= 0 && map[y - shipSize][x].stat == SHIP)
-						return false;
-					if(y + 1 < map.length && map[y + 1][x].stat == SHIP)
-						return false;
-					
-					if(y - 1 >= 0 && map[y + 1][x + 1].stat == SHIP && map[y + 1][x - 1].stat == SHIP) {
-						return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y - i)) return false;
+				for(int i = 0; i < shipSize; i++) {
+					//links
+					try {
+						if(map[y - i][x - 1].stat == SHIP) return false;
+					}catch(ArrayIndexOutOfBoundsException e) {
+						break;
 					}
-					if(y + 1 < map.length && map[y + 1][x + 1].stat == SHIP && map[y + 1][x - 1].stat == SHIP) {
-						return false;
+				}
+				for(int i = 0; i < shipSize; i++) {
+					//rechts
+					try {
+						if(map[y - i][x + 1].stat == SHIP) return false;
+					}catch(ArrayIndexOutOfBoundsException e) {
+						break;
 					}
-					for(int i = 0; i < shipSize; i++) {
-						for(int j = 0; j < 2; j++) {
-							if(x + j < map.length && map[y - i][x + j].stat == SHIP)
-								return false;
-							if(x - j >= 0 && map[y - i][x - j].stat == SHIP)
-								return false;
-						}
+				}
+				for(int i = -1; i <= 1; i++) {
+					//unten
+					try {
+						if(map[y + 1][x + i].stat == SHIP) return false;
+					}catch(ArrayIndexOutOfBoundsException e) {
+						continue;
 					}
-				}catch(ArrayIndexOutOfBoundsException e) {
-					// System.out.println("Yes schon wieder Codingarbeit gespart hehe :)");
+				}
+				for(int i = -1; i <= 1; i++) {
+					//oben
+					try {
+						if(map[y - shipSize][x + i].stat == SHIP) return false;
+					}catch(ArrayIndexOutOfBoundsException e) {
+						continue;
+					}
 				}
 				break;
 			case west:
-				if(x < 0 || x + shipSize - 1 >= map.length)
-					return false;
-				if(y < 0 || y >= map.length)
-					return false;
-				
-				try {
-					if(x - 1 >= 0 && map[y][x - 1].stat == SHIP)
-						return false;
-					if(x + shipSize < map.length && map[y][x + shipSize].stat == SHIP)
-						return false;
-					
-					if(x - 1 >= 0 && map[y + 1][x - 1].stat == SHIP && map[y - 1][x - 1].stat == SHIP) {
-						return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x + i, y)) return false;
+				for(int i = 0; i < shipSize; i++) {
+					//oben
+					try {
+						if(map[y - 1][x + i].stat == SHIP) return false;
+					}catch(Exception e) {
+						break;
 					}
-					if(x + shipSize < map.length && map[y + 1][x + shipSize].stat == SHIP && map[y - 1][x + shipSize].stat == SHIP) {
-						return false;
+				}
+				for(int i = 0; i < shipSize; i++) {
+					//unten
+					try {
+						if(map[y + 1][x + i].stat == SHIP) return false;
+					}catch(Exception e) {
+						break;
 					}
-					for(int i = 0; i < shipSize; i++) {
-						for(int j = 0; j < 2; j++) {
-							if(y + j < map.length && map[y + j][x + i].stat == SHIP)
-								return false;
-							if(y - j >= 0 && map[y - j][x + i].stat == SHIP)
-								return false;
-						}
+				}
+				for(int i = -1; i <= 1; i++) {
+					//links
+					try {
+						if(map[y + i][x - 1].stat == SHIP) return false;
+					}catch(Exception e) {
+						continue;
 					}
-				}catch(ArrayIndexOutOfBoundsException e) {
-					// System.out.println("Yes schon wieder Codingarbeit gespart hehe :)");
+				}
+				for(int i = -1; i <= 1; i++) {
+					//rechts
+					try {
+						if(map[y + i][x + shipSize].stat == SHIP) return false;
+					}catch(Exception e) {
+						continue;
+					}
 				}
 				break;
 			case east:
-				if(x - shipSize + 1 < 0 || x >= map.length)
-					return false;
-				if(y < 0 || y >= map.length)
-					return false;
-				
-				try {
-					if(x - shipSize >= 0 && map[y][x - shipSize].stat == SHIP)
-						return false;
-					if(x + 1 < map.length && map[y][x + 1].stat == SHIP)
-						return false;
-					
-					if(x - shipSize >= 0 && map[y + 1][x - shipSize].stat == SHIP && map[y - 1][x - shipSize].stat == SHIP) {
-						return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x - i, y)) return false;
+				for(int i = 0; i < shipSize; i++) {
+					//oben
+					try {
+						if(map[y - 1][x - i].stat == SHIP) return false;
+					}catch(Exception e) {
+						break;
 					}
-					if(x + 1 < map.length && map[y + 1][x + 1].stat == SHIP && map[y - 1][x + 1].stat == SHIP) {
-						return false;
+				}
+				for(int i = 0; i < shipSize; i++) {
+					//unten
+					try {
+						if(map[y + 1][x - i].stat == SHIP) return false;
+					}catch(Exception e) {
+						break;
 					}
-					for(int i = 0; i < shipSize; i++) {
-						for(int j = 0; j < 2; j++) {
-							if(y + j < map.length && map[y + j][x - i].stat == SHIP)
-								return false;
-							if(y - j >= 0 && map[y - j][x - i].stat == SHIP)
-								return false;
-						}
+				}
+				for(int i = -1; i <= 1; i++) {
+					//rechts
+					try {
+						if(map[y + i][x + 1].stat == SHIP) return false;
+					}catch(Exception e) {
+						continue;
 					}
-				}catch(ArrayIndexOutOfBoundsException e) {
-					// System.out.println("Yes schon wieder Codingarbeit gespart hehe :)");
+				}
+				for(int i = -1; i <= 1; i++) {
+					//links
+					try {
+						if(map[y + i][x - shipSize].stat == SHIP) return false;
+					}catch(Exception e) {
+						continue;
+					}
 				}
 				break;
 		}
 		
 		return true;
-		//TODO
 	}
 	
 	/**
