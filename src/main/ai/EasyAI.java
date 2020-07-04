@@ -1,18 +1,14 @@
 package ai;
 
 import logic.Logic;
+import logic.Map;
+import logic.Player;
 
 import java.util.Random;
 
-class EasyAI extends AI {
-	/**
-	 * @param l "Zurück-Referenz" auf das Logik Objekt.
-	 * @param size Die festgelegte Größe des Spielfelds.
-	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
-	 * @param difficulty Die Schwierigkeitsstufe des Computers
-	 */
-	public EasyAI(Logic l, int size, String name, Difficulty difficulty) {
-		super(l, size, name, difficulty);
+class EasyAI extends PlayableAI {
+	public EasyAI(Player player, Logic logic, Map map) {
+		super(player, logic, map);
 	}
 	
 	/**
@@ -21,9 +17,9 @@ class EasyAI extends AI {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public boolean doWhatYouHaveToDo() {
+	public boolean makeMove() {
 		Random rnd = new Random();
 		
-		return logic.shoot(rnd.nextInt(map.getSize()), rnd.nextInt(map.getSize()), this) != null;
+		return logic.shoot(rnd.nextInt(map.getSize()), rnd.nextInt(map.getSize()), player) != null;
 	}
 }

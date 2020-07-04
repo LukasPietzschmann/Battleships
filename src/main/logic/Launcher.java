@@ -1,11 +1,13 @@
 package logic;
 
-import gui.MainWindow;
+import ai.Difficulty;
+import ai.AI;
 
 /**
  * Die Klasse Launcher startet das Spiel und frägt Anfangseinstellungen ab
  */
 public class Launcher {
+	public static final int SG = 0;
 	/**
 	 * Die {@link AI} gegen einen Gegner übers {@link network.Network}, wobei man selbst der Client ist.
 	 */
@@ -26,56 +28,34 @@ public class Launcher {
 	 * Ein {@link Human} gegen einen Gegner übers {@link network.Network}, wobei man selbst der Server ist.
 	 */
 	public static final int PL_NW_SV = 5;
+	public static final int AI_AI = 6;
 	
-	public static int gridSize = 10;
-	public static String theme = "Battleships";
-	public static String themeIdentifierPlural = "Schiffe";
-	public static String themeIdentifierSingular = "Schiff";
-	public static boolean soundPlaying = false;
+	private static Launcher instance;
 	
-	public static int fiveFieldElementCount = 1;
-	public static int fourFieldElementCount = 2;
-	public static int threeFieldElementCount = 3;
-	public static int twoFieldElementCount = 4;
-	
-	public static int fiveFieldElementMaxCount = 10;
-	public static int fourFieldElementMaxCount = 10;
-	public static int threeFieldElementMaxCount = 10;
-	public static int twoFieldElementMaxCount = 10;
-	
-	public static String fiveFieldElementName;
-	public static String fourFieldElementName;
-	public static String threeFieldElementName;
-	public static String twoFieldElementName;
-	
-	public static char role;
-	public static String clientIP;
-	
-	public static void main(String[] args) throws Exception{
-		// TODO start GUI
-		MainWindow main = new MainWindow();
-		main.setUpMainWindow();
-		// TODO mode = GUI.getMode();
-		int mode = NW_SV_AI;
-		
-		Logic logic;
-		
+	public Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, int size) throws Exception {
 		switch(mode) {
-			case NW_CL_AI:
-				logic = new Logic("AI", "NW", AI.Difficulty.easy, "127.0.0.1");
-				break;
-			case NW_SV_AI:
-				logic = new Logic("AI", "NW", AI.Difficulty.easy, 5);
-				break;
+			case SG:
+				//TODO id Parameter
+				return new Logic(0);
+			case AI_AI:
+				return new Logic("AI1", "AI2", Difficulty.easy, Difficulty.medium, size, ship2Count, ship3Count, ship4Count, ship5Count);
 			case PL_AI:
-				logic = new Logic("AI", "Player", 5, AI.Difficulty.easy);
-				break;
-			case PL_NW_CL:
-				logic = new Logic("Player", "NW", "127.0.0.1");
-				break;
+				return new Logic("AI", "Player", size, Difficulty.easy, ship2Count, ship3Count, ship4Count, ship5Count);
+			case NW_CL_AI:
+				return new Logic("AI", "Network", Difficulty.easy, "127.0.0.1");
+			case NW_SV_AI:
+				return new Logic("AI", "Network", Difficulty.easy, size, ship2Count, ship3Count, ship4Count, ship5Count);
 			case PL_NW_SV:
-				logic = new Logic("Player", "NW", 5);
-				break;
+				return new Logic("Player", "Network", size, ship2Count, ship3Count, ship4Count, ship5Count);
+			case PL_NW_CL:
+				return new Logic("Player", "Network", "127.0.0.1");
 		}
+		
+		return null;
+	}
+	
+	public static Launcher getInstance() {
+		if(instance == null) return Launcher.instance = new Launcher();
+		return instance;
 	}
 }
