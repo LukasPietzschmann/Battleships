@@ -1,4 +1,4 @@
-package main.gui;
+package gui;
 
 public class GuiTester {
 	

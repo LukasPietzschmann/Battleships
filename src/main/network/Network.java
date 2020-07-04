@@ -1,8 +1,8 @@
-package main.network;
+package network;
 
-import main.logic.Logic;
-import main.logic.Player;
-import main.logic.Ship;
+import logic.Logic;
+import logic.Player;
+import logic.Ship;
 
 import java.io.IOException;
 import java.net.ServerSocket;

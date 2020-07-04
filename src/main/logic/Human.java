@@ -1,4 +1,4 @@
-package main.logic;
+package logic;
 
 /**
  * Die Klasse Human modelliert einen echten Spieler.

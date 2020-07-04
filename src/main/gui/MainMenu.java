@@ -1,4 +1,4 @@
-package main.gui;
+package gui;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -8,8 +8,8 @@ import javax.swing.event.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import main.logic.AI;
-import main.logic.Logic;
+import logic.AI;
+import logic.Logic;
 
 
 public class MainMenu {

@@ -1,4 +1,4 @@
-package main.network;
+package network;
 
 public class UnknownMessageException extends RuntimeException {
 	private final String message;

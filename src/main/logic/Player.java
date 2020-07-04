@@ -1,4 +1,4 @@
-package main.logic;
+package logic;
 
 /**
  * Die Klasse Player modelliert einen Spieler auf der höchsten Abstraktionsebene.

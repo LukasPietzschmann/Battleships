@@ -1,4 +1,4 @@
-package main.network;
+package network;
 
 public class UnexpectedMessageException extends RuntimeException {
 	final Message message;

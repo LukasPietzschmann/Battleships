@@ -1,6 +1,6 @@
-package main.logic;
+package logic;
 
-import main.network.Network;
+import network.Network;
 
 import java.util.ArrayList;
 

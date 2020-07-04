@@ -1,4 +1,4 @@
-package main.logic;
+package logic;
 
 /**
  * Die Klasse AI modelliert den Computer-Spieler.

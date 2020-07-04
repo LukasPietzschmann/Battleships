@@ -1,9 +1,9 @@
-package main.ai;
+package ai;
 
-import main.logic.Logic;
+import logic.Logic;
 
-import main.logic.Ship;
-import main.logic.Ship.Direction;
+import logic.Ship;
+import logic.Ship.Direction;
 
 import java.util.Random;
 

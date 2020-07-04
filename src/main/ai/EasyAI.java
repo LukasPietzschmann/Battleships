@@ -1,6 +1,6 @@
-package main.ai;
+package ai;
 
-import main.logic.Logic;
+import logic.Logic;
 
 import java.util.Random;
 

@@ -1,6 +1,6 @@
-package main.logic;
+package logic;
 
-import main.gui.MainWindow;
+import gui.MainWindow;
 
 /**
  * Die Klasse Launcher startet das Spiel und frägt Anfangseinstellungen ab

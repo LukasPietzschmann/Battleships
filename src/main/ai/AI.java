@@ -1,6 +1,6 @@
-package main.ai;
+package ai;
 
-import main.logic.*;
+import logic.*;
 
 /**
  * Die Klasse AI modelliert einen Computer-Spieler.

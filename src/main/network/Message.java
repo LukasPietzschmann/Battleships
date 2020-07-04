@@ -1,6 +1,6 @@
-package main.network;
+package network;
 
-import static main.network.Network.*;
+import static network.Network.*;
 
 public class Message {
 	public static final int SIZE_POS = 0;

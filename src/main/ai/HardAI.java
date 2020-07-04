@@ -1,7 +1,7 @@
-package main.ai;
+package ai;
 
-import main.logic.Logic;
-import main.logic.Ship;
+import logic.Logic;
+import logic.Ship;
 
 import java.util.ArrayList;
 import java.util.Random;

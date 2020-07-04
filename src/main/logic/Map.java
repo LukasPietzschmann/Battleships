@@ -1,4 +1,4 @@
-package main.logic;
+package logic;
 
 /**
  * Die Klasse Map modelliert das Spielfeld eines {@link LocalPlayer}.

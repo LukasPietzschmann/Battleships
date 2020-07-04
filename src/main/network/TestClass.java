@@ -1,6 +1,6 @@
-package main.network;
+package network;
 
-import main.logic.Logic;
+import logic.Logic;
 
 class ClientTest {
 	public static void main(String[] args) {

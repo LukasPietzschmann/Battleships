@@ -1,5 +1,5 @@
 
-package main.gui;
+package gui;
 
 import java.io.File;
 
