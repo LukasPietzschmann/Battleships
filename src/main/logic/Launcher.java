@@ -2,11 +2,14 @@ package logic;
 
 import ai.Difficulty;
 import ai.AI;
+import gui.MainWindow;
 
 /**
  * Die Klasse Launcher startet das Spiel und frägt Anfangseinstellungen ab
  */
 public class Launcher {
+	public static boolean soundPlaying = false;
+	
 	public static final int SG = 0;
 	/**
 	 * Die {@link AI} gegen einen Gegner übers {@link network.Network}, wobei man selbst der Client ist.
@@ -31,8 +34,10 @@ public class Launcher {
 	public static final int AI_AI = 6;
 	
 	private static Launcher instance;
+	public static int gridSize = 10;
+	public static String theme = "Battleships";
 	
-	public Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, int size) throws Exception {
+	public static Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, int size) throws Exception {
 		switch(mode) {
 			case SG:
 				//TODO id Parameter
@@ -57,5 +62,14 @@ public class Launcher {
 	public static Launcher getInstance() {
 		if(instance == null) return Launcher.instance = new Launcher();
 		return instance;
+	}
+	
+	public static boolean enoughShips(int ship2Count, int ship3Count, int ship4Count, int ship5Count){
+		return true;
+	}
+	
+	public static void main(String[] args) {
+		MainWindow mainWindow = new MainWindow();
+		mainWindow.setUpMainWindow();
 	}
 }
