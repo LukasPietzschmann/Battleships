@@ -1,5 +1,7 @@
 package logic;
 
+import java.awt.font.LineBreakMeasurer;
+
 /**
  * Die Klasse Map modelliert das Spielfeld eines {@link LocalPlayer}.
  */
