@@ -1,5 +1,6 @@
 package ai;
 
+import logic.Direction;
 import logic.Logic;
 import logic.Map;
 import logic.Player;
@@ -25,7 +26,7 @@ public abstract class PlayableAI {
 	/**
 	 * Die letzte Richtung in die gegangen wurde, oder {@code null}, falls sie nicht existiert.
 	 */
-	protected Ship.Direction lastDir = null;
+	protected Direction lastDir = null;
 	
 	protected Mission currMission = null;
 	
@@ -42,59 +43,59 @@ public abstract class PlayableAI {
 	/**
 	 * Spiegelt die Richtung. Bsp: {@code Direction.north} wird gespielgelt zu {@code Direction.south}.
 	 *
-	 * @param dir Die zu spiegelnde {@link Ship.Direction}.
-	 * @return Die gespiegelte {@link Ship.Direction}.
+	 * @param dir Die zu spiegelnde {@link Direction}.
+	 * @return Die gespiegelte {@link Direction}.
 	 */
-	protected Ship.Direction mirrorDirection(Ship.Direction dir) {
+	protected Direction mirrorDirection(Direction dir) {
 		switch(dir) {
 			case north:
-				return Ship.Direction.south;
+				return Direction.south;
 			case south:
-				return Ship.Direction.north;
+				return Direction.north;
 			case east:
-				return Ship.Direction.west;
+				return Direction.west;
 			case west:
-				return Ship.Direction.east;
+				return Direction.east;
 		}
 		
-		return Ship.Direction.north;
+		return Direction.north;
 	}
 	
 	/**
-	 * Überprüft ob in die angegebene {@link Ship.Direction} gegangen werden kann, ohne über zu Grenzen der {@link #map}
+	 * Überprüft ob in die angegebene {@link Direction} gegangen werden kann, ohne über zu Grenzen der {@link #map}
 	 * zu laufen.
 	 *
-	 * @param dir Die {@link Ship.Direction} in die gegangen wird.
+	 * @param dir Die {@link Direction} in die gegangen wird.
 	 * @param x Die x-Koordinate von der aus sich bewegt wird.
 	 * @param y Die y-Koordinate von der aus sich bewegt wird.
-	 * @return {@code true}, falls es möglich ist in diese {@link Ship.Direction} zu laufen. Sonst {@code false}.
+	 * @return {@code true}, falls es möglich ist in diese {@link Direction} zu laufen. Sonst {@code false}.
 	 */
-	protected boolean isValidDirection(Ship.Direction dir, int x, int y) {
+	protected boolean isValidDirection(Direction dir, int x, int y) {
 		return map.isInMap(getNewXKoord(dir, x), getNewYKoord(dir, y));
 	}
 	
 	/**
-	 * Schießt auf das nächste Feld in der angegebenen {@link Ship.Direction}. Es wird nicht überprüft, ob man beim
-	 * schießen in diese {@link Ship.Direction} die Grenzen der {@link #map} einhält! Dazu muss voher {@link
-	 * #isValidDirection(Ship.Direction, int, int)} aufgeruen werden.
+	 * Schießt auf das nächste Feld in der angegebenen {@link Direction}. Es wird nicht überprüft, ob man beim
+	 * schießen in diese {@link Direction} die Grenzen der {@link #map} einhält! Dazu muss voher {@link
+	 * #isValidDirection(Direction, int, int)} aufgeruen werden.
 	 *
-	 * @param dir Die {@link Ship.Direction} in die geschossen wird.
-	 * @param x Die x-Koordinate von der aus in die {@link Ship.Direction} geschossen wird.
-	 * @param y Die y-Koordinate von der aus in die {@link Ship.Direction} geschossen wird.
+	 * @param dir Die {@link Direction} in die geschossen wird.
+	 * @param x Die x-Koordinate von der aus in die {@link Direction} geschossen wird.
+	 * @param y Die y-Koordinate von der aus in die {@link Direction} geschossen wird.
 	 * @return Das konkrete {@link Ship} das getroffen wurde, oder {@code null}, falls nicht getroffen wurde.
 	 */
-	protected Ship shootInDirection(Ship.Direction dir, int x, int y) {
+	protected Ship shootInDirection(Direction dir, int x, int y) {
 		return logic.shoot(getNewXKoord(dir, x), getNewYKoord(dir, y), player);
 	}
 	
 	/**
-	 * Berechnet die nächste x-Koordinate in die angegebene {@link Ship.Direction}.
+	 * Berechnet die nächste x-Koordinate in die angegebene {@link Direction}.
 	 *
-	 * @param dir Die {@link Ship.Direction} in die gegangen wird.
+	 * @param dir Die {@link Direction} in die gegangen wird.
 	 * @param x Die alte x-Koordinate.
 	 * @return Eine neue x-Koordinate.
 	 */
-	protected int getNewXKoord(Ship.Direction dir, int x) {
+	protected int getNewXKoord(Direction dir, int x) {
 		switch(dir) {
 			case east:
 				return x + 1;
@@ -106,13 +107,13 @@ public abstract class PlayableAI {
 	}
 	
 	/**
-	 * Berechnet die nächste y-Koordinate in die angegebene {@link Ship.Direction}.
+	 * Berechnet die nächste y-Koordinate in die angegebene {@link Direction}.
 	 *
-	 * @param dir Die {@link Ship.Direction} in die gegangen wird.
+	 * @param dir Die {@link Direction} in die gegangen wird.
 	 * @param y Die alte y-Koordinate.
 	 * @return Eine neue y-Koordinate.
 	 */
-	protected int getNewYKoord(Ship.Direction dir, int y) {
+	protected int getNewYKoord(Direction dir, int y) {
 		switch(dir) {
 			case north:
 				return y - 1;

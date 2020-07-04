@@ -1,5 +1,7 @@
 package logic;
 
+import gui.OnMapChangedListener;
+
 import java.util.ArrayList;
 
 /**
@@ -7,6 +9,7 @@ import java.util.ArrayList;
  */
 public abstract class LocalPlayer extends Player {
 	protected Map map;
+	protected ArrayList<OnMapChangedListener> listeners;
 	
 	/**
 	 * @param l "Zurück-Referenz" auf das Logik Objekt.
@@ -16,6 +19,7 @@ public abstract class LocalPlayer extends Player {
 	public LocalPlayer(Logic l, int size, String name) {
 		super(l, name);
 		map = new Map(size);
+		listeners = new ArrayList<>();
 	}
 	
 	/**
@@ -27,11 +31,14 @@ public abstract class LocalPlayer extends Player {
 	 */
 	@Override
 	public Ship hit(int x, int y) {
-		return map.hit(x, y);
+		Ship hit = map.hit(x, y);
+		notifyListeners();
+		return hit;
 	}
 	
 	/**
 	 * Platziert alle Schiffe zufällig auf dem Spielfeld.
+	 *
 	 * @return {@code true}, falls die Schiffe erfolgreich platziert werden kommten. Sonst {@code false}.
 	 */
 	public boolean randomShipPlacment() {//random zahlen x und y erzeugen für alle boote
@@ -43,6 +50,7 @@ public abstract class LocalPlayer extends Player {
 			return false;
 		}
 		
+		notifyListeners();
 		return true;
 	}
 	
@@ -81,7 +89,15 @@ public abstract class LocalPlayer extends Player {
 		return map.shipsNr() > 0;
 	}
 	
-	public void dumpMap(){
+	public void dumpMap() {
 		map.dump();
+	}
+	
+	public void registerOnMapChangedListener(OnMapChangedListener listener) {
+		listeners.add(listener);
+	}
+	
+	private void notifyListeners(){
+		for(OnMapChangedListener listener : listeners) listener.OnMapChanged(map);
 	}
 }

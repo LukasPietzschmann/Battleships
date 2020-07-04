@@ -1,5 +1,6 @@
 package network;
 
+import logic.Direction;
 import logic.Logic;
 import logic.Player;
 import logic.Ship;
@@ -118,7 +119,7 @@ public class Network extends Player {
 			ships = new ArrayList<>();
 			int[] posis = new int[] {Message.SHIPS2_POS, Message.SHIPS3_POS, Message.SHIPS4_POS, Message.SHIPS5_POS};
 			for(int i = 0; i < posis.length; i++) {
-				for(int j = 0; j < m.getArgs()[posis[i]]; j++) ships.add(new Ship(0, 0, Ship.Direction.north, i + 2));
+				for(int j = 0; j < m.getArgs()[posis[i]]; j++) ships.add(new Ship(0, 0, Direction.north, i + 2));
 			}
 			shipCount = ships.size();
 			networkThread.sendMessage(String.format("%s\n", CONFIRM));

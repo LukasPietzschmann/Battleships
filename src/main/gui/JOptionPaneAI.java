@@ -1,5 +1,7 @@
 package gui;
 
+import ai.Difficulty;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +17,7 @@ import javax.swing.JRadioButton;
 public class JOptionPaneAI {
 	private Component parentComponent;
 	private Object[] options = {"Bestätigen", "Abbrechen"};
-	private String difficulty = "medium";
+	private Difficulty difficulty = Difficulty.medium;
 	
 	public JOptionPaneAI(Component parentComponent) {
 		this.parentComponent = parentComponent;
@@ -37,7 +39,7 @@ public class JOptionPaneAI {
 		easyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				difficulty = "easy";
+				difficulty = Difficulty.easy;
 			}
 		});
 		
@@ -46,7 +48,7 @@ public class JOptionPaneAI {
 		mediumButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				difficulty = "medium";
+				difficulty = Difficulty.medium;
 			}
 		});
 		
@@ -54,7 +56,7 @@ public class JOptionPaneAI {
 		hardButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				difficulty = "hard";
+				difficulty = Difficulty.hard;
 			}
 		});
 		
@@ -72,7 +74,7 @@ public class JOptionPaneAI {
 		return panel;
 	}
 	
-	public String getDifficulty() {
+	public Difficulty getDifficulty() {
 		return difficulty;
 	}
 	

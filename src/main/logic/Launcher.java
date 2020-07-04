@@ -36,24 +36,30 @@ public class Launcher {
 	private static Launcher instance;
 	public static int gridSize = 10;
 	public static String theme = "Battleships";
+	public static String themeIdentifierPlural = "Schiffe";
+	public static String themeIdentifierSingular = "Schiff";
 	
-	public static Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, int size) throws Exception {
-		switch(mode) {
-			case SG:
-				//TODO id Parameter
-				return new Logic(0);
-			case AI_AI:
-				return new Logic("AI1", "AI2", Difficulty.easy, Difficulty.medium, size, ship2Count, ship3Count, ship4Count, ship5Count);
-			case PL_AI:
-				return new Logic("AI", "Player", size, Difficulty.easy, ship2Count, ship3Count, ship4Count, ship5Count);
-			case NW_CL_AI:
-				return new Logic("AI", "Network", Difficulty.easy, "127.0.0.1");
-			case NW_SV_AI:
-				return new Logic("AI", "Network", Difficulty.easy, size, ship2Count, ship3Count, ship4Count, ship5Count);
-			case PL_NW_SV:
-				return new Logic("Player", "Network", size, ship2Count, ship3Count, ship4Count, ship5Count);
-			case PL_NW_CL:
-				return new Logic("Player", "Network", "127.0.0.1");
+	public static Logic startGame(int mode, String name01, String name02, int ship2Count, int ship3Count, int ship4Count, int ship5Count, String ip, Difficulty diff01, Difficulty diff02, long id) {
+		try {
+			switch(mode) {
+				case SG:
+					//TODO id Parameter
+					return new Logic(id);
+				case AI_AI:
+					return new Logic(name01, name02, diff01, diff02, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
+				case PL_AI:
+					return new Logic(name01, name02, gridSize, diff01, ship2Count, ship3Count, ship4Count, ship5Count);
+				case NW_CL_AI:
+					return new Logic(name01, name02, diff01, ip);
+				case NW_SV_AI:
+					return new Logic(name01, name02, diff01, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
+				case PL_NW_SV:
+					return new Logic(name01, name02, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
+				case PL_NW_CL:
+					return new Logic(name01, name02, ip);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 		
 		return null;
@@ -64,7 +70,7 @@ public class Launcher {
 		return instance;
 	}
 	
-	public static boolean enoughShips(int ship2Count, int ship3Count, int ship4Count, int ship5Count){
+	public static boolean enoughShips(int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		return true;
 	}
 	

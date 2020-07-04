@@ -1,6 +1,8 @@
 package gui;
 
+import ai.Difficulty;
 import logic.Launcher;
+import logic.Logic;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -54,7 +56,6 @@ public class MainMenu {
 	JRadioButton battleshipsButton = new JRadioButton("Battleships");
 	JRadioButton battlecarsButton = new JRadioButton("Battlecars");
 	
-	//Lukas:
 	private int fiveFieldElementCount = 1;
 	private int fourFieldElementCount = 2;
 	private int threeFieldElementCount = 3;
@@ -64,9 +65,6 @@ public class MainMenu {
 	private final int fourFieldElementMaxCount = 10;
 	private final int threeFieldElementMaxCount = 10;
 	private final int twoFieldElementMaxCount = 10;
-	private String themeIdentifierPlural = "Schiffe";
-	private String themeIdentifierSingular = "Schiff";
-	
 	
 	private String fiveFieldElementName;
 	private String fourFieldElementName;
@@ -74,7 +72,7 @@ public class MainMenu {
 	private String twoFieldElementName;
 	
 	private String role;
-	private String difficulty;
+	private Difficulty difficulty;
 	private String clientIP;
 	
 	static Color textColor = Color.LIGHT_GRAY;
@@ -160,9 +158,7 @@ public class MainMenu {
 		pvcButton.setPreferredSize(new Dimension(225, 150));
 		pvcButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
-				//Lukas:
-				//TODO
-				boolean shipsCanFitOnGrid = Launcher.enoughShips(0, 0, 0, 0);
+				boolean shipsCanFitOnGrid = Launcher.enoughShips(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount);
 				if(noElementsSelected() == true || shipsCanFitOnGrid == false) {
 					if(noElementsSelected() == true) {
 						throwErrorMessage(2);
@@ -178,7 +174,8 @@ public class MainMenu {
 					if(n == 0) {
 						difficulty = connect.getDifficulty();
 						panel.setVisible(false);
-						GameWindow game = new GameWindow(frame, "pvc");
+						Logic logic = Launcher.startGame(Launcher.PL_AI, "PL", "AI", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", difficulty, null, 0);
+						GameWindow game = new GameWindow(frame, "pvc", logic);
 						game.setUpGameWindow();
 					}
 				}
@@ -198,9 +195,7 @@ public class MainMenu {
 		pvpButton.setPreferredSize(new Dimension(225, 150));
 		pvpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
-				//Lukas:
-				//TODO
-				boolean shipsCanFitOnGrid = Launcher.enoughShips(0, 0, 0, 0);
+				boolean shipsCanFitOnGrid = Launcher.enoughShips(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount);
 				if(noElementsSelected() == true || shipsCanFitOnGrid == false) {
 					if(noElementsSelected() == true) {
 						throwErrorMessage(2);
@@ -217,7 +212,9 @@ public class MainMenu {
 						clientIP = connect.getIP();
 						role = connect.getRole();
 						panel.setVisible(false);
-						GameWindow game = new GameWindow(frame, "pvp");
+						int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
+						Logic logic = Launcher.startGame(mode, "PL", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, null, null, 0);
+						GameWindow game = new GameWindow(frame, "pvp", logic);
 						game.setUpGameWindow();
 					}
 				}
@@ -237,9 +234,7 @@ public class MainMenu {
 		cvcButton.setPreferredSize(new Dimension(225, 150));
 		cvcButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
-				//Lukas:
-				//TODO
-				boolean shipsCanFitOnGrid = Launcher.enoughShips(0, 0, 0, 0);
+				boolean shipsCanFitOnGrid = Launcher.enoughShips(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount);
 				if(noElementsSelected() == true || shipsCanFitOnGrid == false) {
 					if(noElementsSelected() == true) {
 						throwErrorMessage(2);
@@ -255,10 +250,10 @@ public class MainMenu {
 					if(n == 0) {
 						clientIP = connect.getIP();
 						role = connect.getRole();
-						difficulty = connect.getDifficulty();
+						//difficulty = connect.getDifficulty();
 						panel.setVisible(false);
-						GameWindow game = new GameWindow(frame, "cvc");
-						game.setUpGameWindow();
+						//GameWindow game = new GameWindow(frame, "cvc");
+						//game.setUpGameWindow();
 					}
 				}
 			}
@@ -831,15 +826,15 @@ public class MainMenu {
 	public void throwErrorMessage(int i) {
 		// Too many ships for the specific grid
 		if(i == 1) {
-			JOptionPane.showMessageDialog(panel, "Zu viele " + themeIdentifierPlural + " für das gewählte Spielfeld!\nAnzahl der "
-											+ themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
+			JOptionPane.showMessageDialog(panel, "Zu viele " + Launcher.themeIdentifierPlural + " für das gewählte Spielfeld!\nAnzahl der "
+											+ Launcher.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
 							"Fehlermeldung: Zu viele Schiffe für das Spielfeld", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		// No ships selected at all
 		if(i == 2) {
-			JOptionPane.showMessageDialog(panel, "Es wurden keine " + themeIdentifierPlural + " ausgewählt!\nMindestens ein "
-											+ themeIdentifierSingular + " auswählen, um fortzufahren.",
+			JOptionPane.showMessageDialog(panel, "Es wurden keine " + Launcher.themeIdentifierPlural + " ausgewählt!\nMindestens ein "
+											+ Launcher.themeIdentifierSingular + " auswählen, um fortzufahren.",
 							"Fehlermeldung: Keine Schiffe ausgewählt", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
@@ -860,8 +855,8 @@ public class MainMenu {
 			
 			frame.setTitle("Battleships");
 			
-			themeIdentifierSingular = "Schiff";
-			themeIdentifierPlural = "Schiffe";
+			Launcher.themeIdentifierSingular = "Schiff";
+			Launcher.themeIdentifierPlural = "Schiffe";
 			
 			fiveFieldElementName = "Flugzeugträger";
 			fourFieldElementName = "Schlachtschiff";
@@ -882,8 +877,8 @@ public class MainMenu {
 			
 			frame.setTitle("Battlecars");
 			
-			themeIdentifierSingular = "Fahrzeug";
-			themeIdentifierPlural = "Fahrzeuge";
+			Launcher.themeIdentifierSingular = "Fahrzeug";
+			Launcher.themeIdentifierPlural = "Fahrzeuge";
 			
 			fiveFieldElementName = "Bus";
 			fourFieldElementName = "Truck";

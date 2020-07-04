@@ -1,6 +1,8 @@
 
 package gui;
 
+import logic.Launcher;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,7 +20,7 @@ public class MainWindow {
 	
 	
 	public void setUpMainWindow(){
-		frame = new JFrame(GuiTester.theme);
+		frame = new JFrame(Launcher.theme);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(1130, 700));
 		frame.setMinimumSize(new Dimension(1130, 700));
@@ -35,7 +37,7 @@ public class MainWindow {
 		
 		String filepath = "src/res/sound.wav";
 		music = new Music(filepath);
-		if (GuiTester.soundPlaying == true) {
+		if (Launcher.soundPlaying == true) {
 			music.restartMusic();
 		}
 		

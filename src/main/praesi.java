@@ -20,7 +20,7 @@ public class praesi {
 			
 			System.out.println("2er Schiffe - 3er Schiffe - 4er Schiffe - 5er Schiffe - Größe");
 			String[] elems = bf.readLine().split(" ");
-			switch(mod) {
+			/*switch(mod) {
 				case "1":
 					Launcher.getInstance().startGame(Launcher.AI_AI,
 									Integer.parseInt(elems[0]),
@@ -69,7 +69,7 @@ public class praesi {
 									Integer.parseInt(elems[3]),
 									Integer.parseInt(elems[4])).startGame();
 					break;
-			}
+			}*/
 		}
 	}
 }

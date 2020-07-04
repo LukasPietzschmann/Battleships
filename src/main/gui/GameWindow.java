@@ -1,5 +1,10 @@
 package gui;
 
+import logic.Launcher;
+import logic.LocalPlayer;
+import logic.Logic;
+import logic.Ship;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -12,7 +17,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 public class GameWindow {
-	private JFrame frame; 
+	private JFrame frame;
 	private String mode;
 	private JPanel mainPanel = new JPanel();
 	private JPanel gridHolder = new JPanel(new GridBagLayout());
@@ -22,36 +27,44 @@ public class GameWindow {
 	private JPanel elements = new JPanel();
 	private JPanel elementsCounter = new JPanel();
 	private JPanel buttons = new JPanel();
-		private JButton randomButton = new JButton();
-		private JButton startButton = new JButton();
-		private JButton soundButton = new JButton();
+	private JButton randomButton = new JButton();
+	private JButton startButton = new JButton();
+	private JButton soundButton = new JButton();
 	private JLabel fiveFieldElementIcon = MainMenu.fiveFieldElementIcon;
 	private JLabel fourFieldElementIcon = MainMenu.fourFieldElementIcon;
 	private JLabel threeFieldElementIcon = MainMenu.threeFieldElementIcon;
 	private JLabel twoFieldElementIcon = MainMenu.twoFieldElementIcon;
+	
+	private int fiveFieldElementCount = 0;
+	private int fourFieldElementCount = 0;
+	private int threeFieldElementCount = 0;
+	private int twoFieldElementCount = 0;
 	
 	static Color textColor = MainMenu.textColor;
 	static Color backgroundColor = MainMenu.backgroundColor;
 	Font font = new Font("Krungthep", Font.PLAIN, 20);
 	String elementSelected = null;
 	
+	private Logic logic;
+	private LocalPlayer player;
 	
-	public GameWindow(JFrame frame, String mode) {
+	public GameWindow(JFrame frame, String mode, Logic logic) {
 		this.frame = frame;
 		this.mode = mode;
+		this.logic = logic;
+		player = logic.getOwnPlayer();
+		player.registerOnMapChangedListener(grid);
 	}
 	
 	public void setUpGameWindow() {
-//		Grid gridPlayer1 = new Grid(GuiTester.gridSize);
-//		Grid gridPlayer2 = new Grid(GuiTester.gridSize);
-		if (mode.equals("pvp") || mode.equals("pvc")) {
+		//		Grid gridPlayer1 = new Grid(GuiTester.gridSize);
+		//		Grid gridPlayer2 = new Grid(GuiTester.gridSize);
+		if(mode.equals("pvp") || mode.equals("pvc")) {
 			setUpPlaceWindow();
-			
-		} else {
+		}else {
 			// Methode, die die Elemente für beide Spielfelder automatisch füllt
 		}
 	}
-	
 	
 	public void backToMenu() {
 		frame.remove(mainPanel);
@@ -65,7 +78,7 @@ public class GameWindow {
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.setOpaque(true);
 		mainPanel.setBackground(backgroundColor);
-		mainPanel.setBorder(BorderFactory.createEmptyBorder(30,70,30,30));
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 70, 30, 30));
 		
 		// mainPanel Panel Layout
 		mainPanel.add(gridHolder, BorderLayout.CENTER);
@@ -84,31 +97,32 @@ public class GameWindow {
 				int height = grid.getHeight(); // zu löschen
 				int width = grid.getWidth(); // zu löschen
 				System.out.println("Panelsize: " + panelsize + " ( width: " + width + ", height: " + height + ")"); // zu löschen
-				double tilesize = (double)panelsize / (double)grid.groesse;
+				double tilesize = (double) panelsize / (double) grid.groesse;
 				System.out.println("Tilesize: " + tilesize); // zu löschen
 				int x = e.getX();
 				int y = e.getY();
 				System.out.println("X: " + x + ", Y: " + y); // zu löschen
-				int xGrid = (int)((double) x / tilesize);
-				int yGrid = (int)((double) y / tilesize);
+				int xGrid = (int) ((double) x / tilesize) - 1;
+				int yGrid = (int) ((double) y / tilesize) - 1;
 				System.out.println("XGrid: " + xGrid + ", YGrid: " + yGrid); // zu löschen
 			}
+			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
-
+			
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
-
+			
 			@Override
 			public void mouseEntered(MouseEvent e) {
 			}
-
+			
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
@@ -119,7 +133,7 @@ public class GameWindow {
 		// options Panel Settings
 		options.setLayout(new BorderLayout());
 		options.setOpaque(false);
-		options.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+		options.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
 		// options Panel Layout
 		options.add(title, BorderLayout.NORTH);
@@ -131,16 +145,34 @@ public class GameWindow {
 		elements.setLayout(new BoxLayout(elements, BoxLayout.Y_AXIS));
 		elements.setOpaque(false);
 		
+		for(Ship ship : logic.getAvailableShips()) {
+			switch(ship.getSize()) {
+				case 2:
+					twoFieldElementCount++;
+					break;
+				case 3:
+					threeFieldElementCount++;
+					break;
+				case 4:
+					fourFieldElementCount++;
+					break;
+				case 5:
+					fiveFieldElementCount++;
+					break;
+			}
+		}
+		
 		// elements Elements
-		if (GuiTester.fiveFieldElementCount == 0) fiveFieldElementIcon.setEnabled(false);
-		if (GuiTester.fourFieldElementCount == 0) fourFieldElementIcon.setEnabled(false);
-		if (GuiTester.threeFieldElementCount == 0) threeFieldElementIcon.setEnabled(false);
-		if (GuiTester.twoFieldElementCount == 0) twoFieldElementIcon.setEnabled(false);
+		if(fiveFieldElementCount == 0) fiveFieldElementIcon.setEnabled(false);
+		if(fourFieldElementCount == 0) fourFieldElementIcon.setEnabled(false);
+		if(threeFieldElementCount == 0) threeFieldElementIcon.setEnabled(false);
+		if(twoFieldElementCount == 0) twoFieldElementIcon.setEnabled(false);
+		
 		EmptyBorder emptyBorder = new EmptyBorder(3, 3, 3, 3);
 		fiveFieldElementIcon.setBorder(emptyBorder);
 		fiveFieldElementIcon.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if (fiveFieldElementIcon.isEnabled() == true) {
+				if(fiveFieldElementIcon.isEnabled() == true) {
 					fourFieldElementIcon.setBorder(emptyBorder);
 					threeFieldElementIcon.setBorder(emptyBorder);
 					twoFieldElementIcon.setBorder(emptyBorder);
@@ -152,7 +184,7 @@ public class GameWindow {
 		fourFieldElementIcon.setBorder(emptyBorder);
 		fourFieldElementIcon.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if (fourFieldElementIcon.isEnabled() == true) {
+				if(fourFieldElementIcon.isEnabled() == true) {
 					fiveFieldElementIcon.setBorder(emptyBorder);
 					threeFieldElementIcon.setBorder(emptyBorder);
 					twoFieldElementIcon.setBorder(emptyBorder);
@@ -164,7 +196,7 @@ public class GameWindow {
 		threeFieldElementIcon.setBorder(emptyBorder);
 		threeFieldElementIcon.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if (threeFieldElementIcon.isEnabled() == true) {
+				if(threeFieldElementIcon.isEnabled() == true) {
 					fiveFieldElementIcon.setBorder(emptyBorder);
 					fourFieldElementIcon.setBorder(emptyBorder);
 					twoFieldElementIcon.setBorder(emptyBorder);
@@ -176,7 +208,7 @@ public class GameWindow {
 		twoFieldElementIcon.setBorder(emptyBorder);
 		twoFieldElementIcon.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if (twoFieldElementIcon.isEnabled() == true) {
+				if(twoFieldElementIcon.isEnabled() == true) {
 					fiveFieldElementIcon.setBorder(emptyBorder);
 					fourFieldElementIcon.setBorder(emptyBorder);
 					threeFieldElementIcon.setBorder(emptyBorder);
@@ -200,19 +232,19 @@ public class GameWindow {
 		elementsCounter.setOpaque(false);
 		
 		// elementsCounter Elements
-		int fiveRemaining = GuiTester.fiveFieldElementCount;
+		int fiveRemaining = fiveFieldElementCount;
 		JLabel fiveFieldElementCount = new JLabel(fiveRemaining + "x");
 		fiveFieldElementCount.setFont(font);
 		fiveFieldElementCount.setForeground(textColor);
-		int fourRemaining = GuiTester.fourFieldElementCount;
+		int fourRemaining = fourFieldElementCount;
 		JLabel fourFieldElementCount = new JLabel(fourRemaining + "x");
 		fourFieldElementCount.setFont(font);
 		fourFieldElementCount.setForeground(textColor);
-		int threeRemaining = GuiTester.threeFieldElementCount;
+		int threeRemaining = threeFieldElementCount;
 		JLabel threeFieldElementCount = new JLabel(threeRemaining + "x");
 		threeFieldElementCount.setFont(font);
 		threeFieldElementCount.setForeground(textColor);
-		int twoRemaining = GuiTester.twoFieldElementCount;
+		int twoRemaining = twoFieldElementCount;
 		JLabel twoFieldElementCount = new JLabel(twoRemaining + "x");
 		twoFieldElementCount.setFont(font);
 		twoFieldElementCount.setForeground(textColor);
@@ -247,7 +279,7 @@ public class GameWindow {
 		
 		// Elements in option Panel
 		// title JPanel Settings
-		title.setText(GuiTester.themeIdentifierPlural + " platzieren");
+		title.setText(Launcher.themeIdentifierPlural + " platzieren");
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setForeground(textColor);
 		title.setFont(font);
@@ -256,66 +288,68 @@ public class GameWindow {
 		randomButton.setText("Zufällig");
 		ImageIcon randomPutIcon = new ImageIcon(new ImageIcon("src/res/random.png").getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
 		randomButton.setIcon(randomPutIcon);
-//		randomButton.setHorizontalAlignment(SwingConstants.LEFT);
+		//		randomButton.setHorizontalAlignment(SwingConstants.LEFT);
 		randomButton.setBorder(null);
-		randomButton.setToolTipText("Zufällige Platzierung der " + GuiTester.themeIdentifierPlural);
+		randomButton.setToolTipText("Zufällige Platzierung der " + Launcher.themeIdentifierPlural);
 		randomButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		randomButton.setMinimumSize(new Dimension(130, 60));
 		randomButton.setMaximumSize(new Dimension(130, 60));
 		randomButton.setPreferredSize(new Dimension(130, 60));
+		randomButton.addActionListener(a -> {
+			player.randomShipPlacment();
+		});
 		
 		// startButton Button Settings
 		startButton.setText("Start");
 		ImageIcon startIcon = new ImageIcon(new ImageIcon("src/res/start.png").getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
 		startButton.setIcon(startIcon);
-//		startButton.setHorizontalAlignment(SwingConstants.LEFT);
+		//		startButton.setHorizontalAlignment(SwingConstants.LEFT);
 		startButton.setBorder(null);
 		startButton.setToolTipText("Spiel starten");
 		startButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		startButton.setMinimumSize(new Dimension(130, 60));
 		startButton.setMaximumSize(new Dimension(130, 60));
 		startButton.setPreferredSize(new Dimension(130, 60));
-		startButton.addActionListener(new ActionListener(){
+		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				backToMenu();
-			}	
-		});			
+			}
+		});
 		
 		// soundButton Button Settings
 		soundButton.setText("Lautstärke anpassen");
 		Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		if (GuiTester.soundPlaying == true) {
+		if(Launcher.soundPlaying == true) {
 			soundButton.setIcon(soundOnIcon);
-		} else {
+		}else {
 			soundButton.setIcon(soundOffIcon);
 		}
-//		soundButton.setHorizontalAlignment(SwingConstants.LEFT);
+		//		soundButton.setHorizontalAlignment(SwingConstants.LEFT);
 		soundButton.setBorder(null);
 		soundButton.setToolTipText("Lautstärke anpassen");
 		soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		soundButton.setMinimumSize(new Dimension(50, 50));
 		soundButton.setMaximumSize(new Dimension(50, 50));
 		soundButton.setPreferredSize(new Dimension(50, 50));
-		soundButton.addActionListener(new ActionListener(){
+		soundButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (GuiTester.soundPlaying == true) {
+				if(Launcher.soundPlaying == true) {
 					soundButton.setIcon(soundOffIcon);
 					soundButton.setBorder(null);
 					MainWindow.music.stopMusic();
-					GuiTester.soundPlaying = false;
-				} else {
+					Launcher.soundPlaying = false;
+				}else {
 					soundButton.setIcon(soundOnIcon);
 					soundButton.setBorder(null);
 					MainWindow.music.restartMusic();
-					GuiTester.soundPlaying = true;
+					Launcher.soundPlaying = true;
 				}
-			}	
-		});			
+			}
+		});
 	}
-	
 }
 
 
