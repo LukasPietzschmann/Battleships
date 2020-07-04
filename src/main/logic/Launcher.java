@@ -30,21 +30,21 @@ public class Launcher {
 	public static final int PL_NW_SV = 5;
 	public static final int AI_AI = 6;
 	
-	private static final Launcher instance = null;
+	private static Launcher instance;
 	
-	public Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, int size) throws Exception{
-		switch(mode){
+	public Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, int size) throws Exception {
+		switch(mode) {
 			case SG:
 				//TODO id Parameter
 				return new Logic(0);
 			case AI_AI:
 				return new Logic("AI1", "AI2", Difficulty.easy, Difficulty.medium, size, ship2Count, ship3Count, ship4Count, ship5Count);
 			case PL_AI:
-				return new Logic("AI", "Player", size, Difficulty.easy,  ship2Count, ship3Count, ship4Count, ship5Count);
+				return new Logic("AI", "Player", size, Difficulty.easy, ship2Count, ship3Count, ship4Count, ship5Count);
 			case NW_CL_AI:
-				return new Logic("Player", "Network", "127.0.0.1");
+				return new Logic("AI", "Network", Difficulty.easy, "127.0.0.1");
 			case NW_SV_AI:
-				return new Logic("AI", "Network", Difficulty.easy, size,  ship2Count, ship3Count, ship4Count, ship5Count);
+				return new Logic("AI", "Network", Difficulty.easy, size, ship2Count, ship3Count, ship4Count, ship5Count);
 			case PL_NW_SV:
 				return new Logic("Player", "Network", size, ship2Count, ship3Count, ship4Count, ship5Count);
 			case PL_NW_CL:
@@ -54,8 +54,8 @@ public class Launcher {
 		return null;
 	}
 	
-	public static Launcher getInstance(){
-		if(instance == null) return new Launcher();
+	public static Launcher getInstance() {
+		if(instance == null) return Launcher.instance = new Launcher();
 		return instance;
 	}
 }
