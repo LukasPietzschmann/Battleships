@@ -25,19 +25,29 @@ public class Logic {
 		this.MODE = MODE;
 	}
 	
-	private Logic(int moded, int ship2Count, int ship3Count, int ship4Count, int ship5Count){
-		this(moded);
+	/**
+	 * Konstruktor, falls ein Save-Game geladen wird.
+	 *
+	 * @param id Die ID des Save-Games.
+	 */
+	public Logic(long id) {
+		this(Launcher.SG);
+		//TODO implement
+	}
+	
+	private Logic(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
+		this(mode);
 		ships = new ArrayList<>();
 		int[] ships = {ship2Count, ship3Count, ship4Count, ship5Count};
 		
 		for(int i = 0; i < ships.length; i++) {
 			for(int j = 0; j < ships[i]; j++) {
-				this.ships.add(new Ship(0,0, Ship.Direction.north, i + 2));
+				this.ships.add(new Ship(0, 0, Direction.north, i + 2));
 			}
 		}
 	}
 	
-	public Logic(String nameAI1, String nameAI2, Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count){
+	public Logic(String nameAI1, String nameAI2, Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		this(Launcher.AI_AI, ship2Count, ship3Count, ship4Count, ship5Count);
 		ownPlayer = new AI(this, size, nameAI1, difficultyAI1);
 		oppPlayer = new AI(this, size, nameAI2, difficultyAI2);
@@ -54,8 +64,8 @@ public class Logic {
 	public Logic(String nameAI, String nameNW, Difficulty difficulty, String IP) {
 		this(Launcher.NW_CL_AI);
 		oppPlayer = new Network(this, nameNW, IP);
-		ships = ((Network)oppPlayer).getShips();
-		ownPlayer = new AI(this, ((Network)oppPlayer).getSize(), nameNW, difficulty);
+		ships = ((Network) oppPlayer).getShips();
+		ownPlayer = new AI(this, ((Network) oppPlayer).getSize(), nameNW, difficulty);
 	}
 	
 	/**
@@ -96,7 +106,7 @@ public class Logic {
 	public Logic(String namePl, String nameNW, String IP) {
 		this(Launcher.PL_NW_CL);
 		oppPlayer = new Network(this, nameNW, IP);
-		ships = ((Network)oppPlayer).getShips();
+		ships = ((Network) oppPlayer).getShips();
 		ownPlayer = new Human(this, ((Network) oppPlayer).getSize(), namePl);
 	}
 	
@@ -161,7 +171,7 @@ public class Logic {
 				
 				hit = currPlayer.doWhatYouHaveToDo();
 				System.out.println(otherPlayer.name);
-				((LocalPlayer)otherPlayer).dumpMap();
+				((LocalPlayer) otherPlayer).dumpMap();
 				System.out.println("\n");
 			}
 			
@@ -178,5 +188,9 @@ public class Logic {
 	 */
 	public ArrayList<Ship> getAvailableShips() {
 		return ships;
+	}
+	
+	public LocalPlayer getOwnPlayer(){
+		return (LocalPlayer) ownPlayer;
 	}
 }

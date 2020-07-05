@@ -1,5 +1,6 @@
 package ai;
 
+import logic.Direction;
 import logic.Map;
 import logic.Ship;
 
@@ -18,8 +19,8 @@ public class Mission {
 	private int startY;
 	private int nextX;
 	private int nextY;
-	private Ship.Direction lastHitDir;
-	private Ship.Direction unsureDir;
+	private Direction lastHitDir;
+	private Direction unsureDir;
 	private Map map;
 	
 	public Mission(int startX, int startY, Map map) {
@@ -38,7 +39,7 @@ public class Mission {
 		if(state == State.firstHit) {
 			Random rnd = new Random();
 			do {
-				unsureDir = Ship.Direction.values()[rnd.nextInt(Ship.Direction.values().length)];
+				unsureDir = Direction.values()[rnd.nextInt(Direction.values().length)];
 			}while(!isValidDirection(unsureDir, startX, startY));
 			nextX = getXInDirection(unsureDir, startX);
 			nextY = getYInDirection(unsureDir, startY);
@@ -79,11 +80,11 @@ public class Mission {
 		return false;
 	}
 	
-	private boolean isValidDirection(Ship.Direction dir, int x, int y) {
+	private boolean isValidDirection(Direction dir, int x, int y) {
 		return map.isInMap(getXInDirection(dir, x), getYInDirection(dir, y));
 	}
 	
-	private int getXInDirection(Ship.Direction dir, int x) {
+	private int getXInDirection(Direction dir, int x) {
 		switch(dir) {
 			case west:
 				return x - 1;
@@ -94,7 +95,7 @@ public class Mission {
 		}
 	}
 	
-	private int getYInDirection(Ship.Direction dir, int y) {
+	private int getYInDirection(Direction dir, int y) {
 		switch(dir) {
 			case north:
 				return y - 1;
@@ -105,16 +106,16 @@ public class Mission {
 		}
 	}
 	
-	private Ship.Direction mirrorDirection(Ship.Direction dir) {
+	private Direction mirrorDirection(Direction dir) {
 		switch(dir) {
 			case north:
-				return Ship.Direction.south;
+				return Direction.south;
 			case south:
-				return Ship.Direction.north;
+				return Direction.north;
 			case west:
-				return Ship.Direction.east;
+				return Direction.east;
 			case east:
-				return Ship.Direction.west;
+				return Direction.west;
 		}
 		
 		return null;

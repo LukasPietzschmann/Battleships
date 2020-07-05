@@ -7,19 +7,9 @@ import java.util.Random;
  */
 public class Ship {
 	/**
-	 * Die Richtung in die das Schiff schaut. Der Kopf des Schiffs schaut immer in dieser Richtung.
-	 */
-	public enum Direction {
-		north,
-		south,
-		east,
-		west
-	}
-	
-	/**
 	 * Mögliche Namen des Schiffs. Wird durch die Größe des Schiffs terminiert.
 	 */
-	private String[] names = {"U-Boot", "Zerstörer", "Kreuzer", "Schlachtschiff"};
+	private final String[] names = {"U-Boot", "Zerstörer", "Kreuzer", "Schlachtschiff"};
 	
 	/**
 	 * x-Koordinate des Schiffs.
@@ -36,7 +26,7 @@ public class Ship {
 	/**
 	 * Größe des Schiffs.
 	 */
-	private int size;
+	private final int size;
 	/**
 	 * Anzahl der bereits erlittenen Treffer.
 	 */
