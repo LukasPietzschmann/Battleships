@@ -19,9 +19,8 @@ public class JOptionPaneLoadSavegame {
 	}
 	
 	public int displayGui() {
-		int n = JOptionPane.showOptionDialog(parentComponent, getPanel(), "Spielstand laden",
+		return JOptionPane.showOptionDialog(parentComponent, getPanel(), "Spielstand laden",
 				JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		return n;
 	}
 	
 	private JPanel getPanel() {

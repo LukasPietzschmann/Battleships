@@ -5,10 +5,8 @@ import logic.Launcher;
 import logic.Logic;
 
 import java.awt.*;
-import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
 
 public class MainMenu {
 	
@@ -52,9 +50,9 @@ public class MainMenu {
 	private JPanel twoFieldElementCountChange = new JPanel();
 	
 	private JPanel themes = new JPanel();
-	JLabel themesHeading = new JLabel("Spielstil\nwählen:");
-	JRadioButton battleshipsButton = new JRadioButton("Battleships");
-	JRadioButton battlecarsButton = new JRadioButton("Battlecars");
+	private JLabel themesHeading = new JLabel("Spielstil\nwählen:");
+	private JRadioButton battleshipsButton = new JRadioButton("Battleships");
+	private JRadioButton battlecarsButton = new JRadioButton("Battlecars");
 	
 	private int fiveFieldElementCount = 1;
 	private int fourFieldElementCount = 2;
@@ -75,17 +73,17 @@ public class MainMenu {
 	private Difficulty difficulty;
 	private String clientIP;
 	
-	static Color textColor = Color.LIGHT_GRAY;
-	static Color backgroundColor = new Color(35, 35, 35);
+	public static Color textColor = Color.LIGHT_GRAY;
+	public static Color backgroundColor = new Color(35, 35, 35);
 	
-	ImageIcon themeIcon;
+	private ImageIcon themeIcon;
 	
-	MainMenu(JFrame frame) {
+	public MainMenu(JFrame frame) {
 		this.frame = frame;
 		loadThemeItems(Launcher.theme);
 	}
 	
-	MainMenu(JFrame frame, String theme) {
+	public MainMenu(JFrame frame, String theme) {
 		this.frame = frame;
 		Launcher.theme = theme;
 		loadThemeItems(Launcher.theme);
@@ -156,67 +154,61 @@ public class MainMenu {
 		pvcButton.setMinimumSize(new Dimension(225, 150));
 		pvcButton.setMaximumSize(new Dimension(225, 150));
 		pvcButton.setPreferredSize(new Dimension(225, 150));
-		pvcButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent a) {
-				boolean shipsCanFitOnGrid = Launcher.enoughShips(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount);
-				if(noElementsSelected() == true || shipsCanFitOnGrid == false) {
-					if(noElementsSelected() == true) {
-						throwErrorMessage(2);
-						return;
-					}
-					if(shipsCanFitOnGrid == false) {
-						throwErrorMessage(1);
-						return;
-					}
-				}else {
-					JOptionPaneAI connect = new JOptionPaneAI(frame);
-					int n = connect.displayGui();
-					if(n == 0) {
-						difficulty = connect.getDifficulty();
-						panel.setVisible(false);
-						Logic logic = Launcher.startGame(Launcher.PL_AI, "PL", "AI", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", difficulty, null, 0);
-						GameWindow game = new GameWindow(frame, "pvc", logic);
-						game.setUpGameWindow();
-					}
+		pvcButton.addActionListener(a -> {
+			boolean shipsCanFitOnGrid = Launcher.enoughShips(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount);
+			if(noElementsSelected() || !shipsCanFitOnGrid) {
+				if(noElementsSelected()) {
+					throwErrorMessage(2);
+					return;
+				}
+				if(!shipsCanFitOnGrid) {
+					throwErrorMessage(1);
+				}
+			}else {
+				JOptionPaneAI connect = new JOptionPaneAI(frame);
+				int n = connect.displayGui();
+				if(n == 0) {
+					difficulty = connect.getDifficulty();
+					panel.setVisible(false);
+					Logic logic = Launcher.startGame(Launcher.PL_AI, "PL", "AI", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", difficulty, null, 0);
+					GameWindow game = new GameWindow(frame, "pvc", logic);
+					game.setUpGameWindow();
 				}
 			}
 		});
 		
 		// Player vs. Player Button
-		JButton pvpButton = new JButton("Spieler vs. Spieler");
+		JButton pvpButton = new JButton("Spieler vs. 'Netzwerk'");
 		ImageIcon pvpIcon = new ImageIcon(new ImageIcon("src/res/playerVsPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		pvpButton.setIcon(pvpIcon);
 		pvpButton.setHorizontalAlignment(SwingConstants.LEFT);
 		pvpButton.setBorder(null);
-		pvpButton.setToolTipText("Spieler vs. Spieler");
+		pvpButton.setToolTipText("Spieler vs. 'Netzwerk'");
 		pvpButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		pvpButton.setMinimumSize(new Dimension(225, 150));
 		pvpButton.setMaximumSize(new Dimension(225, 150));
 		pvpButton.setPreferredSize(new Dimension(225, 150));
-		pvpButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent a) {
-				boolean shipsCanFitOnGrid = Launcher.enoughShips(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount);
-				if(noElementsSelected() == true || shipsCanFitOnGrid == false) {
-					if(noElementsSelected() == true) {
-						throwErrorMessage(2);
-						return;
-					}
-					if(shipsCanFitOnGrid == false) {
-						throwErrorMessage(1);
-						return;
-					}
-				}else {
-					JOptionPaneConnect connect = new JOptionPaneConnect(frame);
-					int n = connect.displayGui();
-					if(n == 0) {
-						clientIP = connect.getIP();
-						role = connect.getRole();
-						panel.setVisible(false);
-						int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
-						Logic logic = Launcher.startGame(mode, "PL", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, null, null, 0);
-						GameWindow game = new GameWindow(frame, "pvp", logic);
-						game.setUpGameWindow();
-					}
+		pvpButton.addActionListener(a -> {
+			boolean shipsCanFitOnGrid = Launcher.enoughShips(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount);
+			if(noElementsSelected() || !shipsCanFitOnGrid) {
+				if(noElementsSelected()) {
+					throwErrorMessage(2);
+					return;
+				}
+				if(!shipsCanFitOnGrid) {
+					throwErrorMessage(1);
+				}
+			}else {
+				JOptionPaneConnect connect = new JOptionPaneConnect(frame);
+				int n = connect.displayGui();
+				if(n == 0) {
+					clientIP = connect.getIP();
+					role = connect.getRole();
+					panel.setVisible(false);
+					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
+					Logic logic = Launcher.startGame(mode, "PL", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, null, null, 0);
+					GameWindow game = new GameWindow(frame, "pvp", logic);
+					game.setUpGameWindow();
 				}
 			}
 		});
@@ -232,29 +224,28 @@ public class MainMenu {
 		cvcButton.setMinimumSize(new Dimension(225, 150));
 		cvcButton.setMaximumSize(new Dimension(225, 150));
 		cvcButton.setPreferredSize(new Dimension(225, 150));
-		cvcButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent a) {
-				boolean shipsCanFitOnGrid = Launcher.enoughShips(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount);
-				if(noElementsSelected() == true || shipsCanFitOnGrid == false) {
-					if(noElementsSelected() == true) {
-						throwErrorMessage(2);
-						return;
-					}
-					if(shipsCanFitOnGrid == false) {
-						throwErrorMessage(1);
-						return;
-					}
-				}else {
-					JOptionPaneConnectAI connect = new JOptionPaneConnectAI(frame);
-					int n = connect.displayGui();
-					if(n == 0) {
-						clientIP = connect.getIP();
-						role = connect.getRole();
-						//difficulty = connect.getDifficulty();
-						panel.setVisible(false);
-						//GameWindow game = new GameWindow(frame, "cvc");
-						//game.setUpGameWindow();
-					}
+		cvcButton.addActionListener(a -> {
+			boolean shipsCanFitOnGrid = Launcher.enoughShips(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount);
+			if(noElementsSelected() || !shipsCanFitOnGrid) {
+				if(noElementsSelected()) {
+					throwErrorMessage(2);
+					return;
+				}
+				if(!shipsCanFitOnGrid) {
+					throwErrorMessage(1);
+				}
+			}else {
+				JOptionPaneConnectAI connect = new JOptionPaneConnectAI(frame);
+				int n = connect.displayGui();
+				if(n == 0) {
+					clientIP = connect.getIP();
+					role = connect.getRole();
+					difficulty = connect.getDifficulty();
+					panel.setVisible(false);
+					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
+					Logic logic = Launcher.startGame(mode, "AI", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, difficulty, null, 0);
+					GameWindow game = new GameWindow(frame, "cvc", logic);
+					game.setUpGameWindow();
 				}
 			}
 		});
@@ -270,12 +261,7 @@ public class MainMenu {
 		infoButton.setMinimumSize(new Dimension(50, 50));
 		infoButton.setMaximumSize(new Dimension(50, 50));
 		infoButton.setPreferredSize(new Dimension(50, 50));
-		infoButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				showInfo();
-			}
-		});
+		infoButton.addActionListener(arg0 -> showInfo());
 		
 		// LoadFile Button
 		JButton loadButton = new JButton("Spiel laden");
@@ -288,24 +274,21 @@ public class MainMenu {
 		loadButton.setMinimumSize(new Dimension(50, 50));
 		loadButton.setMaximumSize(new Dimension(50, 50));
 		loadButton.setPreferredSize(new Dimension(50, 50));
-		loadButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				//					FileFilter filter = new FileNameExtensionFilter("Textdatei", "txt");
-				//					JFileChooser chooser = new JFileChooser();
-				//					chooser.setDialogTitle("Spielstand laden");
-				//					chooser.addChoosableFileFilter(filter);
-				//					int returnValue = chooser.showOpenDialog(frame);
-				//					if (returnValue == JFileChooser.APPROVE_OPTION) {
-				//						// Logic.verarbeiteDatei(chooser.getSelectedFile());
-				//					}
-				
-				JOptionPaneLoadSavegame connect = new JOptionPaneLoadSavegame(frame);
-				int n = connect.displayGui();
-				if(n == 0) {
-					String saveGameId = connect.getSavegameId();
-					//...
-				}
+		loadButton.addActionListener(arg0 -> {
+			//					FileFilter filter = new FileNameExtensionFilter("Textdatei", "txt");
+			//					JFileChooser chooser = new JFileChooser();
+			//					chooser.setDialogTitle("Spielstand laden");
+			//					chooser.addChoosableFileFilter(filter);
+			//					int returnValue = chooser.showOpenDialog(frame);
+			//					if (returnValue == JFileChooser.APPROVE_OPTION) {
+			//						// Logic.verarbeiteDatei(chooser.getSelectedFile());
+			//					}
+			
+			JOptionPaneLoadSavegame connect = new JOptionPaneLoadSavegame(frame);
+			int n = connect.displayGui();
+			if(n == 0) {
+				String saveGameId = connect.getSavegameId();
+				//...
 			}
 		});
 		
@@ -320,29 +303,26 @@ public class MainMenu {
 		themesButton.setMinimumSize(new Dimension(50, 50));
 		themesButton.setMaximumSize(new Dimension(50, 50));
 		themesButton.setPreferredSize(new Dimension(50, 50));
-		themesButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(counters.isVisible() == true) {
-					counters.setVisible(false);
-					settings.add(themes, BorderLayout.EAST);
-					themes.setVisible(true);
-					selectCurrentThemeButton();
-				}else {
-					themes.setVisible(false);
-					settings.add(counters, BorderLayout.EAST);
-					counters.setVisible(true);
-				}
-				frame.getContentPane().revalidate();
-				frame.getContentPane().repaint();
+		themesButton.addActionListener(arg0 -> {
+			if(counters.isVisible()) {
+				counters.setVisible(false);
+				settings.add(themes, BorderLayout.EAST);
+				themes.setVisible(true);
+				selectCurrentThemeButton();
+			}else {
+				themes.setVisible(false);
+				settings.add(counters, BorderLayout.EAST);
+				counters.setVisible(true);
 			}
+			frame.getContentPane().revalidate();
+			frame.getContentPane().repaint();
 		});
 		
 		// Sound Button
 		JButton soundButton = new JButton("Lautstärke anpassen");
 		Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		if(Launcher.soundPlaying == true) {
+		if(Launcher.soundPlaying) {
 			soundButton.setIcon(soundOnIcon);
 		}else {
 			soundButton.setIcon(soundOffIcon);
@@ -354,20 +334,17 @@ public class MainMenu {
 		soundButton.setMinimumSize(new Dimension(50, 50));
 		soundButton.setMaximumSize(new Dimension(50, 50));
 		soundButton.setPreferredSize(new Dimension(50, 50));
-		soundButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(Launcher.soundPlaying == true) {
-					soundButton.setIcon(soundOffIcon);
-					soundButton.setBorder(null);
-					MainWindow.music.stopMusic();
-					Launcher.soundPlaying = false;
-				}else {
-					soundButton.setIcon(soundOnIcon);
-					soundButton.setBorder(null);
-					MainWindow.music.restartMusic();
-					Launcher.soundPlaying = true;
-				}
+		soundButton.addActionListener(arg0 -> {
+			if(Launcher.soundPlaying) {
+				soundButton.setIcon(soundOffIcon);
+				soundButton.setBorder(null);
+				MainWindow.music.stopMusic();
+				Launcher.soundPlaying = false;
+			}else {
+				soundButton.setIcon(soundOnIcon);
+				soundButton.setBorder(null);
+				MainWindow.music.restartMusic();
+				Launcher.soundPlaying = true;
 			}
 		});
 		
@@ -478,17 +455,14 @@ public class MainMenu {
 		fiveFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
 		fiveFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + fiveFieldElementName);
 		fiveFieldElementCountIncrease.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		fiveFieldElementCountIncrease.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(fiveFieldElementCount < fiveFieldElementMaxCount) {
-					fiveFieldElementCount += 1;
-				}else {
-					fiveFieldElementCount = 0;
-				}
-				fiveFieldElementText.setText(fiveFieldElementCount +
-								"x " + fiveFieldElementName);
+		fiveFieldElementCountIncrease.addActionListener(arg0 -> {
+			if(fiveFieldElementCount < fiveFieldElementMaxCount) {
+				fiveFieldElementCount += 1;
+			}else {
+				fiveFieldElementCount = 0;
 			}
+			fiveFieldElementText.setText(fiveFieldElementCount +
+							"x " + fiveFieldElementName);
 		});
 		
 		// fiveFieldElementCountDecrease Button
@@ -498,17 +472,14 @@ public class MainMenu {
 		fiveFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
 		fiveFieldElementCountDecrease.setToolTipText("Anzahl senken: " + fiveFieldElementName);
 		fiveFieldElementCountDecrease.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		fiveFieldElementCountDecrease.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(fiveFieldElementCount > 0) {
-					fiveFieldElementCount -= 1;
-				}else {
-					fiveFieldElementCount = fiveFieldElementMaxCount;
-				}
-				fiveFieldElementText.setText(fiveFieldElementCount +
-								"x " + fiveFieldElementName);
+		fiveFieldElementCountDecrease.addActionListener(arg0 -> {
+			if(fiveFieldElementCount > 0) {
+				fiveFieldElementCount -= 1;
+			}else {
+				fiveFieldElementCount = fiveFieldElementMaxCount;
 			}
+			fiveFieldElementText.setText(fiveFieldElementCount +
+							"x " + fiveFieldElementName);
 		});
 		
 		// fiveFieldElementCountChange Layout
@@ -539,17 +510,14 @@ public class MainMenu {
 		fourFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
 		fourFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + fourFieldElementName);
 		fourFieldElementCountIncrease.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		fourFieldElementCountIncrease.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(fourFieldElementCount < fourFieldElementMaxCount) {
-					fourFieldElementCount += 1;
-				}else {
-					fourFieldElementCount = 0;
-				}
-				fourFieldElementText.setText(fourFieldElementCount +
-								"x " + fourFieldElementName);
+		fourFieldElementCountIncrease.addActionListener(arg0 -> {
+			if(fourFieldElementCount < fourFieldElementMaxCount) {
+				fourFieldElementCount += 1;
+			}else {
+				fourFieldElementCount = 0;
 			}
+			fourFieldElementText.setText(fourFieldElementCount +
+							"x " + fourFieldElementName);
 		});
 		
 		// fourFieldElementCountDecrease Button
@@ -559,17 +527,14 @@ public class MainMenu {
 		fourFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
 		fourFieldElementCountDecrease.setToolTipText("Anzahl senken: " + fourFieldElementName);
 		fourFieldElementCountDecrease.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		fourFieldElementCountDecrease.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(fourFieldElementCount > 0) {
-					fourFieldElementCount -= 1;
-				}else {
-					fourFieldElementCount = fourFieldElementMaxCount;
-				}
-				fourFieldElementText.setText(fourFieldElementCount +
-								"x " + fourFieldElementName);
+		fourFieldElementCountDecrease.addActionListener(arg0 -> {
+			if(fourFieldElementCount > 0) {
+				fourFieldElementCount -= 1;
+			}else {
+				fourFieldElementCount = fourFieldElementMaxCount;
 			}
+			fourFieldElementText.setText(fourFieldElementCount +
+							"x " + fourFieldElementName);
 		});
 		
 		// fourFieldElementCountChange Layout
@@ -600,17 +565,14 @@ public class MainMenu {
 		threeFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
 		threeFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + threeFieldElementName);
 		threeFieldElementCountIncrease.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		threeFieldElementCountIncrease.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(threeFieldElementCount < threeFieldElementMaxCount) {
-					threeFieldElementCount += 1;
-				}else {
-					threeFieldElementCount = 0;
-				}
-				threeFieldElementText.setText(threeFieldElementCount +
-								"x " + threeFieldElementName);
+		threeFieldElementCountIncrease.addActionListener(arg0 -> {
+			if(threeFieldElementCount < threeFieldElementMaxCount) {
+				threeFieldElementCount += 1;
+			}else {
+				threeFieldElementCount = 0;
 			}
+			threeFieldElementText.setText(threeFieldElementCount +
+							"x " + threeFieldElementName);
 		});
 		
 		//threeFieldElementCountDecrease Button
@@ -620,17 +582,14 @@ public class MainMenu {
 		threeFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
 		threeFieldElementCountDecrease.setToolTipText("Anzahl senken: " + threeFieldElementName);
 		threeFieldElementCountDecrease.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		threeFieldElementCountDecrease.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(threeFieldElementCount > 0) {
-					threeFieldElementCount -= 1;
-				}else {
-					threeFieldElementCount = threeFieldElementMaxCount;
-				}
-				threeFieldElementText.setText(threeFieldElementCount +
-								"x " + threeFieldElementName);
+		threeFieldElementCountDecrease.addActionListener(arg0 -> {
+			if(threeFieldElementCount > 0) {
+				threeFieldElementCount -= 1;
+			}else {
+				threeFieldElementCount = threeFieldElementMaxCount;
 			}
+			threeFieldElementText.setText(threeFieldElementCount +
+							"x " + threeFieldElementName);
 		});
 		
 		// threeFieldElementCountChange Layout
@@ -661,17 +620,14 @@ public class MainMenu {
 		twoFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
 		twoFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + twoFieldElementName);
 		twoFieldElementCountIncrease.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		twoFieldElementCountIncrease.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(twoFieldElementCount < twoFieldElementMaxCount) {
-					twoFieldElementCount += 1;
-				}else {
-					twoFieldElementCount = 0;
-				}
-				twoFieldElementText.setText(twoFieldElementCount +
-								"x " + twoFieldElementName);
+		twoFieldElementCountIncrease.addActionListener(arg0 -> {
+			if(twoFieldElementCount < twoFieldElementMaxCount) {
+				twoFieldElementCount += 1;
+			}else {
+				twoFieldElementCount = 0;
 			}
+			twoFieldElementText.setText(twoFieldElementCount +
+							"x " + twoFieldElementName);
 		});
 		
 		//twoFieldElementCountDecrease Button
@@ -681,17 +637,14 @@ public class MainMenu {
 		twoFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
 		twoFieldElementCountDecrease.setToolTipText("Anzahl senken: " + twoFieldElementName);
 		twoFieldElementCountDecrease.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		twoFieldElementCountDecrease.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(twoFieldElementCount > 0) {
-					twoFieldElementCount -= 1;
-				}else {
-					twoFieldElementCount = twoFieldElementMaxCount;
-				}
-				twoFieldElementText.setText(twoFieldElementCount +
-								"x " + twoFieldElementName);
+		twoFieldElementCountDecrease.addActionListener(arg0 -> {
+			if(twoFieldElementCount > 0) {
+				twoFieldElementCount -= 1;
+			}else {
+				twoFieldElementCount = twoFieldElementMaxCount;
 			}
+			twoFieldElementText.setText(twoFieldElementCount +
+							"x " + twoFieldElementName);
 		});
 		
 		// twoFieldElementCountChange Layout
@@ -724,11 +677,9 @@ public class MainMenu {
 		gridSlider.setAlignmentX(Component.LEFT_ALIGNMENT);
 		gridSlider.setToolTipText("Spielfeldgröße auswählen");
 		gridSlider.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		gridSlider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent event) {
-				Launcher.gridSize = gridSlider.getValue();
-				gridText.setText("Feldgröße: " + gridSlider.getValue() + "*" + gridSlider.getValue());
-			}
+		gridSlider.addChangeListener(event -> {
+			Launcher.gridSize = gridSlider.getValue();
+			gridText.setText("Feldgröße: " + gridSlider.getValue() + "*" + gridSlider.getValue());
 		});
 		
 		// Counters Layout
@@ -768,34 +719,28 @@ public class MainMenu {
 		battleshipsButton.setPreferredSize(new Dimension(210, 30));
 		battleshipsButton.setFont(themesFont);
 		battleshipsButton.setForeground(textColor);
-		battleshipsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(!Launcher.theme.equals("Battleships")) {
-					Launcher.theme = "Battleships";
-					loadThemeItems("Battleships");
-					updateThemeItems();
-				}
-				themes.setVisible(false);
-				settings.add(counters, BorderLayout.EAST);
-				counters.setVisible(true);
+		battleshipsButton.addActionListener(arg0 -> {
+			if(!Launcher.theme.equals("Battleships")) {
+				Launcher.theme = "Battleships";
+				loadThemeItems("Battleships");
+				updateThemeItems();
 			}
+			themes.setVisible(false);
+			settings.add(counters, BorderLayout.EAST);
+			counters.setVisible(true);
 		});
 		battlecarsButton.setPreferredSize(new Dimension(210, 30));
 		battlecarsButton.setFont(themesFont);
 		battlecarsButton.setForeground(textColor);
-		battlecarsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(!Launcher.theme.equals("Battlecars")) {
-					Launcher.theme = "Battlecars";
-					loadThemeItems("Battlecars");
-					updateThemeItems();
-				}
-				themes.setVisible(false);
-				settings.add(counters, BorderLayout.EAST);
-				counters.setVisible(true);
+		battlecarsButton.addActionListener(arg0 -> {
+			if(!Launcher.theme.equals("Battlecars")) {
+				Launcher.theme = "Battlecars";
+				loadThemeItems("Battlecars");
+				updateThemeItems();
 			}
+			themes.setVisible(false);
+			settings.add(counters, BorderLayout.EAST);
+			counters.setVisible(true);
 		});
 		ButtonGroup themesGroup = new ButtonGroup();
 		themesGroup.add(battleshipsButton);
@@ -836,7 +781,6 @@ public class MainMenu {
 			JOptionPane.showMessageDialog(panel, "Es wurden keine " + Launcher.themeIdentifierPlural + " ausgewählt!\nMindestens ein "
 											+ Launcher.themeIdentifierSingular + " auswählen, um fortzufahren.",
 							"Fehlermeldung: Keine Schiffe ausgewählt", JOptionPane.ERROR_MESSAGE);
-			return;
 		}
 	}
 	
@@ -895,10 +839,7 @@ public class MainMenu {
 	}
 	
 	public boolean noElementsSelected() {
-		if(fiveFieldElementCount + fourFieldElementCount + threeFieldElementCount + twoFieldElementCount == 0) {
-			return true;
-		}
-		return false;
+		return fiveFieldElementCount + fourFieldElementCount + threeFieldElementCount + twoFieldElementCount == 0;
 	}
 	
 	public void updateThemeItems() {

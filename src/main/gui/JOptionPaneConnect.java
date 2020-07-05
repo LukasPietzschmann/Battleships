@@ -2,8 +2,6 @@ package gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -28,9 +26,8 @@ public class JOptionPaneConnect {
 	}
 	
 	public int displayGui() {
-		int n = JOptionPane.showOptionDialog(parentComponent, getPanel(), "Weitere Einstellungen",
+		return JOptionPane.showOptionDialog(parentComponent, getPanel(), "Weitere Einstellungen",
 				JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		return n;
 	}
 	
 	private JPanel getPanel() {
@@ -39,28 +36,22 @@ public class JOptionPaneConnect {
 		JRadioButton serverButton = new JRadioButton("Verbinden als Server");
 		serverButton.setPreferredSize(new Dimension(210, 30));
 		serverButton.setSelected(true);
-		serverButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				role = "server";
-				textfield.setEnabled(false);
-				ip.setEnabled(false);
-				textfield.setText("192.168.21.2");
-				panel.validate();
-				panel.repaint();
-			}
+		serverButton.addActionListener(arg0 -> {
+			role = "server";
+			textfield.setEnabled(false);
+			ip.setEnabled(false);
+			textfield.setText("192.168.21.2");
+			panel.validate();
+			panel.repaint();
 		});
 		JRadioButton clientButton = new JRadioButton("Verbinden als Client");
 		clientButton.setPreferredSize(new Dimension(210, 30));
-		clientButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				role = "client";
-				textfield.setEnabled(true);
-				ip.setEnabled(true);
-				panel.validate();
-				panel.repaint();
-			}
+		clientButton.addActionListener(arg0 -> {
+			role = "client";
+			textfield.setEnabled(true);
+			ip.setEnabled(true);
+			panel.validate();
+			panel.repaint();
 		});
 		
 		ButtonGroup connectGroup = new ButtonGroup();
@@ -70,7 +61,7 @@ public class JOptionPaneConnect {
 		textfield = new JTextField("192.168.21.2");
 		textfield.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (textfield.isEnabled() == true) textfield.setText("");
+				if (textfield.isEnabled()) textfield.setText("");
 			}
 		});
 		textfield.setEnabled(false);
@@ -86,10 +77,10 @@ public class JOptionPaneConnect {
 	}
 	
 	public String getIP() {
-		if (role == "server") {
+		if (role.equals("server")) {
 			return null;
 		}
-		if (role == "client") {
+		if (role.equals("client")) {
 			return textfield.getText();
 		}
 		return null;

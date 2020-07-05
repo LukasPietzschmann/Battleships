@@ -37,16 +37,14 @@ public class MainWindow {
 		
 		String filepath = "src/res/sound.wav";
 		music = new Music(filepath);
-		if (Launcher.soundPlaying == true) {
+		if (Launcher.soundPlaying) {
 			music.restartMusic();
 		}
 		
 		try {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/res/Krungthep.ttf")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (FontFormatException e) {
+		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 		}
 	}

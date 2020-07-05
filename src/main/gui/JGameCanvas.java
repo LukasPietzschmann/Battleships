@@ -3,6 +3,7 @@ package gui;
 import logic.Direction;
 import logic.Launcher;
 import logic.Map;
+import logic.OnMapChangedListener;
 import logic.Ship;
 
 import java.awt.Container;
@@ -22,15 +23,15 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 	private static final long serialVersionUID = 1L;
 	private static final int tW = 32; // tile width
 	private static final int tH = 32; // tile height
-	private static Tile[][] map = null;
+	private Tile[][] map;
 	
-	private static final Tile numbers[] = {Tile.N1, Tile.N2, Tile.N3, Tile.N4, Tile.N5, Tile.N6, Tile.N7, Tile.N8, Tile.N9, Tile.N10,
+	private static final Tile[] numbers = {Tile.N1, Tile.N2, Tile.N3, Tile.N4, Tile.N5, Tile.N6, Tile.N7, Tile.N8, Tile.N9, Tile.N10,
 					Tile.N11, Tile.N12, Tile.N13, Tile.N14, Tile.N15, Tile.N16, Tile.N17, Tile.N18, Tile.N19, Tile.N20,
 					Tile.N21, Tile.N22, Tile.N23, Tile.N24, Tile.N25, Tile.N26, Tile.N27, Tile.N28, Tile.N29, Tile.N30};
-	private static final Tile fiveElement[] = {Tile.FIVEELEMENTONE, Tile.FIVEELEMENTTWO, Tile.FIVEELEMENTTHREE, Tile.FIVEELEMENTFOUR, Tile.FIVELEMENTFIVE};
-	private static final Tile fourElement[] = {Tile.FOURELEMENTONE, Tile.FOURELEMENTTWO, Tile.FOURELEMENTTHREE, Tile.FOURELEMENTFOUR};
-	private static final Tile threeElement[] = {Tile.THREEELEMENTONE, Tile.THREEELEMENTTWO, Tile.THREEELEMENTTHREE};
-	private static final Tile twoElement[] = {Tile.TWOELEMENTONE, Tile.TWOELEMENTTWO};
+	private static final Tile[] fiveElement = {Tile.FIVEELEMENTONE, Tile.FIVEELEMENTTWO, Tile.FIVEELEMENTTHREE, Tile.FIVEELEMENTFOUR, Tile.FIVELEMENTFIVE};
+	private static final Tile[] fourElement = {Tile.FOURELEMENTONE, Tile.FOURELEMENTTWO, Tile.FOURELEMENTTHREE, Tile.FOURELEMENTFOUR};
+	private static final Tile[] threeElement = {Tile.THREEELEMENTONE, Tile.THREEELEMENTTWO, Tile.THREEELEMENTTHREE};
+	private static final Tile[] twoElement = {Tile.TWOELEMENTONE, Tile.TWOELEMENTTWO};
 	
 	private int numberCounterHorizontal = 0;
 	private int numberCounterVertical = 0;
@@ -124,11 +125,11 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 		}
 		int w = (int) d.getHeight();
 		int h = (int) d.getWidth();
-		int s = (w < h ? w : h);
+		int s = (Math.min(w, h));
 		return new Dimension(s, s);
 	}
 	
-	public boolean placeShip(Ship ship) {
+	public void placeShip(Ship ship) {
 		int length = ship.getSize();
 		int x = ship.getXPos() + 1;
 		int y = ship.getYPos() + 1;
@@ -154,7 +155,6 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 					break;
 			}
 		}
-		return true;
 	}
 	
 	@Override

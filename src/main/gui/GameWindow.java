@@ -9,12 +9,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 public class GameWindow {
 	private JFrame frame;
@@ -109,14 +105,10 @@ public class GameWindow {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
@@ -125,8 +117,6 @@ public class GameWindow {
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
@@ -172,7 +162,7 @@ public class GameWindow {
 		fiveFieldElementIcon.setBorder(emptyBorder);
 		fiveFieldElementIcon.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if(fiveFieldElementIcon.isEnabled() == true) {
+				if(fiveFieldElementIcon.isEnabled()) {
 					fourFieldElementIcon.setBorder(emptyBorder);
 					threeFieldElementIcon.setBorder(emptyBorder);
 					twoFieldElementIcon.setBorder(emptyBorder);
@@ -184,7 +174,7 @@ public class GameWindow {
 		fourFieldElementIcon.setBorder(emptyBorder);
 		fourFieldElementIcon.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if(fourFieldElementIcon.isEnabled() == true) {
+				if(fourFieldElementIcon.isEnabled()) {
 					fiveFieldElementIcon.setBorder(emptyBorder);
 					threeFieldElementIcon.setBorder(emptyBorder);
 					twoFieldElementIcon.setBorder(emptyBorder);
@@ -196,7 +186,7 @@ public class GameWindow {
 		threeFieldElementIcon.setBorder(emptyBorder);
 		threeFieldElementIcon.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if(threeFieldElementIcon.isEnabled() == true) {
+				if(threeFieldElementIcon.isEnabled()) {
 					fiveFieldElementIcon.setBorder(emptyBorder);
 					fourFieldElementIcon.setBorder(emptyBorder);
 					twoFieldElementIcon.setBorder(emptyBorder);
@@ -208,7 +198,7 @@ public class GameWindow {
 		twoFieldElementIcon.setBorder(emptyBorder);
 		twoFieldElementIcon.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if(twoFieldElementIcon.isEnabled() == true) {
+				if(twoFieldElementIcon.isEnabled()) {
 					fiveFieldElementIcon.setBorder(emptyBorder);
 					fourFieldElementIcon.setBorder(emptyBorder);
 					threeFieldElementIcon.setBorder(emptyBorder);
@@ -295,9 +285,7 @@ public class GameWindow {
 		randomButton.setMinimumSize(new Dimension(130, 60));
 		randomButton.setMaximumSize(new Dimension(130, 60));
 		randomButton.setPreferredSize(new Dimension(130, 60));
-		randomButton.addActionListener(a -> {
-			player.randomShipPlacment();
-		});
+		randomButton.addActionListener(a -> player.randomShipPlacment());
 		
 		// startButton Button Settings
 		startButton.setText("Start");
@@ -310,18 +298,13 @@ public class GameWindow {
 		startButton.setMinimumSize(new Dimension(130, 60));
 		startButton.setMaximumSize(new Dimension(130, 60));
 		startButton.setPreferredSize(new Dimension(130, 60));
-		startButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				backToMenu();
-			}
-		});
+		startButton.addActionListener(arg0 -> backToMenu());
 		
 		// soundButton Button Settings
 		soundButton.setText("Lautstärke anpassen");
 		Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		if(Launcher.soundPlaying == true) {
+		if(Launcher.soundPlaying) {
 			soundButton.setIcon(soundOnIcon);
 		}else {
 			soundButton.setIcon(soundOffIcon);
@@ -333,20 +316,17 @@ public class GameWindow {
 		soundButton.setMinimumSize(new Dimension(50, 50));
 		soundButton.setMaximumSize(new Dimension(50, 50));
 		soundButton.setPreferredSize(new Dimension(50, 50));
-		soundButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(Launcher.soundPlaying == true) {
-					soundButton.setIcon(soundOffIcon);
-					soundButton.setBorder(null);
-					MainWindow.music.stopMusic();
-					Launcher.soundPlaying = false;
-				}else {
-					soundButton.setIcon(soundOnIcon);
-					soundButton.setBorder(null);
-					MainWindow.music.restartMusic();
-					Launcher.soundPlaying = true;
-				}
+		soundButton.addActionListener(arg0 -> {
+			if(Launcher.soundPlaying) {
+				soundButton.setIcon(soundOffIcon);
+				soundButton.setBorder(null);
+				MainWindow.music.stopMusic();
+				Launcher.soundPlaying = false;
+			}else {
+				soundButton.setIcon(soundOnIcon);
+				soundButton.setBorder(null);
+				MainWindow.music.restartMusic();
+				Launcher.soundPlaying = true;
 			}
 		});
 	}

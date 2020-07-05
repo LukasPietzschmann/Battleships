@@ -1,7 +1,5 @@
 package logic;
 
-import gui.OnMapChangedListener;
-
 import java.util.ArrayList;
 
 /**

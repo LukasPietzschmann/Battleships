@@ -3,8 +3,6 @@ package gui;
 import ai.Difficulty;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -24,9 +22,8 @@ public class JOptionPaneAI {
 	}
 	
 	public int displayGui() {
-		int n = JOptionPane.showOptionDialog(parentComponent, getPanel(), "Weitere Einstellungen",
+		return JOptionPane.showOptionDialog(parentComponent, getPanel(), "Weitere Einstellungen",
 				JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		return n;
 	}
 	
 	private JPanel getPanel() {
@@ -36,29 +33,14 @@ public class JOptionPaneAI {
 		JLabel aiDifficulty = new JLabel("AI-Schwierigkeit: ");
 		
 		JRadioButton easyButton = new JRadioButton("Leicht");
-		easyButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				difficulty = Difficulty.easy;
-			}
-		});
+		easyButton.addActionListener(arg0 -> difficulty = Difficulty.easy);
 		
 		JRadioButton mediumButton = new JRadioButton("Mittel");
 		mediumButton.setSelected(true);
-		mediumButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				difficulty = Difficulty.medium;
-			}
-		});
+		mediumButton.addActionListener(arg0 -> difficulty = Difficulty.medium);
 		
 		JRadioButton hardButton = new JRadioButton("Schwer");
-		hardButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				difficulty = Difficulty.hard;
-			}
-		});
+		hardButton.addActionListener(arg0 -> difficulty = Difficulty.hard);
 		
 		ButtonGroup difficultyGroup = new ButtonGroup();
 		difficultyGroup.add(easyButton);
