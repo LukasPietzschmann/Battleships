@@ -278,7 +278,7 @@ public class GameWindow {
 		randomButton.setText("Zufällig");
 		ImageIcon randomPutIcon = new ImageIcon(new ImageIcon("src/res/random.png").getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
 		randomButton.setIcon(randomPutIcon);
-		//		randomButton.setHorizontalAlignment(SwingConstants.LEFT);
+		randomButton.setHorizontalAlignment(SwingConstants.LEFT);
 		randomButton.setBorder(null);
 		randomButton.setToolTipText("Zufällige Platzierung der " + Launcher.themeIdentifierPlural);
 		randomButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -291,7 +291,7 @@ public class GameWindow {
 		startButton.setText("Start");
 		ImageIcon startIcon = new ImageIcon(new ImageIcon("src/res/start.png").getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
 		startButton.setIcon(startIcon);
-		//		startButton.setHorizontalAlignment(SwingConstants.LEFT);
+		startButton.setHorizontalAlignment(SwingConstants.LEFT);
 		startButton.setBorder(null);
 		startButton.setToolTipText("Spiel starten");
 		startButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -311,6 +311,7 @@ public class GameWindow {
 		}
 		//		soundButton.setHorizontalAlignment(SwingConstants.LEFT);
 		soundButton.setBorder(null);
+		soundButton.setContentAreaFilled(false);
 		soundButton.setToolTipText("Lautstärke anpassen");
 		soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		soundButton.setMinimumSize(new Dimension(50, 50));

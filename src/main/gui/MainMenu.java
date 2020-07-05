@@ -50,7 +50,7 @@ public class MainMenu {
 	private JPanel twoFieldElementCountChange = new JPanel();
 	
 	private JPanel themes = new JPanel();
-	private JLabel themesHeading = new JLabel("Spielstil\nwählen:");
+	private JLabel themesHeading = new JLabel("Spielstil wählen:");
 	private JRadioButton battleshipsButton = new JRadioButton("Battleships");
 	private JRadioButton battlecarsButton = new JRadioButton("Battlecars");
 	
@@ -256,6 +256,7 @@ public class MainMenu {
 		infoButton.setIcon(infoIcon);
 		infoButton.setHorizontalAlignment(SwingConstants.LEFT);
 		infoButton.setBorder(null);
+		infoButton.setContentAreaFilled(false);
 		infoButton.setToolTipText("Information");
 		infoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		infoButton.setMinimumSize(new Dimension(50, 50));
@@ -269,6 +270,7 @@ public class MainMenu {
 		loadButton.setIcon(loadIcon);
 		loadButton.setHorizontalAlignment(SwingConstants.LEFT);
 		loadButton.setBorder(null);
+		loadButton.setContentAreaFilled(false);
 		loadButton.setToolTipText("Spiel laden");
 		loadButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		loadButton.setMinimumSize(new Dimension(50, 50));
@@ -298,6 +300,7 @@ public class MainMenu {
 		themesButton.setIcon(themesIcon);
 		themesButton.setHorizontalAlignment(SwingConstants.LEFT);
 		themesButton.setBorder(null);
+		themesButton.setContentAreaFilled(false);
 		themesButton.setToolTipText("Spielstil wählen");
 		themesButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		themesButton.setMinimumSize(new Dimension(50, 50));
@@ -329,6 +332,7 @@ public class MainMenu {
 		}
 		soundButton.setHorizontalAlignment(SwingConstants.LEFT);
 		soundButton.setBorder(null);
+		soundButton.setContentAreaFilled(false);
 		soundButton.setToolTipText("Lautstärke anpassen");
 		soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		soundButton.setMinimumSize(new Dimension(50, 50));
@@ -356,13 +360,13 @@ public class MainMenu {
 		modes.add(pvpButton);
 		modes.add(Box.createHorizontalStrut(20));
 		modes.add(cvcButton);
-		modes.add(Box.createHorizontalStrut(40));
+		modes.add(Box.createHorizontalStrut(30));
 		modes.add(infoButton);
-		modes.add(Box.createHorizontalStrut(20));
+		modes.add(Box.createHorizontalStrut(18));
 		modes.add(loadButton);
-		modes.add(Box.createHorizontalStrut(20));
+		modes.add(Box.createHorizontalStrut(18));
 		modes.add(themesButton);
-		modes.add(Box.createHorizontalStrut(20));
+		modes.add(Box.createHorizontalStrut(18));
 		modes.add(soundButton);
 		modes.add(Box.createHorizontalGlue());
 		
@@ -432,7 +436,8 @@ public class MainMenu {
 		
 		// Counters Elements
 		// countersFont Font
-		Font countersFont = new Font("Krungthep", Font.PLAIN, 20);
+		Font countersFont = new Font("Arial", Font.PLAIN, 20);
+		Font plusMinusCountersFont = new Font("Arial", Font.BOLD, 20);
 		
 		// fiveFieldElementText Label
 		fiveFieldElementText.setText(fiveFieldElementCount +
@@ -450,6 +455,9 @@ public class MainMenu {
 		// fiveFieldElementCountChange Elements
 		// fiveFieldElementCountIncrease Button
 		fiveFieldElementCountIncrease.setText("+");
+		fiveFieldElementCountIncrease.setFont(plusMinusCountersFont);
+		fiveFieldElementCountIncrease.setBorder(null);
+		fiveFieldElementCountIncrease.setFocusPainted(false);
 		fiveFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 		fiveFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 		fiveFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -467,6 +475,9 @@ public class MainMenu {
 		
 		// fiveFieldElementCountDecrease Button
 		fiveFieldElementCountDecrease.setText("-");
+		fiveFieldElementCountDecrease.setFont(plusMinusCountersFont);
+		fiveFieldElementCountDecrease.setBorder(null);
+		fiveFieldElementCountDecrease.setFocusPainted(false);
 		fiveFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 		fiveFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 		fiveFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -505,6 +516,9 @@ public class MainMenu {
 		// fourFieldElementCountChange Elements
 		// fourFieldElementCountIncrease Button
 		fourFieldElementCountIncrease.setText("+");
+		fourFieldElementCountIncrease.setFont(plusMinusCountersFont);
+		fourFieldElementCountIncrease.setBorder(null);
+		fourFieldElementCountIncrease.setFocusPainted(false);
 		fourFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 		fourFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 		fourFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -522,6 +536,9 @@ public class MainMenu {
 		
 		// fourFieldElementCountDecrease Button
 		fourFieldElementCountDecrease.setText("-");
+		fourFieldElementCountDecrease.setFont(plusMinusCountersFont);
+		fourFieldElementCountDecrease.setBorder(null);
+		fourFieldElementCountDecrease.setFocusPainted(false);
 		fourFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 		fourFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 		fourFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -560,6 +577,9 @@ public class MainMenu {
 		// threeFieldElementCountChange Elements
 		// threeFieldElementCountIncrease Button
 		threeFieldElementCountIncrease.setText("+");
+		threeFieldElementCountIncrease.setFont(plusMinusCountersFont);
+		threeFieldElementCountIncrease.setBorder(null);
+		threeFieldElementCountIncrease.setFocusPainted(false);
 		threeFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 		threeFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 		threeFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -577,6 +597,9 @@ public class MainMenu {
 		
 		//threeFieldElementCountDecrease Button
 		threeFieldElementCountDecrease.setText("-");
+		threeFieldElementCountDecrease.setFont(plusMinusCountersFont);
+		threeFieldElementCountDecrease.setBorder(null);
+		threeFieldElementCountDecrease.setFocusPainted(false);
 		threeFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 		threeFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 		threeFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -615,6 +638,9 @@ public class MainMenu {
 		// twoFieldElementCountChange Elements
 		// twoFieldElementCountIncrease Button
 		twoFieldElementCountIncrease.setText("+");
+		twoFieldElementCountIncrease.setFont(plusMinusCountersFont);
+		twoFieldElementCountIncrease.setBorder(null);
+		twoFieldElementCountIncrease.setFocusPainted(false);
 		twoFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 		twoFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 		twoFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -632,6 +658,9 @@ public class MainMenu {
 		
 		//twoFieldElementCountDecrease Button
 		twoFieldElementCountDecrease.setText("-");
+		twoFieldElementCountDecrease.setFont(plusMinusCountersFont);
+		twoFieldElementCountDecrease.setBorder(null);
+		twoFieldElementCountDecrease.setFocusPainted(false);
 		twoFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 		twoFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 		twoFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -664,6 +693,7 @@ public class MainMenu {
 		// gridSlider Slider
 		JSlider gridSlider = new JSlider();
 		gridSlider.setForeground(textColor);
+		gridSlider.setOpaque(false);
 		gridSlider.setMinimum(5);
 		gridSlider.setMaximum(30);
 		gridSlider.setMajorTickSpacing(5);
@@ -711,13 +741,14 @@ public class MainMenu {
 		themes.setVisible(false);
 		
 		// Themes Elements
-		Font themesFont = new Font("Krungthep", Font.PLAIN, 20);
+		Font themesFont = new Font("Arial", Font.PLAIN, 20);
 		
 		themesHeading.setFont(themesFont);
 		themesHeading.setForeground(textColor);
 		
 		battleshipsButton.setPreferredSize(new Dimension(210, 30));
 		battleshipsButton.setFont(themesFont);
+		battleshipsButton.setContentAreaFilled(false);
 		battleshipsButton.setForeground(textColor);
 		battleshipsButton.addActionListener(arg0 -> {
 			if(!Launcher.theme.equals("Battleships")) {
@@ -731,6 +762,7 @@ public class MainMenu {
 		});
 		battlecarsButton.setPreferredSize(new Dimension(210, 30));
 		battlecarsButton.setFont(themesFont);
+		battlecarsButton.setContentAreaFilled(false);
 		battlecarsButton.setForeground(textColor);
 		battlecarsButton.addActionListener(arg0 -> {
 			if(!Launcher.theme.equals("Battlecars")) {
