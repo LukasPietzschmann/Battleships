@@ -1,9 +1,6 @@
 package ai;
 
-import logic.LocalPlayer;
-import logic.Logic;
-import logic.Map;
-import logic.Ship;
+import logic.*;
 
 /**
  * Die Klasse AI modelliert einen Computer-Spieler.

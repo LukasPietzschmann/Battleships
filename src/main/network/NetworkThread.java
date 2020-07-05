@@ -70,7 +70,7 @@ public class NetworkThread extends Thread {
 					while(true) {
 						String msg = in.readLine();
 						if(msg == null) continue;
-						System.out.println("Client recieved: Message " + msg.replace("\n", ""));
+						System.out.println("Client recieved: " + msg.replace("\n", ""));
 						recieveQueue.offer(msg);
 						break;
 					}
@@ -78,7 +78,7 @@ public class NetworkThread extends Thread {
 					while(true) {
 						String msg = sendQueue.take();
 						if(msg == null) continue;
-						System.out.println("Client sent: Message " + msg.replace("\n", ""));
+						System.out.println("Client sent: " + msg.replace("\n", ""));
 						out.write(msg);
 						out.flush();
 						break;

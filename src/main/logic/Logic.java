@@ -42,7 +42,7 @@ public class Logic {
 		
 		for(int i = 0; i < ships.length; i++) {
 			for(int j = 0; j < ships[i]; j++) {
-				this.ships.add(new Ship(0, 0, Ship.Direction.north, i + 2));
+				this.ships.add(new Ship(0, 0, Direction.north, i + 2));
 			}
 		}
 	}
@@ -188,5 +188,9 @@ public class Logic {
 	 */
 	public ArrayList<Ship> getAvailableShips() {
 		return ships;
+	}
+	
+	public LocalPlayer getOwnPlayer(){
+		return (LocalPlayer) ownPlayer;
 	}
 }
