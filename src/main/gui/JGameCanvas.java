@@ -28,10 +28,20 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 	private static final Tile[] numbers = {Tile.N1, Tile.N2, Tile.N3, Tile.N4, Tile.N5, Tile.N6, Tile.N7, Tile.N8, Tile.N9, Tile.N10,
 					Tile.N11, Tile.N12, Tile.N13, Tile.N14, Tile.N15, Tile.N16, Tile.N17, Tile.N18, Tile.N19, Tile.N20,
 					Tile.N21, Tile.N22, Tile.N23, Tile.N24, Tile.N25, Tile.N26, Tile.N27, Tile.N28, Tile.N29, Tile.N30};
-	private static final Tile[] fiveElement = {Tile.FIVEELEMENTONE, Tile.FIVEELEMENTTWO, Tile.FIVEELEMENTTHREE, Tile.FIVEELEMENTFOUR, Tile.FIVELEMENTFIVE};
-	private static final Tile[] fourElement = {Tile.FOURELEMENTONE, Tile.FOURELEMENTTWO, Tile.FOURELEMENTTHREE, Tile.FOURELEMENTFOUR};
-	private static final Tile[] threeElement = {Tile.THREEELEMENTONE, Tile.THREEELEMENTTWO, Tile.THREEELEMENTTHREE};
-	private static final Tile[] twoElement = {Tile.TWOELEMENTONE, Tile.TWOELEMENTTWO};
+	private static final Tile[] fiveElementHorizontal = {Tile.FIVEELEMENTONE_HORIZONTAL, Tile.FIVEELEMENTTWO_HORIZONTAL,
+					Tile.FIVEELEMENTTHREE_HORIZONTAL, Tile.FIVEELEMENTFOUR_HORIZONTAL, Tile.FIVELEMENTFIVE_HORIZONTAL};
+	private static final Tile[] fourElementHorizontal = {Tile.FOURELEMENTONE_HORIZONTAL, Tile.FOURELEMENTTWO_HORIZONTAL,
+					Tile.FOURELEMENTTHREE_HORIZONTAL, Tile.FOURELEMENTFOUR_HORIZONTAL};
+	private static final Tile[] threeElementHorizontal = {Tile.THREEELEMENTONE_HORIZONTAL, Tile.THREEELEMENTTWO_HORIZONTAL,
+					Tile.THREEELEMENTTHREE_HORIZONTAL};
+	private static final Tile[] twoElementHorizontal = {Tile.TWOELEMENTONE_HORIZONTAL, Tile.TWOELEMENTTWO_HORIZONTAL};
+	private static final Tile[] fiveElementVertical = {Tile.FIVEELEMENTONE_VERTICAL, Tile.FIVEELEMENTTWO_VERTICAL,
+					Tile.FIVEELEMENTTHREE_VERTICAL, Tile.FIVEELEMENTFOUR_VERTICAL, Tile.FIVEELEMENTFIVE_VERTICAL};
+	private static final Tile[] fourElementVertical = {Tile.FOURELEMENTONE_VERTICAL, Tile.FOURELEMENTTWO_VERTICAL,
+					Tile.FOURELEMENTTHREE_VERTICAL, Tile.FOURELEMENTFOUR_VERTICAL};
+	private static final Tile[] threeElementVertical = {Tile.THREEELEMENTONE_VERTICAL, Tile.THREEELEMENTWO_VERTICAL,
+					Tile.THREEELEMENTHREE_VERTICAL};
+	private static final Tile[] twoElementVertical = {Tile.TWOELEMENTONE_VERTICAL, Tile.TWOELEMENTTWO_VERTICAL};
 	
 	private int numberCounterHorizontal = 0;
 	private int numberCounterVertical = 0;
@@ -41,8 +51,8 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 	
 	public JGameCanvas() {
 		groesse = Launcher.gridSize + 1;
-		ImageIcon tileset2 = new ImageIcon(new ImageIcon("src/res/tileset6.png").getImage());
-		tileset = tileset2.getImage();
+		ImageIcon tilesetIcon = new ImageIcon(new ImageIcon("src/res/tileset7.png").getImage());
+		tileset = tilesetIcon.getImage();
 		map = new Tile[groesse][groesse];
 		initialGrid();
 		addMouseMotionListener(new MouseAdapter() {
@@ -95,7 +105,7 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 	protected void paintComponent(Graphics g) {
 		int w = getWidth();
 		int h = getHeight();
-		System.out.println(w + " " + h);
+//		System.out.println(w + " " + h);
 		int min = Math.min(w, h);
 		for(int i = 0; i < groesse; i++) {
 			for(int j = 0; j < groesse; j++) {
@@ -131,14 +141,23 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 	
 	public void placeShip(Ship ship) {
 		int length = ship.getSize();
+		Direction direction = ship.getDirection();
 		int x = ship.getXPos() + 1;
 		int y = ship.getYPos() + 1;
 		for(int i = 0; i < length; i++) {
-			/*if(length == 5) map[y][x] = fiveElement[i];
-			else if(length == 4) map[y][x] = fourElement[i];
-			else if(length == 3) map[y][x] = threeElement[i];
-			else if(length == 2) map[y][x] = twoElement[i];*/
-			map[y][x] = Tile.HIT;
+
+			if (direction == Direction.north || direction == Direction.south){
+				if (length == 5) map[y][x] = fiveElementVertical[i];
+				if (length == 4) map[y][x] = fourElementVertical[i];
+				if (length == 3) map[y][x] = threeElementVertical[i];
+				if (length == 2) map[y][x] = twoElementVertical[i];
+			}
+			if (direction == Direction.east || direction == Direction.west){
+				if (length == 5) map[y][x] = fiveElementHorizontal[i];
+				if (length == 4) map[y][x] = fourElementHorizontal[i];
+				if (length == 3) map[y][x] = threeElementHorizontal[i];
+				if (length == 2) map[y][x] = twoElementHorizontal[i];
+			}
 			
 			switch(ship.getDirection()) {
 				case north:
@@ -167,7 +186,7 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 						this.map[y + 1][x + 1] = Tile.BACKGROUND;
 						break;
 					case Map.SUCC_HIT:
-						this.map[y + 1][x + 1] = Tile.HIT;
+						this.map[y + 1][x + 1] = Tile.HIT_WATER;
 						break;
 					case Map.UNSUCC_HIT:
 						this.map[y + 1][x + 1] = Tile.MISS;

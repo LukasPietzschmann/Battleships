@@ -1,48 +1,61 @@
 package gui;
 
-import logic.Launcher;
-import logic.LocalPlayer;
-import logic.Logic;
-import logic.Ship;
+import logic.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GameWindow {
-	private JFrame frame;
-	private String mode;
-	private JPanel mainPanel = new JPanel();
-	private JPanel gridHolder = new JPanel(new GridBagLayout());
+	private final JFrame frame;
+	private final String mode;
+	private final JPanel mainPanel = new JPanel();
+	private final JPanel gridHolder = new JPanel(new GridBagLayout());
 	JGameCanvas grid = new JGameCanvas();
-	private JPanel options = new JPanel();
-	private JLabel title = new JLabel();
-	private JPanel elements = new JPanel();
-	private JPanel elementsCounter = new JPanel();
-	private JPanel buttons = new JPanel();
-	private JButton randomButton = new JButton();
-	private JButton startButton = new JButton();
-	private JButton soundButton = new JButton();
-	private JLabel fiveFieldElementIcon = MainMenu.fiveFieldElementIcon;
-	private JLabel fourFieldElementIcon = MainMenu.fourFieldElementIcon;
-	private JLabel threeFieldElementIcon = MainMenu.threeFieldElementIcon;
-	private JLabel twoFieldElementIcon = MainMenu.twoFieldElementIcon;
+	private final JPanel options = new JPanel();
+	private final JLabel title = new JLabel();
+	private final JPanel elements = new JPanel();
+	private final JPanel elementsCounter = new JPanel();
+	private final JPanel buttonsHolder = new JPanel();
+	private final JPanel buttons = new JPanel();
+	private final JButton directionButton = new JButton();
+	private final JButton randomButton = new JButton();
+	private final JButton startButton = new JButton();
+	private final JButton soundButton = new JButton();
+	private final JLabel fiveFieldElementIcon = MainMenu.fiveFieldElementIcon;
+	private final JLabel fourFieldElementIcon = MainMenu.fourFieldElementIcon;
+	private final JLabel threeFieldElementIcon = MainMenu.threeFieldElementIcon;
+	private final JLabel twoFieldElementIcon = MainMenu.twoFieldElementIcon;
 	
 	private int fiveFieldElementCount = 0;
 	private int fourFieldElementCount = 0;
 	private int threeFieldElementCount = 0;
 	private int twoFieldElementCount = 0;
+
+	int fiveRemaining;
+	int fourRemaining;
+	int threeRemaining;
+	int twoRemaining;
+
+	JLabel fiveFieldElementCountLabel;
+	JLabel fourFieldElementCountLabel;
+	JLabel threeFieldElementCountLabel;
+	JLabel twoFieldElementCountLabel;
 	
 	static Color textColor = MainMenu.textColor;
 	static Color backgroundColor = MainMenu.backgroundColor;
 	Font font = new Font("Krungthep", Font.PLAIN, 20);
-	String elementSelected = null;
+	int elementSelected;
+	Direction direction = Direction.west;
 	
-	private Logic logic;
-	private LocalPlayer player;
+	private final Logic logic;
+	private final LocalPlayer player;
 	
 	public GameWindow(JFrame frame, String mode, Logic logic) {
 		this.frame = frame;
@@ -57,9 +70,10 @@ public class GameWindow {
 		//		Grid gridPlayer2 = new Grid(GuiTester.gridSize);
 		if(mode.equals("pvp") || mode.equals("pvc")) {
 			setUpPlaceWindow();
-		}else {
-			// Methode, die die Elemente für beide Spielfelder automatisch füllt
 		}
+//		else {
+//			// Methode, die die Elemente für beide Spielfelder automatisch füllt
+//		}
 	}
 	
 	public void backToMenu() {
@@ -90,17 +104,55 @@ public class GameWindow {
 		grid.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int panelsize = grid.getWidth();
-				int height = grid.getHeight(); // zu löschen
-				int width = grid.getWidth(); // zu löschen
-				System.out.println("Panelsize: " + panelsize + " ( width: " + width + ", height: " + height + ")"); // zu löschen
 				double tilesize = (double) panelsize / (double) grid.groesse;
-				System.out.println("Tilesize: " + tilesize); // zu löschen
 				int x = e.getX();
 				int y = e.getY();
-				System.out.println("X: " + x + ", Y: " + y); // zu löschen
 				int xGrid = (int) ((double) x / tilesize) - 1;
 				int yGrid = (int) ((double) y / tilesize) - 1;
-				System.out.println("XGrid: " + xGrid + ", YGrid: " + yGrid); // zu löschen
+				Ship ship = new Ship(xGrid, yGrid, direction, elementSelected);
+				if(player.map.canShipBePlaced(ship)){
+					player.map.placeShip(ship);
+					grid.placeShip(ship);
+					grid.repaint();
+					if (elementSelected == 5) {
+						fiveRemaining--;
+						fiveFieldElementCountLabel.setText(fiveRemaining + "x");
+						if (fiveRemaining == 0){
+							fiveFieldElementIcon.setEnabled(false);
+							fiveFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+							elementSelected = 0;
+						}
+					}
+					if (elementSelected == 4) {
+						fourRemaining--;
+						fourFieldElementCountLabel.setText(fourRemaining + "x");
+						if (fourRemaining == 0){
+							fourFieldElementIcon.setEnabled(false);
+							fourFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+							elementSelected = 0;
+						}
+					}
+					if (elementSelected == 3) {
+						threeRemaining--;
+						threeFieldElementCountLabel.setText(threeRemaining + "x");
+						if (threeRemaining == 0){
+							threeFieldElementIcon.setEnabled(false);
+							threeFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+							elementSelected = 0;
+						}
+					}
+					if (elementSelected == 2) {
+						twoRemaining--;
+						twoFieldElementCountLabel.setText(twoRemaining + "x");
+						if (twoRemaining == 0){
+							twoFieldElementIcon.setEnabled(false);
+							twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+							elementSelected = 0;
+						}
+					}
+
+				}
+
 			}
 			
 			@Override
@@ -129,7 +181,7 @@ public class GameWindow {
 		options.add(title, BorderLayout.NORTH);
 		options.add(elements, BorderLayout.WEST);
 		options.add(elementsCounter, BorderLayout.EAST);
-		options.add(buttons, BorderLayout.SOUTH);
+		options.add(buttonsHolder, BorderLayout.SOUTH);
 		
 		// elements Panel Settings
 		elements.setLayout(new BoxLayout(elements, BoxLayout.Y_AXIS));
@@ -167,7 +219,7 @@ public class GameWindow {
 					threeFieldElementIcon.setBorder(emptyBorder);
 					twoFieldElementIcon.setBorder(emptyBorder);
 					fiveFieldElementIcon.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-					elementSelected = "five";
+					elementSelected = 5;
 				}
 			}
 		});
@@ -179,7 +231,7 @@ public class GameWindow {
 					threeFieldElementIcon.setBorder(emptyBorder);
 					twoFieldElementIcon.setBorder(emptyBorder);
 					fourFieldElementIcon.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-					elementSelected = "four";
+					elementSelected = 4;
 				}
 			}
 		});
@@ -191,7 +243,7 @@ public class GameWindow {
 					fourFieldElementIcon.setBorder(emptyBorder);
 					twoFieldElementIcon.setBorder(emptyBorder);
 					threeFieldElementIcon.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-					elementSelected = "three";
+					elementSelected = 3;
 				}
 			}
 		});
@@ -203,7 +255,7 @@ public class GameWindow {
 					fourFieldElementIcon.setBorder(emptyBorder);
 					threeFieldElementIcon.setBorder(emptyBorder);
 					twoFieldElementIcon.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-					elementSelected = "two";
+					elementSelected = 2;
 				}
 			}
 		});
@@ -222,33 +274,53 @@ public class GameWindow {
 		elementsCounter.setOpaque(false);
 		
 		// elementsCounter Elements
-		int fiveRemaining = fiveFieldElementCount;
-		JLabel fiveFieldElementCount = new JLabel(fiveRemaining + "x");
-		fiveFieldElementCount.setFont(font);
-		fiveFieldElementCount.setForeground(textColor);
-		int fourRemaining = fourFieldElementCount;
-		JLabel fourFieldElementCount = new JLabel(fourRemaining + "x");
-		fourFieldElementCount.setFont(font);
-		fourFieldElementCount.setForeground(textColor);
-		int threeRemaining = threeFieldElementCount;
-		JLabel threeFieldElementCount = new JLabel(threeRemaining + "x");
-		threeFieldElementCount.setFont(font);
-		threeFieldElementCount.setForeground(textColor);
-		int twoRemaining = twoFieldElementCount;
-		JLabel twoFieldElementCount = new JLabel(twoRemaining + "x");
-		twoFieldElementCount.setFont(font);
-		twoFieldElementCount.setForeground(textColor);
+		fiveRemaining = fiveFieldElementCount;
+		fiveFieldElementCountLabel = new JLabel(fiveRemaining + "x");
+		fiveFieldElementCountLabel.setFont(font);
+		fiveFieldElementCountLabel.setForeground(textColor);
+		fourRemaining = fourFieldElementCount;
+		fourFieldElementCountLabel = new JLabel(fourRemaining + "x");
+		fourFieldElementCountLabel.setFont(font);
+		fourFieldElementCountLabel.setForeground(textColor);
+		threeRemaining = threeFieldElementCount;
+		threeFieldElementCountLabel = new JLabel(threeRemaining + "x");
+		threeFieldElementCountLabel.setFont(font);
+		threeFieldElementCountLabel.setForeground(textColor);
+		twoRemaining = twoFieldElementCount;
+		twoFieldElementCountLabel = new JLabel(twoRemaining + "x");
+		twoFieldElementCountLabel.setFont(font);
+		twoFieldElementCountLabel.setForeground(textColor);
 		
 		//elementsCounter Layout
 		elementsCounter.add(Box.createVerticalGlue());
-		elementsCounter.add(fiveFieldElementCount);
+		elementsCounter.add(fiveFieldElementCountLabel);
 		elementsCounter.add(Box.createVerticalStrut(70));
-		elementsCounter.add(fourFieldElementCount);
+		elementsCounter.add(fourFieldElementCountLabel);
 		elementsCounter.add(Box.createVerticalStrut(70));
-		elementsCounter.add(threeFieldElementCount);
+		elementsCounter.add(threeFieldElementCountLabel);
 		elementsCounter.add(Box.createVerticalStrut(70));
-		elementsCounter.add(twoFieldElementCount);
+		elementsCounter.add(twoFieldElementCountLabel);
 		elementsCounter.add(Box.createVerticalGlue());
+
+		// buttonsHolder Panel Settings
+		buttonsHolder.setLayout(new BoxLayout(buttonsHolder, BoxLayout.Y_AXIS));
+		buttonsHolder.setOpaque(false);
+
+		// Elements in buttonsHolder
+		Font tipFont = new Font("Krungthep", Font.PLAIN, 15);
+		JLabel tip = new JLabel("<html><body>STRG gedrückt halten, um die<br>Platzierungsrichtung zu ändern</body></html>");
+		tip.setHorizontalAlignment(SwingConstants.CENTER);
+		tip.setFont(tipFont);
+		tip.setForeground(textColor);
+		JPanel tipHolder = new JPanel();
+		tipHolder.setLayout(new BorderLayout(0,0));
+		tipHolder.setOpaque(false);
+		tipHolder.add(tip, BorderLayout.CENTER);
+
+		// buttonsHolder Panel Layout
+		buttonsHolder.add(tipHolder);
+		buttonsHolder.add(Box.createVerticalStrut(10));
+		buttonsHolder.add(buttons);
 		
 		// buttons Panel Settings
 		buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
@@ -256,6 +328,8 @@ public class GameWindow {
 		
 		// buttons Panel Layout
 		buttons.add(Box.createHorizontalGlue());
+		buttons.add(directionButton);
+		buttons.add(Box.createHorizontalStrut(10));
 		buttons.add(randomButton);
 		buttons.add(Box.createHorizontalStrut(10));
 		buttons.add(startButton);
@@ -273,7 +347,47 @@ public class GameWindow {
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setForeground(textColor);
 		title.setFont(font);
-		
+
+		// directionButton
+		directionButton.setText("Platzierungsrichtung");
+		Icon directionRight = new ImageIcon(new ImageIcon("src/res/direction_right.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		Icon directionDown = new ImageIcon(new ImageIcon("src/res/direction_down.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		directionButton.setIcon(directionRight);
+		directionButton.setBorder(null);
+		directionButton.setHorizontalAlignment(SwingConstants.LEFT);
+		directionButton.setContentAreaFilled(false);
+		directionButton.setToolTipText("Platzierungsrichtung");
+		directionButton.setMinimumSize(new Dimension(50, 50));
+		directionButton.setMaximumSize(new Dimension(50, 50));
+		directionButton.setPreferredSize(new Dimension(50, 50));
+
+		mainPanel.setFocusable(true);
+		mainPanel.addKeyListener( new KeyListener() {
+
+			@Override
+			public void keyTyped( KeyEvent evt ) {
+			}
+
+			@Override
+			public void keyPressed( KeyEvent evt ) {
+				if (evt.isControlDown()){
+					direction = Direction.north;
+					directionButton.setIcon(directionDown);
+					directionButton.setBorder(null);
+				}
+
+			}
+
+			@Override
+			public void keyReleased( KeyEvent evt ) {
+				if (!evt.isControlDown()){
+					direction = Direction.west;
+					directionButton.setIcon(directionRight);
+					directionButton.setBorder(null);
+				}
+			}
+		} );
+
 		// randomButton Button Settings
 		randomButton.setText("Zufällig");
 		ImageIcon randomPutIcon = new ImageIcon(new ImageIcon("src/res/random.png").getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
@@ -286,6 +400,7 @@ public class GameWindow {
 		randomButton.setMaximumSize(new Dimension(130, 60));
 		randomButton.setPreferredSize(new Dimension(130, 60));
 		randomButton.addActionListener(a -> player.randomShipPlacment());
+		randomButton.addActionListener(a -> disableShipPlacement());
 		
 		// startButton Button Settings
 		startButton.setText("Start");
@@ -330,6 +445,22 @@ public class GameWindow {
 				Launcher.soundPlaying = true;
 			}
 		});
+	}
+
+	public void disableShipPlacement(){
+		elementSelected = 0;
+		fiveFieldElementCountLabel.setText(0 + "x");
+		fiveFieldElementIcon.setEnabled(false);
+		fiveFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+		fourFieldElementCountLabel.setText(0 + "x");
+		fourFieldElementIcon.setEnabled(false);
+		fourFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+		threeFieldElementCountLabel.setText(0 + "x");
+		threeFieldElementIcon.setEnabled(false);
+		threeFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+		twoFieldElementCountLabel.setText(0 + "x");
+		twoFieldElementIcon.setEnabled(false);
+		twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
 	}
 }
 

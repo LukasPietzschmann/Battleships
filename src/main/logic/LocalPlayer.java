@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Die Klasse LocalPlayer modelliert einen Spieler, der am selben Computer sitzt.
  */
 public abstract class LocalPlayer extends Player {
-	protected Map map;
+	public Map map;
 	protected ArrayList<OnMapChangedListener> listeners;
 	
 	/**
