@@ -288,7 +288,7 @@ public class MainMenu {
 			int n = connect.displayGui();
 			if(n == 0) {
 				String saveGameId = connect.getSavegameId();
-				//...
+				Logic logic = Launcher.startGame(Launcher.SG,"","", 0,0,0,0,"", null, null,Integer.parseInt(saveGameId));
 			}
 		});
 		

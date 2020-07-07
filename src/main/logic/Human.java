@@ -15,7 +15,11 @@ public class Human extends LocalPlayer {
 	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
 	 */
 	public Human(Logic l, int size, String name) {
-		super(l, size, name);
+		this(l, new Map(size), name);
+	}
+	
+	public Human(Logic l, Map map, String name){
+		super(l, map, name);
 	}
 	
 	/**

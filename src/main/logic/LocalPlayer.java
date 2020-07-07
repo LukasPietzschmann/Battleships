@@ -9,14 +9,9 @@ public abstract class LocalPlayer extends Player {
 	protected Map map;
 	protected ArrayList<OnMapChangedListener> listeners;
 	
-	/**
-	 * @param l "Zurück-Referenz" auf das Logik Objekt.
-	 * @param size Die festgelegte Größe des Spielfelds.
-	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
-	 */
-	public LocalPlayer(Logic l, int size, String name) {
+	protected LocalPlayer(Logic l, Map map, String name) {
 		super(l, name);
-		map = new Map(size);
+		this.map = map;
 		listeners = new ArrayList<>();
 	}
 	
@@ -95,7 +90,7 @@ public abstract class LocalPlayer extends Player {
 		listeners.add(listener);
 	}
 	
-	private void notifyListeners(){
+	private void notifyListeners() {
 		for(OnMapChangedListener listener : listeners) listener.OnMapChanged(map);
 	}
 }

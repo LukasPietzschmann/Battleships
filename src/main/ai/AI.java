@@ -18,17 +18,20 @@ public class AI extends LocalPlayer {
 	 * @param difficulty Die Schwierigkeitsstufe des Computers
 	 */
 	public AI(Logic l, int size, String name, Difficulty difficulty) {
-		super(l, size, name);
-		
+		this(l, new Map(size), name, difficulty);
+	}
+	
+	public AI(Logic l, Map map, String name, Difficulty difficulty){
+		super(l, map, name);
 		switch(difficulty) {
 			case easy:
-				ai = new EasyAI(this, logic, new Map(size));
+				ai = new EasyAI(this, logic, map);
 				break;
 			case medium:
-				ai = new MediumAI(this, logic, new Map(size));
+				ai = new MediumAI(this, logic, map);
 				break;
 			case hard:
-				ai = new HardAI(this, logic, new Map(size));
+				ai = new HardAI(this, logic, map);
 				break;
 		}
 	}

@@ -2,13 +2,21 @@ package logic;
 
 import ai.Difficulty;
 import ai.AI;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import gui.MainWindow;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Die Klasse Launcher startet das Spiel und frägt Anfangseinstellungen ab
  */
 public class Launcher {
 	public static boolean soundPlaying = false;
+	public static String fileSuffix = ".sg";
+	public static String mapPraefix = "map_";
 	
 	public static final int SG = 0;
 	/**
@@ -43,8 +51,7 @@ public class Launcher {
 		try {
 			switch(mode) {
 				case SG:
-					//TODO id Parameter
-					return new Logic(id);
+					return getSaveGame(id);
 				case AI_AI:
 					return new Logic(name01, name02, diff01, diff02, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
 				case PL_AI:
@@ -77,5 +84,24 @@ public class Launcher {
 	public static void main(String[] args) {
 		MainWindow mainWindow = new MainWindow();
 		mainWindow.setUpMainWindow();
+	}
+	
+	private static Logic getSaveGame(long id) throws Exception {
+		GsonBuilder gb = new GsonBuilder();
+		Gson gson = gb.create();
+		File mapFile = new File(String.format("%s/%s/%s%d%s", System.getProperty("user.home"), "Documents", mapPraefix, id, fileSuffix));
+		Scanner fileScanner;
+		if(!mapFile.exists()) return null;
+		fileScanner = new Scanner(mapFile);
+		SaveGameSetup sgs = gson.fromJson(fileScanner.nextLine(), SaveGameSetup.class);
+		Map ownMap = gson.fromJson(fileScanner.nextLine(), Map.class);
+		Map oppMap = null;
+		switch(sgs.getMode()) {
+			case Launcher.PL_AI:
+			case Launcher.AI_AI:
+				oppMap = gson.fromJson(fileScanner.nextLine(), Map.class);
+		}
+		
+		return new Logic(sgs.getMode(), ownMap, sgs.getOwnPlayerName(), sgs.getOwnDifficulty(), oppMap, sgs.getOppPlayerName(), sgs.getOppDifficulty(), id);
 	}
 }

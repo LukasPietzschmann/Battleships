@@ -25,16 +25,6 @@ public class Logic {
 		this.MODE = MODE;
 	}
 	
-	/**
-	 * Konstruktor, falls ein Save-Game geladen wird.
-	 *
-	 * @param id Die ID des Save-Games.
-	 */
-	public Logic(long id) {
-		this(Launcher.SG);
-		//TODO implement
-	}
-	
 	private Logic(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		this(mode);
 		ships = new ArrayList<>();
@@ -44,6 +34,35 @@ public class Logic {
 			for(int j = 0; j < ships[i]; j++) {
 				this.ships.add(new Ship(0, 0, Direction.north, i + 2));
 			}
+		}
+	}
+	
+	public Logic(int mode, LocalPlayer ownPlayer, Player oppPlayer) {
+		//TODO extra mode wer dran is
+		this(mode);
+		this.ownPlayer = ownPlayer;
+		this.oppPlayer = oppPlayer;
+	}
+	
+	public Logic(int mode, Map ownPlayerMap, String ownPlayerName, Difficulty ownPlayerDiff, Map oppPlayerMap, String oppPlayerName, Difficulty oppPlayerDiff, long id) throws Exception{
+		this(mode);
+		switch(mode) {
+			case Launcher.PL_AI:
+				ownPlayer = new Human(this, oppPlayerMap, ownPlayerName);
+				oppPlayer = new AI(this, oppPlayerMap, oppPlayerName, oppPlayerDiff);
+				break;
+			case Launcher.AI_AI:
+				ownPlayer = new AI(this, ownPlayerMap, ownPlayerName, ownPlayerDiff);
+				oppPlayer = new AI(this, oppPlayerMap, oppPlayerName, oppPlayerDiff);
+				break;
+			case Launcher.PL_NW_CL:
+				ownPlayer = new Human(this, ownPlayerMap, ownPlayerName);
+				oppPlayer = new Network(this, oppPlayerName, id);
+				break;
+			case Launcher.NW_SV_AI:
+				ownPlayer = new AI(this,ownPlayerMap, ownPlayerName, ownPlayerDiff);
+				oppPlayer = new Network(this, oppPlayerName, id);
+				break;
 		}
 	}
 	
@@ -190,7 +209,11 @@ public class Logic {
 		return ships;
 	}
 	
-	public LocalPlayer getOwnPlayer(){
+	public LocalPlayer getOwnPlayer() {
 		return (LocalPlayer) ownPlayer;
+	}
+	
+	public void saveGame(){
+		//TODO implement
 	}
 }
