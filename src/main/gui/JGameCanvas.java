@@ -45,14 +45,14 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 	
 	private int numberCounterHorizontal = 0;
 	private int numberCounterVertical = 0;
-	
+
+	private ImageIcon tilesetIcon;
 	private static Image tileset;
 	int groesse;
 	
 	public JGameCanvas() {
 		groesse = Launcher.gridSize + 1;
-		ImageIcon tilesetIcon = new ImageIcon(new ImageIcon("src/res/tileset7.png").getImage());
-		tileset = tilesetIcon.getImage();
+		loadTileSet();
 		map = new Tile[groesse][groesse];
 		initialGrid();
 		addMouseMotionListener(new MouseAdapter() {
@@ -199,6 +199,21 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 			}
 		}
 		repaint();
+	}
+
+	public void loadTileSet(){
+		String theme = Launcher.theme;
+
+		switch(theme){
+			case "Battleships":
+				tilesetIcon = new ImageIcon(new ImageIcon("src/res/tileset_battleships.png").getImage());
+				tileset = tilesetIcon.getImage();
+				break;
+			case "Battlecars":
+				tilesetIcon = new ImageIcon(new ImageIcon("src/res/tileset_battlecars.png").getImage());
+				tileset = tilesetIcon.getImage();
+				break;
+		}
 	}
 	
 	public static void main(String[] args) {

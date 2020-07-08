@@ -779,7 +779,7 @@ public class MainMenu {
 		themesGroup.add(battlecarsButton);
 		
 		// Themes Layout
-		themes.add(Box.createVerticalGlue());
+		themes.add(Box.createVerticalStrut(30));
 		themes.add(themesHeading);
 		themes.add(Box.createVerticalStrut(10));
 		themes.add(battleshipsButton);

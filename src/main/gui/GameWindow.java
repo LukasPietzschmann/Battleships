@@ -66,8 +66,6 @@ public class GameWindow {
 	}
 	
 	public void setUpGameWindow() {
-		//		Grid gridPlayer1 = new Grid(GuiTester.gridSize);
-		//		Grid gridPlayer2 = new Grid(GuiTester.gridSize);
 		if(mode.equals("pvp") || mode.equals("pvc")) {
 			setUpPlaceWindow();
 		}
