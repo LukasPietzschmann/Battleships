@@ -15,7 +15,6 @@ import javax.swing.JFrame;
 
 public class MainWindow {
 	private JFrame frame;
-	private boolean gameRunning;
 	public static Music music;
 	
 	
@@ -29,7 +28,6 @@ public class MainWindow {
 	}
 	
 	public void createMenu() {
-		gameRunning = true;
 		
 		MainMenu menu = new MainMenu(frame);
 		

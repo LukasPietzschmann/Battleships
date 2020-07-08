@@ -1,465 +1,199 @@
 package gui;
 
-import logic.*;
+import logic.Launcher;
+import logic.LocalPlayer;
+import logic.Logic;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class GameWindow {
-	private final JFrame frame;
-	private final String mode;
-	private final JPanel mainPanel = new JPanel();
-	private final JPanel gridHolder = new JPanel(new GridBagLayout());
-	JGameCanvas grid = new JGameCanvas();
-	private final JPanel options = new JPanel();
-	private final JLabel title = new JLabel();
-	private final JPanel elements = new JPanel();
-	private final JPanel elementsCounter = new JPanel();
-	private final JPanel buttonsHolder = new JPanel();
-	private final JPanel buttons = new JPanel();
-	private final JButton directionButton = new JButton();
-	private final JButton randomButton = new JButton();
-	private final JButton startButton = new JButton();
-	private final JButton soundButton = new JButton();
-	private final JLabel fiveFieldElementIcon = MainMenu.fiveFieldElementIcon;
-	private final JLabel fourFieldElementIcon = MainMenu.fourFieldElementIcon;
-	private final JLabel threeFieldElementIcon = MainMenu.threeFieldElementIcon;
-	private final JLabel twoFieldElementIcon = MainMenu.twoFieldElementIcon;
-	
-	private int fiveFieldElementCount = 0;
-	private int fourFieldElementCount = 0;
-	private int threeFieldElementCount = 0;
-	private int twoFieldElementCount = 0;
+    private final JFrame frame;
+    private final String mode;
+    private Logic logic;
+    private LocalPlayer ownPlayer;
 
-	int fiveRemaining;
-	int fourRemaining;
-	int threeRemaining;
-	int twoRemaining;
+    JGameCanvas grid1 = new JGameCanvas();
+    JGameCanvas grid2 = new JGameCanvas();
+    private final JPanel grid1Holder = new JPanel(new GridBagLayout());
+    private final JPanel grid2Holder = new JPanel(new GridBagLayout());
+    private JPanel textbarHolder = new JPanel();
+    private JLabel textbar = new JLabel();
+    private JPanel statsOptions = new JPanel();
+    private JPanel stats = new JPanel();
+    private JPanel options = new JPanel();
 
-	JLabel fiveFieldElementCountLabel;
-	JLabel fourFieldElementCountLabel;
-	JLabel threeFieldElementCountLabel;
-	JLabel twoFieldElementCountLabel;
-	
-	static Color textColor = MainMenu.textColor;
-	static Color backgroundColor = MainMenu.backgroundColor;
-	Font font = new Font("Krungthep", Font.PLAIN, 20);
-	int elementSelected;
-	Direction direction = Direction.west;
-	
-	private final Logic logic;
-	private final LocalPlayer player;
-	
-	public GameWindow(JFrame frame, String mode, Logic logic) {
-		this.frame = frame;
-		this.mode = mode;
-		this.logic = logic;
-		player = logic.getOwnPlayer();
-		player.registerOnMapChangedListener(grid);
-	}
-	
-	public void setUpGameWindow() {
-		if(mode.equals("pvp") || mode.equals("pvc")) {
-			setUpPlaceWindow();
-		}
-//		else {
-//			// Methode, die die Elemente für beide Spielfelder automatisch füllt
-//		}
-	}
-	
-	public void backToMenu() {
-		frame.remove(mainPanel);
-		MainMenu menu = new MainMenu(frame);
-		menu.setUpMenu();
-	}
-	
-	public void setUpPlaceWindow() {
-		
-		// mainPanel Panel Settings
-		mainPanel.setLayout(new BorderLayout());
-		mainPanel.setOpaque(true);
-		mainPanel.setBackground(backgroundColor);
-		mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 70, 30, 30));
-		
-		// mainPanel Panel Layout
-		mainPanel.add(gridHolder, BorderLayout.CENTER);
-		mainPanel.add(options, BorderLayout.EAST);
-		
-		// gridHolder Panel Settings & Layout
-		gridHolder.setOpaque(false);
-		gridHolder.add(grid);
-		
-		// grid Panel Settings
-		grid.setOpaque(false);
-		grid.setSize(grid.getPreferredSize());
-		grid.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				int panelsize = grid.getWidth();
-				double tilesize = (double) panelsize / (double) grid.groesse;
-				int x = e.getX();
-				int y = e.getY();
-				int xGrid = (int) ((double) x / tilesize) - 1;
-				int yGrid = (int) ((double) y / tilesize) - 1;
-				Ship ship = new Ship(xGrid, yGrid, direction, elementSelected);
-				if(player.map.canShipBePlaced(ship)){
-					player.map.placeShip(ship);
-					grid.placeShip(ship);
-					grid.repaint();
-					if (elementSelected == 5) {
-						fiveRemaining--;
-						fiveFieldElementCountLabel.setText(fiveRemaining + "x");
-						if (fiveRemaining == 0){
-							fiveFieldElementIcon.setEnabled(false);
-							fiveFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-							elementSelected = 0;
-						}
-					}
-					if (elementSelected == 4) {
-						fourRemaining--;
-						fourFieldElementCountLabel.setText(fourRemaining + "x");
-						if (fourRemaining == 0){
-							fourFieldElementIcon.setEnabled(false);
-							fourFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-							elementSelected = 0;
-						}
-					}
-					if (elementSelected == 3) {
-						threeRemaining--;
-						threeFieldElementCountLabel.setText(threeRemaining + "x");
-						if (threeRemaining == 0){
-							threeFieldElementIcon.setEnabled(false);
-							threeFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-							elementSelected = 0;
-						}
-					}
-					if (elementSelected == 2) {
-						twoRemaining--;
-						twoFieldElementCountLabel.setText(twoRemaining + "x");
-						if (twoRemaining == 0){
-							twoFieldElementIcon.setEnabled(false);
-							twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-							elementSelected = 0;
-						}
-					}
+    JPanel mainPanel = new JPanel();
 
-				}
+    static Color backgroundColor = MainMenu.backgroundColor;
+    static Color textColor = MainMenu.textColor;
+    Font font = new Font("Krungthep", Font.PLAIN, 20);
 
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-		});
-		
-		// options Panel Settings
-		options.setLayout(new BorderLayout());
-		options.setOpaque(false);
-		options.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		
-		// options Panel Layout
-		options.add(title, BorderLayout.NORTH);
-		options.add(elements, BorderLayout.WEST);
-		options.add(elementsCounter, BorderLayout.EAST);
-		options.add(buttonsHolder, BorderLayout.SOUTH);
-		
-		// elements Panel Settings
-		elements.setLayout(new BoxLayout(elements, BoxLayout.Y_AXIS));
-		elements.setOpaque(false);
-		
-		for(Ship ship : logic.getAvailableShips()) {
-			switch(ship.getSize()) {
-				case 2:
-					twoFieldElementCount++;
-					break;
-				case 3:
-					threeFieldElementCount++;
-					break;
-				case 4:
-					fourFieldElementCount++;
-					break;
-				case 5:
-					fiveFieldElementCount++;
-					break;
-			}
-		}
-		
-		// elements Elements
-		if(fiveFieldElementCount == 0) fiveFieldElementIcon.setEnabled(false);
-		if(fourFieldElementCount == 0) fourFieldElementIcon.setEnabled(false);
-		if(threeFieldElementCount == 0) threeFieldElementIcon.setEnabled(false);
-		if(twoFieldElementCount == 0) twoFieldElementIcon.setEnabled(false);
-		
-		EmptyBorder emptyBorder = new EmptyBorder(3, 3, 3, 3);
-		fiveFieldElementIcon.setBorder(emptyBorder);
-		fiveFieldElementIcon.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if(fiveFieldElementIcon.isEnabled()) {
-					fourFieldElementIcon.setBorder(emptyBorder);
-					threeFieldElementIcon.setBorder(emptyBorder);
-					twoFieldElementIcon.setBorder(emptyBorder);
-					fiveFieldElementIcon.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-					elementSelected = 5;
-				}
-			}
-		});
-		fourFieldElementIcon.setBorder(emptyBorder);
-		fourFieldElementIcon.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if(fourFieldElementIcon.isEnabled()) {
-					fiveFieldElementIcon.setBorder(emptyBorder);
-					threeFieldElementIcon.setBorder(emptyBorder);
-					twoFieldElementIcon.setBorder(emptyBorder);
-					fourFieldElementIcon.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-					elementSelected = 4;
-				}
-			}
-		});
-		threeFieldElementIcon.setBorder(emptyBorder);
-		threeFieldElementIcon.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if(threeFieldElementIcon.isEnabled()) {
-					fiveFieldElementIcon.setBorder(emptyBorder);
-					fourFieldElementIcon.setBorder(emptyBorder);
-					twoFieldElementIcon.setBorder(emptyBorder);
-					threeFieldElementIcon.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-					elementSelected = 3;
-				}
-			}
-		});
-		twoFieldElementIcon.setBorder(emptyBorder);
-		twoFieldElementIcon.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if(twoFieldElementIcon.isEnabled()) {
-					fiveFieldElementIcon.setBorder(emptyBorder);
-					fourFieldElementIcon.setBorder(emptyBorder);
-					threeFieldElementIcon.setBorder(emptyBorder);
-					twoFieldElementIcon.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-					elementSelected = 2;
-				}
-			}
-		});
-		elements.add(Box.createVerticalGlue());
-		elements.add(fiveFieldElementIcon);
-		elements.add(Box.createVerticalStrut(40));
-		elements.add(fourFieldElementIcon);
-		elements.add(Box.createVerticalStrut(40));
-		elements.add(threeFieldElementIcon);
-		elements.add(Box.createVerticalStrut(40));
-		elements.add(twoFieldElementIcon);
-		elements.add(Box.createVerticalGlue());
-		
-		// elementsCounter Panel Settings
-		elementsCounter.setLayout(new BoxLayout(elementsCounter, BoxLayout.Y_AXIS));
-		elementsCounter.setOpaque(false);
-		
-		// elementsCounter Elements
-		fiveRemaining = fiveFieldElementCount;
-		fiveFieldElementCountLabel = new JLabel(fiveRemaining + "x");
-		fiveFieldElementCountLabel.setFont(font);
-		fiveFieldElementCountLabel.setForeground(textColor);
-		fourRemaining = fourFieldElementCount;
-		fourFieldElementCountLabel = new JLabel(fourRemaining + "x");
-		fourFieldElementCountLabel.setFont(font);
-		fourFieldElementCountLabel.setForeground(textColor);
-		threeRemaining = threeFieldElementCount;
-		threeFieldElementCountLabel = new JLabel(threeRemaining + "x");
-		threeFieldElementCountLabel.setFont(font);
-		threeFieldElementCountLabel.setForeground(textColor);
-		twoRemaining = twoFieldElementCount;
-		twoFieldElementCountLabel = new JLabel(twoRemaining + "x");
-		twoFieldElementCountLabel.setFont(font);
-		twoFieldElementCountLabel.setForeground(textColor);
-		
-		//elementsCounter Layout
-		elementsCounter.add(Box.createVerticalGlue());
-		elementsCounter.add(fiveFieldElementCountLabel);
-		elementsCounter.add(Box.createVerticalStrut(70));
-		elementsCounter.add(fourFieldElementCountLabel);
-		elementsCounter.add(Box.createVerticalStrut(70));
-		elementsCounter.add(threeFieldElementCountLabel);
-		elementsCounter.add(Box.createVerticalStrut(70));
-		elementsCounter.add(twoFieldElementCountLabel);
-		elementsCounter.add(Box.createVerticalGlue());
 
-		// buttonsHolder Panel Settings
-		buttonsHolder.setLayout(new BoxLayout(buttonsHolder, BoxLayout.Y_AXIS));
-		buttonsHolder.setOpaque(false);
+    public GameWindow(JFrame frame, String mode, Logic logic){
+        this.frame = frame;
+        this.mode = mode;
+        this.logic = logic;
+        this.ownPlayer = logic.getOwnPlayer();
+        ownPlayer.registerOnMapChangedListener(grid1);
+        setUpGameWindow();
+        grid1.OnMapChanged(ownPlayer.map);
+    }
 
-		// Elements in buttonsHolder
-		Font tipFont = new Font("Krungthep", Font.PLAIN, 15);
-		JLabel tip = new JLabel("<html><body>STRG gedrückt halten, um die<br>Platzierungsrichtung zu ändern</body></html>");
-		tip.setHorizontalAlignment(SwingConstants.CENTER);
-		tip.setFont(tipFont);
-		tip.setForeground(textColor);
-		JPanel tipHolder = new JPanel();
-		tipHolder.setLayout(new BorderLayout(0,0));
-		tipHolder.setOpaque(false);
-		tipHolder.add(tip, BorderLayout.CENTER);
+    public void setUpGameWindow(){
 
-		// buttonsHolder Panel Layout
-		buttonsHolder.add(tipHolder);
-		buttonsHolder.add(Box.createVerticalStrut(10));
-		buttonsHolder.add(buttons);
-		
-		// buttons Panel Settings
-		buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-		buttons.setOpaque(false);
-		
-		// buttons Panel Layout
-		buttons.add(Box.createHorizontalGlue());
-		buttons.add(directionButton);
-		buttons.add(Box.createHorizontalStrut(10));
-		buttons.add(randomButton);
-		buttons.add(Box.createHorizontalStrut(10));
-		buttons.add(startButton);
-		buttons.add(Box.createHorizontalStrut(10));
-		buttons.add(soundButton);
-		buttons.add(Box.createHorizontalGlue());
-		
-		// frame Settings
-		frame.getContentPane().add(mainPanel);
-		frame.setVisible(true);
-		
-		// Elements in option Panel
-		// title JPanel Settings
-		title.setText(Launcher.themeIdentifierPlural + " platzieren");
-		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setForeground(textColor);
-		title.setFont(font);
+        // mainPanel Panel Settings
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setOpaque(true);
+        mainPanel.setBackground(backgroundColor);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(30 , 30, 30, 30));
 
-		// directionButton
-		directionButton.setText("Platzierungsrichtung");
-		Icon directionRight = new ImageIcon(new ImageIcon("src/res/direction_right.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		Icon directionDown = new ImageIcon(new ImageIcon("src/res/direction_down.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		directionButton.setIcon(directionRight);
-		directionButton.setBorder(null);
-		directionButton.setHorizontalAlignment(SwingConstants.LEFT);
-		directionButton.setContentAreaFilled(false);
-		directionButton.setToolTipText("Platzierungsrichtung");
-		directionButton.setMinimumSize(new Dimension(50, 50));
-		directionButton.setMaximumSize(new Dimension(50, 50));
-		directionButton.setPreferredSize(new Dimension(50, 50));
+        EmptyBorder emptyBorder = new EmptyBorder(3, 3, 3, 3);
+        Border activeBorder = BorderFactory.createLineBorder(Color.GREEN, 3);
 
-		mainPanel.setFocusable(true);
-		mainPanel.addKeyListener( new KeyListener() {
+        // grid1
+        grid1.setOpaque(false);
+        grid1.setSize(grid1.getPreferredSize());
+        grid1.setBorder(activeBorder);
+        grid1Holder.setOpaque(false);
+        grid1Holder.add(grid1);
 
-			@Override
-			public void keyTyped( KeyEvent evt ) {
-			}
+        // grid2
+        grid2.setOpaque(false);
+        grid2.setSize(grid2.getPreferredSize());
+        grid2.setBorder(emptyBorder);
+        grid2Holder.setOpaque(false);
+        grid2Holder.add(grid2);
 
-			@Override
-			public void keyPressed( KeyEvent evt ) {
-				if (evt.isControlDown()){
-					direction = Direction.north;
-					directionButton.setIcon(directionDown);
-					directionButton.setBorder(null);
-				}
+        // gridHolder
+        JPanel gridHolder = new JPanel();
+        gridHolder.setLayout(new BoxLayout(gridHolder, BoxLayout.X_AXIS));
+        gridHolder.setOpaque(false);
 
-			}
+        gridHolder.add(Box.createHorizontalGlue());
+        gridHolder.add(grid1Holder);
+        gridHolder.add(Box.createHorizontalStrut(30));
+        gridHolder.add(grid2Holder);
+        gridHolder.add(Box.createHorizontalGlue());
 
-			@Override
-			public void keyReleased( KeyEvent evt ) {
-				if (!evt.isControlDown()){
-					direction = Direction.west;
-					directionButton.setIcon(directionRight);
-					directionButton.setBorder(null);
-				}
-			}
-		} );
+        // mainPanel Layout
+        mainPanel.add(textbarHolder, BorderLayout.NORTH);
+        mainPanel.add(gridHolder, BorderLayout.CENTER);
+        mainPanel.add(statsOptions, BorderLayout.EAST);
 
-		// randomButton Button Settings
-		randomButton.setText("Zufällig");
-		ImageIcon randomPutIcon = new ImageIcon(new ImageIcon("src/res/random.png").getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
-		randomButton.setIcon(randomPutIcon);
-		randomButton.setHorizontalAlignment(SwingConstants.LEFT);
-		randomButton.setBorder(null);
-		randomButton.setToolTipText("Zufällige Platzierung der " + Launcher.themeIdentifierPlural);
-		randomButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		randomButton.setMinimumSize(new Dimension(130, 60));
-		randomButton.setMaximumSize(new Dimension(130, 60));
-		randomButton.setPreferredSize(new Dimension(130, 60));
-		randomButton.addActionListener(a -> player.randomShipPlacment());
-		randomButton.addActionListener(a -> disableShipPlacement());
-		
-		// startButton Button Settings
-		startButton.setText("Start");
-		ImageIcon startIcon = new ImageIcon(new ImageIcon("src/res/start.png").getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
-		startButton.setIcon(startIcon);
-		startButton.setHorizontalAlignment(SwingConstants.LEFT);
-		startButton.setBorder(null);
-		startButton.setToolTipText("Spiel starten");
-		startButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		startButton.setMinimumSize(new Dimension(130, 60));
-		startButton.setMaximumSize(new Dimension(130, 60));
-		startButton.setPreferredSize(new Dimension(130, 60));
-		startButton.addActionListener(arg0 -> backToMenu());
-		
-		// soundButton Button Settings
-		soundButton.setText("Lautstärke anpassen");
-		Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		if(Launcher.soundPlaying) {
-			soundButton.setIcon(soundOnIcon);
-		}else {
-			soundButton.setIcon(soundOffIcon);
-		}
-		//		soundButton.setHorizontalAlignment(SwingConstants.LEFT);
-		soundButton.setBorder(null);
-		soundButton.setContentAreaFilled(false);
-		soundButton.setToolTipText("Lautstärke anpassen");
-		soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		soundButton.setMinimumSize(new Dimension(50, 50));
-		soundButton.setMaximumSize(new Dimension(50, 50));
-		soundButton.setPreferredSize(new Dimension(50, 50));
-		soundButton.addActionListener(arg0 -> {
-			if(Launcher.soundPlaying) {
-				soundButton.setIcon(soundOffIcon);
-				soundButton.setBorder(null);
-				MainWindow.music.stopMusic();
-				Launcher.soundPlaying = false;
-			}else {
-				soundButton.setIcon(soundOnIcon);
-				soundButton.setBorder(null);
-				MainWindow.music.restartMusic();
-				Launcher.soundPlaying = true;
-			}
-		});
-	}
+        // textbar
+        textbar.setText("Test Test Spielanweisung Test Test");
+        textbar.setForeground(textColor);
+        textbar.setFont(font);
+        textbar.setOpaque(false);
+        textbar.setSize(new Dimension(200, 200));
+        textbarHolder.add(textbar);
+        textbarHolder.setOpaque(false);
 
-	public void disableShipPlacement(){
-		elementSelected = 0;
-		fiveFieldElementCountLabel.setText(0 + "x");
-		fiveFieldElementIcon.setEnabled(false);
-		fiveFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-		fourFieldElementCountLabel.setText(0 + "x");
-		fourFieldElementIcon.setEnabled(false);
-		fourFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-		threeFieldElementCountLabel.setText(0 + "x");
-		threeFieldElementIcon.setEnabled(false);
-		threeFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-		twoFieldElementCountLabel.setText(0 + "x");
-		twoFieldElementIcon.setEnabled(false);
-		twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-	}
+        // stats Elements
+        JLabel platzhalter1 = new JLabel("Platzerhalter 1");
+        JLabel platzhalter2 = new JLabel("Platzhalter 2");
+        JLabel platzhalter3 = new JLabel("Platzerhalter 3");
+        JLabel platzhalter4 = new JLabel("Platzhalter 4");
+
+        stats.add(Box.createVerticalStrut(30));
+        stats.add(platzhalter1);
+        stats.add(platzhalter2);
+        stats.add(platzhalter3);
+        stats.add(platzhalter4);
+        stats.add(Box.createVerticalGlue());
+
+        // buttonHolder Elemente
+        JPanel buttonsHolder = new JPanel();
+        buttonsHolder.setLayout(new BoxLayout(buttonsHolder, BoxLayout.X_AXIS));
+        buttonsHolder.setOpaque(false);
+        buttonsHolder.setBorder(null);
+
+        // saveButton
+        JButton saveButton = new JButton("Spiel speichern");
+        ImageIcon loadIcon = new ImageIcon(new ImageIcon("src/res/loadSaveIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        saveButton.setIcon(loadIcon);
+        saveButton.setHorizontalAlignment(SwingConstants.LEFT);
+        saveButton.setBorder(null);
+        saveButton.setContentAreaFilled(false);
+        saveButton.setToolTipText("Spiel speichern");
+        saveButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        saveButton.setMinimumSize(new Dimension(50, 50));
+        saveButton.setMaximumSize(new Dimension(50, 50));
+        saveButton.setPreferredSize(new Dimension(50, 50));
+        saveButton.addActionListener(arg0 -> {
+            int saveGameId = 12345; // TODO delete
+            JOptionPane.showMessageDialog(mainPanel, "Aktuelle Spielstand-ID: " + saveGameId,
+                    "Spielstand-ID", JOptionPane.PLAIN_MESSAGE);
+        });
+
+        // soundButton Button Settings
+        JButton soundButton = new JButton();
+        soundButton.setText("Lautstärke anpassen");
+        Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        if(Launcher.soundPlaying) {
+            soundButton.setIcon(soundOnIcon);
+        }else {
+            soundButton.setIcon(soundOffIcon);
+        }
+        //		soundButton.setHorizontalAlignment(SwingConstants.LEFT);
+        soundButton.setBorder(null);
+        soundButton.setContentAreaFilled(false);
+        soundButton.setToolTipText("Lautstärke anpassen");
+        soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        soundButton.setMinimumSize(new Dimension(50, 50));
+        soundButton.setMaximumSize(new Dimension(50, 50));
+        soundButton.setPreferredSize(new Dimension(50, 50));
+        soundButton.setFocusable(false);
+        soundButton.addActionListener(arg0 -> {
+            if(Launcher.soundPlaying) {
+                soundButton.setIcon(soundOffIcon);
+                soundButton.setBorder(null);
+                MainWindow.music.stopMusic();
+                Launcher.soundPlaying = false;
+            }else {
+                soundButton.setIcon(soundOnIcon);
+                soundButton.setBorder(null);
+                MainWindow.music.restartMusic();
+                Launcher.soundPlaying = true;
+            }
+        });
+
+        buttonsHolder.add(Box.createHorizontalGlue());
+        buttonsHolder.add(saveButton);
+        buttonsHolder.add(Box.createHorizontalStrut(20));
+        buttonsHolder.add(soundButton);
+        buttonsHolder.add(Box.createHorizontalGlue());
+
+        // statsOptions
+        statsOptions.setLayout(new BorderLayout());
+        statsOptions.setOpaque(false);
+        statsOptions.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 20));
+        stats.setLayout(new BoxLayout(stats, BoxLayout.Y_AXIS));
+        stats.setOpaque(false);
+        options.setLayout(new BoxLayout(options, BoxLayout.X_AXIS));
+        options.setOpaque(false);
+
+        JLabel statisticsTitle = new JLabel();
+        statisticsTitle.setText("Statistiken");
+        statisticsTitle.setForeground(textColor);
+        statisticsTitle.setFont(font);
+
+        statsOptions.add(statisticsTitle, BorderLayout.NORTH);
+        statsOptions.add(stats, BorderLayout.CENTER);
+        statsOptions.add(options, BorderLayout.SOUTH);
+
+        options.add(buttonsHolder);
+
+        // frame Settings
+        frame.getContentPane().add(mainPanel);
+        frame.setVisible(true);
+        frame.pack();
+
+
+    }
+
 }
-
-

@@ -10,17 +10,17 @@ import javax.swing.*;
 
 public class MainMenu {
 	
-	private JFrame frame;
-	private JPanel panel = new JPanel();
-	private JPanel themeIconTitle = new JPanel();
+	private final JFrame frame;
+	private final JPanel panel = new JPanel();
+	private final JPanel themeIconTitle = new JPanel();
 	private JPanel themeIconPanel = new JPanel();
-	private JPanel modes = new JPanel();
-	private JPanel title = new JPanel();
+	private final JPanel modes = new JPanel();
+	private final JPanel title = new JPanel();
 	JLabel themeTitle = new JLabel();
 	
-	private JPanel settings = new JPanel();
+	private final JPanel settings = new JPanel();
 	
-	private JPanel icons = new JPanel();
+	private final JPanel icons = new JPanel();
 	public ImageIcon fiveFieldElementIconFromSide;
 	public ImageIcon fourFieldElementIconFromSide;
 	public ImageIcon threeFieldElementIconFromSide;
@@ -31,28 +31,28 @@ public class MainMenu {
 	public static JLabel twoFieldElementIcon = new JLabel();
 	public static JLabel gridIcon = new JLabel();
 	
-	private JPanel counters = new JPanel();
-	private JLabel fiveFieldElementText = new JLabel();
-	private JLabel fourFieldElementText = new JLabel();
-	private JLabel threeFieldElementText = new JLabel();
-	private JLabel twoFieldElementText = new JLabel();
-	private JButton fiveFieldElementCountIncrease = new JButton();
-	private JButton fiveFieldElementCountDecrease = new JButton();
-	private JButton fourFieldElementCountIncrease = new JButton();
-	private JButton fourFieldElementCountDecrease = new JButton();
-	private JButton threeFieldElementCountIncrease = new JButton();
-	private JButton threeFieldElementCountDecrease = new JButton();
-	private JButton twoFieldElementCountIncrease = new JButton();
-	private JButton twoFieldElementCountDecrease = new JButton();
-	private JPanel fiveFieldElementCountChange = new JPanel();
-	private JPanel fourFieldElementCountChange = new JPanel();
-	private JPanel threeFieldElementCountChange = new JPanel();
-	private JPanel twoFieldElementCountChange = new JPanel();
+	private final JPanel counters = new JPanel();
+	private final JLabel fiveFieldElementText = new JLabel();
+	private final JLabel fourFieldElementText = new JLabel();
+	private final JLabel threeFieldElementText = new JLabel();
+	private final JLabel twoFieldElementText = new JLabel();
+	private final JButton fiveFieldElementCountIncrease = new JButton();
+	private final JButton fiveFieldElementCountDecrease = new JButton();
+	private final JButton fourFieldElementCountIncrease = new JButton();
+	private final JButton fourFieldElementCountDecrease = new JButton();
+	private final JButton threeFieldElementCountIncrease = new JButton();
+	private final JButton threeFieldElementCountDecrease = new JButton();
+	private final JButton twoFieldElementCountIncrease = new JButton();
+	private final JButton twoFieldElementCountDecrease = new JButton();
+	private final JPanel fiveFieldElementCountChange = new JPanel();
+	private final JPanel fourFieldElementCountChange = new JPanel();
+	private final JPanel threeFieldElementCountChange = new JPanel();
+	private final JPanel twoFieldElementCountChange = new JPanel();
 	
-	private JPanel themes = new JPanel();
-	private JLabel themesHeading = new JLabel("Spielstil wählen:");
-	private JRadioButton battleshipsButton = new JRadioButton("Battleships");
-	private JRadioButton battlecarsButton = new JRadioButton("Battlecars");
+	private final JPanel themes = new JPanel();
+	private final JLabel themesHeading = new JLabel("Spielstil wählen:");
+	private final JRadioButton battleshipsButton = new JRadioButton("Battleships");
+	private final JRadioButton battlecarsButton = new JRadioButton("Battlecars");
 	
 	private int fiveFieldElementCount = 1;
 	private int fourFieldElementCount = 2;
@@ -171,8 +171,8 @@ public class MainMenu {
 					difficulty = connect.getDifficulty();
 					panel.setVisible(false);
 					Logic logic = Launcher.startGame(Launcher.PL_AI, "PL", "AI", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", difficulty, null, 0);
-					GameWindow game = new GameWindow(frame, "pvc", logic);
-					game.setUpGameWindow();
+					SetUpMenu game = new SetUpMenu(frame, "pvc", logic);
+					game.checkSetUp();
 				}
 			}
 		});
@@ -207,8 +207,8 @@ public class MainMenu {
 					panel.setVisible(false);
 					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
 					Logic logic = Launcher.startGame(mode, "PL", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, null, null, 0);
-					GameWindow game = new GameWindow(frame, "pvp", logic);
-					game.setUpGameWindow();
+					SetUpMenu game = new SetUpMenu(frame, "pvp", logic);
+					game.checkSetUp();
 				}
 			}
 		});
@@ -244,8 +244,8 @@ public class MainMenu {
 					panel.setVisible(false);
 					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
 					Logic logic = Launcher.startGame(mode, "AI", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, difficulty, null, 0);
-					GameWindow game = new GameWindow(frame, "cvc", logic);
-					game.setUpGameWindow();
+					SetUpMenu game = new SetUpMenu(frame, "cvc", logic);
+					game.checkSetUp();
 				}
 			}
 		});
@@ -290,7 +290,7 @@ public class MainMenu {
 			int n = connect.displayGui();
 			if(n == 0) {
 				String saveGameId = connect.getSavegameId();
-				//...
+				// TODO Laden eines SaveGames implementieren
 			}
 		});
 		
@@ -805,7 +805,7 @@ public class MainMenu {
 		if(i == 1) {
 			JOptionPane.showMessageDialog(panel, "Zu viele " + Launcher.themeIdentifierPlural + " für das gewählte Spielfeld!\nAnzahl der "
 											+ Launcher.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
-							"Fehlermeldung: Zu viele Schiffe für das Spielfeld", JOptionPane.ERROR_MESSAGE);
+							"Fehlermeldung: Zu viele " + Launcher.themeIdentifierPlural + "für das Spielfeld", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		// No ships selected at all

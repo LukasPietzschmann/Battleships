@@ -18,12 +18,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-//FIXME Direction wird bei der Rotation der Tiles nicht berücksichtigt
 public class JGameCanvas extends JPanel implements OnMapChangedListener {
 	private static final long serialVersionUID = 1L;
 	private static final int tW = 32; // tile width
 	private static final int tH = 32; // tile height
-	private Tile[][] map;
+	private final Tile[][] map;
 	
 	private static final Tile[] numbers = {Tile.N1, Tile.N2, Tile.N3, Tile.N4, Tile.N5, Tile.N6, Tile.N7, Tile.N8, Tile.N9, Tile.N10,
 					Tile.N11, Tile.N12, Tile.N13, Tile.N14, Tile.N15, Tile.N16, Tile.N17, Tile.N18, Tile.N19, Tile.N20,
@@ -46,7 +45,6 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 	private int numberCounterHorizontal = 0;
 	private int numberCounterVertical = 0;
 
-	private ImageIcon tilesetIcon;
 	private static Image tileset;
 	int groesse;
 	
@@ -79,7 +77,7 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 					if(j == 0 && i == 0) {
 						map[j][i] = Tile.GREY;
 					}
-					if(j != 0 && i == 0) {
+					if(j != 0) {
 						map[j][i] = numbers[numberCounterVertical];
 						numberCounterVertical++;
 					}
@@ -94,19 +92,12 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 		}
 		numberCounterHorizontal = 0;
 		numberCounterVertical = 0;
-		
-		/*for(int i = 0; i < groesse; i++) {
-			for(int j = 0; j < groesse; j++) {
-				map[i][j] = Tile.GREY;
-			}
-		}*/
+
 	}
 	
 	protected void paintComponent(Graphics g) {
 		int w = getWidth();
 		int h = getHeight();
-//		System.out.println(w + " " + h);
-		int min = Math.min(w, h);
 		for(int i = 0; i < groesse; i++) {
 			for(int j = 0; j < groesse; j++) {
 				drawTile(g, map[j][i], i * h / groesse, j * w / groesse);
@@ -120,7 +111,6 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 		int my = t.ordinal() / 10;
 		int w = getWidth();
 		int h = getHeight();
-		int min = Math.min(w, h);
 		g.drawImage(tileset, x, y, x + w / groesse, y + h / groesse,
 						mx * tW, my * tH, mx * tW + tW, my * tH + tH, this);
 	}
@@ -206,7 +196,7 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 
 		switch(theme){
 			case "Battleships":
-				tilesetIcon = new ImageIcon(new ImageIcon("src/res/tileset_battleships.png").getImage());
+				ImageIcon tilesetIcon = new ImageIcon(new ImageIcon("src/res/tileset_battleships.png").getImage());
 				tileset = tilesetIcon.getImage();
 				break;
 			case "Battlecars":
