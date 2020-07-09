@@ -11,7 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class SetUpMenu {
+public class SetUpMenu implements GameStartsListener {
 	private final JFrame frame;
 	private final String mode;
 	private final JPanel mainPanel = new JPanel();
@@ -36,12 +36,12 @@ public class SetUpMenu {
 	private int fourFieldElementCount = 0;
 	private int threeFieldElementCount = 0;
 	private int twoFieldElementCount = 0;
-
+	
 	int fiveRemaining;
 	int fourRemaining;
 	int threeRemaining;
 	int twoRemaining;
-
+	
 	JLabel fiveFieldElementCountLabel;
 	JLabel fourFieldElementCountLabel;
 	JLabel threeFieldElementCountLabel;
@@ -63,38 +63,13 @@ public class SetUpMenu {
 		this.logic = logic;
 		player = logic.getOwnPlayer();
 		player.registerOnMapChangedListener(grid);
-	}
-	
-	public void checkSetUp() {
-		switch(mode){
-		case "pvp":
-		case "pvc":
-			setUpPlaceWindow();
-			break;
-		case "cvc":
-			player.randomShipPlacment();
-			readyToPlay = true;
-			startGame();
-		}
+		logic.registerGameStartsListener(this);
 	}
 	
 	public void backToMenu() {
 		frame.remove(mainPanel);
 		MainMenu menu = new MainMenu(frame);
 		menu.setUpMenu();
-	}
-
-	public void startGame(){
-		if (readyToPlay){
-			frame.remove(mainPanel);
-			GameWindow game = new GameWindow(frame, mode, logic);
-		}
-		else {
-			JOptionPane.showMessageDialog(mainPanel, "Vor dem Starten müssen alle " + Launcher.themeIdentifierPlural + " platziert werden!",
-					"Fehlermeldung: Nicht alle " + Launcher.themeIdentifierPlural + " platziert", JOptionPane.ERROR_MESSAGE);
-			frame.setFocusable(true);
-		}
-
 	}
 	
 	public void setUpPlaceWindow() {
@@ -125,49 +100,48 @@ public class SetUpMenu {
 				int xGrid = (int) ((double) x / tilesize) - 1;
 				int yGrid = (int) ((double) y / tilesize) - 1;
 				Ship ship = new Ship(xGrid, yGrid, direction, elementSelected);
-				if(player.map.canShipBePlaced(ship)){
-					player.map.placeShip(ship);
+				if(player.canShipBePlaced(ship)) {
+					player.placeShip(ship);
 					grid.placeShip(ship);
 					grid.repaint();
-					if (elementSelected == 5) {
+					if(elementSelected == 5) {
 						fiveRemaining--;
 						fiveFieldElementCountLabel.setText(fiveRemaining + "x");
-						if (fiveRemaining == 0){
+						if(fiveRemaining == 0) {
 							fiveFieldElementIcon.setEnabled(false);
 							fiveFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
 							elementSelected = 0;
 						}
 					}
-					if (elementSelected == 4) {
+					if(elementSelected == 4) {
 						fourRemaining--;
 						fourFieldElementCountLabel.setText(fourRemaining + "x");
-						if (fourRemaining == 0){
+						if(fourRemaining == 0) {
 							fourFieldElementIcon.setEnabled(false);
 							fourFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
 							elementSelected = 0;
 						}
 					}
-					if (elementSelected == 3) {
+					if(elementSelected == 3) {
 						threeRemaining--;
 						threeFieldElementCountLabel.setText(threeRemaining + "x");
-						if (threeRemaining == 0){
+						if(threeRemaining == 0) {
 							threeFieldElementIcon.setEnabled(false);
 							threeFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
 							elementSelected = 0;
 						}
 					}
-					if (elementSelected == 2) {
+					if(elementSelected == 2) {
 						twoRemaining--;
 						twoFieldElementCountLabel.setText(twoRemaining + "x");
-						if (twoRemaining == 0){
+						if(twoRemaining == 0) {
 							twoFieldElementIcon.setEnabled(false);
 							twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
 							elementSelected = 0;
 						}
 					}
-					if (fiveRemaining+fourRemaining+threeRemaining+twoRemaining == 0) readyToPlay = true;
+					if(fiveRemaining + fourRemaining + threeRemaining + twoRemaining == 0) readyToPlay = true;
 				}
-
 			}
 			
 			@Override
@@ -316,11 +290,11 @@ public class SetUpMenu {
 		elementsCounter.add(Box.createVerticalStrut(70));
 		elementsCounter.add(twoFieldElementCountLabel);
 		elementsCounter.add(Box.createVerticalGlue());
-
+		
 		// buttonsHolder Panel Settings
 		buttonsHolder.setLayout(new BoxLayout(buttonsHolder, BoxLayout.Y_AXIS));
 		buttonsHolder.setOpaque(false);
-
+		
 		// Elements in buttonsHolder
 		Font tipFont = new Font("Krungthep", Font.PLAIN, 15);
 		JLabel tip = new JLabel("<html><body>STRG gedrückt halten, um die<br>Platzierungsrichtung zu ändern</body></html>");
@@ -328,10 +302,10 @@ public class SetUpMenu {
 		tip.setFont(tipFont);
 		tip.setForeground(textColor);
 		JPanel tipHolder = new JPanel();
-		tipHolder.setLayout(new BorderLayout(0,0));
+		tipHolder.setLayout(new BorderLayout(0, 0));
 		tipHolder.setOpaque(false);
 		tipHolder.add(tip, BorderLayout.CENTER);
-
+		
 		// buttonsHolder Panel Layout
 		buttonsHolder.add(tipHolder);
 		buttonsHolder.add(Box.createVerticalStrut(10));
@@ -362,7 +336,7 @@ public class SetUpMenu {
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setForeground(textColor);
 		title.setFont(font);
-
+		
 		// directionButton
 		directionButton.setText("Platzierungsrichtung");
 		Icon directionRight = new ImageIcon(new ImageIcon("src/res/direction_right.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
@@ -375,34 +349,33 @@ public class SetUpMenu {
 		directionButton.setMinimumSize(new Dimension(50, 50));
 		directionButton.setMaximumSize(new Dimension(50, 50));
 		directionButton.setPreferredSize(new Dimension(50, 50));
-
+		
 		mainPanel.setFocusable(true);
-		mainPanel.addKeyListener( new KeyListener() {
-
+		mainPanel.addKeyListener(new KeyListener() {
+			
 			@Override
-			public void keyTyped( KeyEvent evt ) {
+			public void keyTyped(KeyEvent evt) {
 			}
-
+			
 			@Override
-			public void keyPressed( KeyEvent evt ) {
-				if (evt.isControlDown()){
+			public void keyPressed(KeyEvent evt) {
+				if(evt.isControlDown()) {
 					direction = Direction.north;
 					directionButton.setIcon(directionDown);
 					directionButton.setBorder(null);
 				}
-
 			}
-
+			
 			@Override
-			public void keyReleased( KeyEvent evt ) {
-				if (!evt.isControlDown()){
+			public void keyReleased(KeyEvent evt) {
+				if(!evt.isControlDown()) {
 					direction = Direction.west;
 					directionButton.setIcon(directionRight);
 					directionButton.setBorder(null);
 				}
 			}
-		} );
-
+		});
+		
 		// randomButton Button Settings
 		randomButton.setText("Zufällig");
 		ImageIcon randomPutIcon = new ImageIcon(new ImageIcon("src/res/random.png").getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
@@ -431,9 +404,9 @@ public class SetUpMenu {
 		startButton.setMaximumSize(new Dimension(130, 60));
 		startButton.setPreferredSize(new Dimension(130, 60));
 		startButton.setFocusable(false);
-//		startButton.addActionListener(arg0 -> backToMenu());
-		startButton.addActionListener(arg0 -> startGame());
-
+		//		startButton.addActionListener(arg0 -> backToMenu());
+		startButton.addActionListener(arg0 -> logic.setShipsPlaced(player));
+		
 		// soundButton Button Settings
 		soundButton.setText("Lautstärke anpassen");
 		Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
@@ -466,8 +439,8 @@ public class SetUpMenu {
 			}
 		});
 	}
-
-	public void disableShipPlacement(){
+	
+	public void disableShipPlacement() {
 		elementSelected = 0;
 		fiveFieldElementCountLabel.setText(0 + "x");
 		fiveFieldElementIcon.setEnabled(false);
@@ -481,6 +454,13 @@ public class SetUpMenu {
 		twoFieldElementCountLabel.setText(0 + "x");
 		twoFieldElementIcon.setEnabled(false);
 		twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+	}
+	
+	@Override
+	public void OnStartGame() {
+		frame.remove(mainPanel);
+		GameWindow game = new GameWindow(frame, mode, logic);
+		//game.setUpGameWindow();
 	}
 }
 

@@ -5,11 +5,15 @@ import ai.Difficulty;
 import network.Network;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Die Klasse Logik steuert den kompletten Spielablauf.
  */
-public class Logic {
+public class Logic extends Thread {
+	private volatile boolean ownPlayerShipsPlaced = false;
+	private volatile boolean oppPlayerShipsPlaced = false;
 	private final int MODE;
 	/**
 	 * Referenz auf einen der beiden Spieler.
@@ -20,9 +24,13 @@ public class Logic {
 	 */
 	public Player oppPlayer;
 	private ArrayList<Ship> ships;
+	private CopyOnWriteArrayList<SetUpShipsListener> setUpShipsListeners;
+	private CopyOnWriteArrayList<GameStartsListener> gameStartsListeners;
 	
 	private Logic(int MODE) {
 		this.MODE = MODE;
+		setUpShipsListeners = new CopyOnWriteArrayList<>();
+		gameStartsListeners = new CopyOnWriteArrayList<>();
 	}
 	
 	/**
@@ -143,8 +151,48 @@ public class Logic {
 	 * Startet das Spiel.
 	 */
 	public void startGame() {
-		// grobe Implementation
-		// kannst liebend gerne anders schreiben
+		this.start();
+	}
+	
+	/**
+	 * Gibt alle Schiffe zurück, die platziert werden dürfen.
+	 *
+	 * @return Eine Liste an Schiffen, die platziert werden können.
+	 */
+	public ArrayList<Ship> getAvailableShips() {
+		return ships;
+	}
+	
+	public LocalPlayer getOwnPlayer() {
+		return (LocalPlayer) ownPlayer;
+	}
+	
+	public void registerSetupShipsListener(SetUpShipsListener listener) {
+		setUpShipsListeners.add(listener);
+	}
+	
+	public void registerGameStartsListener(GameStartsListener listener) {
+		gameStartsListeners.add(listener);
+	}
+	
+	private void notifyPlaceShips() {
+		Iterator<SetUpShipsListener> it = setUpShipsListeners.iterator();
+		while(it.hasNext()) it.next().onPlaceShips();
+	}
+	
+	private void notifyGameStarts() {
+		Iterator<GameStartsListener> it = gameStartsListeners.iterator();
+		while(it.hasNext()) it.next().OnStartGame();
+	}
+	
+	public synchronized void setShipsPlaced(Player player) {
+		if(player == ownPlayer) ownPlayerShipsPlaced = true;
+		else oppPlayerShipsPlaced = true;
+	}
+	
+	@Override
+	public void run() {
+		super.run();
 		boolean hit;
 		
 		Player currPlayer, otherPlayer;
@@ -159,8 +207,26 @@ public class Logic {
 				otherPlayer = oppPlayer;
 		}
 		
+		if(MODE != Launcher.AI_AI) notifyPlaceShips();
+		
 		currPlayer.placeShips();
+		if(currPlayer == oppPlayer) {
+			while(!oppPlayerShipsPlaced) {
+			}
+		}else {
+			while(!ownPlayerShipsPlaced) {
+			}
+		}
 		otherPlayer.placeShips();
+		if(otherPlayer == oppPlayer) {
+			while(!oppPlayerShipsPlaced) {
+			}
+		}else {
+			while(!ownPlayerShipsPlaced) {
+			}
+		}
+		notifyGameStarts();
+		
 		while(true) {
 			hit = true;
 			while(hit) {
@@ -179,18 +245,5 @@ public class Logic {
 			currPlayer = otherPlayer;
 			otherPlayer = temp;
 		}
-	}
-	
-	/**
-	 * Gibt alle Schiffe zurück, die platziert werden dürfen.
-	 *
-	 * @return Eine Liste an Schiffen, die platziert werden können.
-	 */
-	public ArrayList<Ship> getAvailableShips() {
-		return ships;
-	}
-	
-	public LocalPlayer getOwnPlayer(){
-		return (LocalPlayer) ownPlayer;
 	}
 }

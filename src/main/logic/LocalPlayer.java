@@ -6,8 +6,8 @@ import java.util.ArrayList;
  * Die Klasse LocalPlayer modelliert einen Spieler, der am selben Computer sitzt.
  */
 public abstract class LocalPlayer extends Player {
-	public Map map;
-	protected ArrayList<OnMapChangedListener> listeners;
+	protected Map map;
+	protected ArrayList<MapListener> mapListeners;
 	
 	/**
 	 * @param l "Zurück-Referenz" auf das Logik Objekt.
@@ -17,7 +17,7 @@ public abstract class LocalPlayer extends Player {
 	public LocalPlayer(Logic l, int size, String name) {
 		super(l, name);
 		map = new Map(size);
-		listeners = new ArrayList<>();
+		mapListeners = new ArrayList<>();
 	}
 	
 	/**
@@ -91,11 +91,25 @@ public abstract class LocalPlayer extends Player {
 		map.dump();
 	}
 	
-	public void registerOnMapChangedListener(OnMapChangedListener listener) {
-		listeners.add(listener);
+	public void registerOnMapChangedListener(MapListener listener) {
+		mapListeners.add(listener);
+	}
+	
+	@Override
+	public void registerGameListener(GameListener listener) {
+		super.registerGameListener(listener);
+		listener.OnMapChanged(map);
 	}
 	
 	private void notifyListeners(){
-		for(OnMapChangedListener listener : listeners) listener.OnMapChanged(map);
+		for(MapListener listener : mapListeners) listener.OnMapChanged(map);
+	}
+	
+	public boolean canShipBePlaced(Ship ship){
+		return map.canShipBePlaced(ship);
+	}
+	
+	public void placeShip(Ship ship){
+		map.placeShip(ship);
 	}
 }

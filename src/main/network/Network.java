@@ -64,6 +64,8 @@ public class Network extends Player {
 	 */
 	private int shipCount;
 	
+	//TODO set Ships placed in der Logik aufrufen
+	
 	public Network(Logic logic, String name, long id) throws IOException {
 		super(logic, name);
 		networkThread = new NetworkThread(new ServerSocket(PORT));

@@ -1,6 +1,8 @@
 package gui;
 
 import ai.Difficulty;
+import logic.GameStartsListener;
+import logic.SetUpShipsListener;
 import logic.Launcher;
 import logic.Logic;
 
@@ -8,7 +10,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
-public class MainMenu {
+public class MainMenu implements SetUpShipsListener, GameStartsListener {
 	
 	private final JFrame frame;
 	private final JPanel panel = new JPanel();
@@ -77,6 +79,8 @@ public class MainMenu {
 	public static Color backgroundColor = new Color(35, 35, 35);
 	
 	private ImageIcon themeIcon;
+	
+	private Logic logic;
 	
 	public MainMenu(JFrame frame) {
 		this.frame = frame;
@@ -170,9 +174,10 @@ public class MainMenu {
 				if(n == 0) {
 					difficulty = connect.getDifficulty();
 					panel.setVisible(false);
-					Logic logic = Launcher.startGame(Launcher.PL_AI, "PL", "AI", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", difficulty, null, 0);
-					SetUpMenu game = new SetUpMenu(frame, "pvc", logic);
-					game.checkSetUp();
+					logic = Launcher.startGame(Launcher.PL_AI, "PL", "AI", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", difficulty, null, 0);
+					logic.registerSetupShipsListener(this);
+					logic.registerGameStartsListener(this);
+					logic.startGame();
 				}
 			}
 		});
@@ -206,9 +211,10 @@ public class MainMenu {
 					role = connect.getRole();
 					panel.setVisible(false);
 					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
-					Logic logic = Launcher.startGame(mode, "PL", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, null, null, 0);
-					SetUpMenu game = new SetUpMenu(frame, "pvp", logic);
-					game.checkSetUp();
+					logic = Launcher.startGame(mode, "PL", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, null, null, 0);
+					logic.registerSetupShipsListener(this);
+					logic.registerGameStartsListener(this);
+					logic.startGame();
 				}
 			}
 		});
@@ -243,9 +249,10 @@ public class MainMenu {
 					difficulty = connect.getDifficulty();
 					panel.setVisible(false);
 					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
-					Logic logic = Launcher.startGame(mode, "AI", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, difficulty, null, 0);
-					SetUpMenu game = new SetUpMenu(frame, "cvc", logic);
-					game.checkSetUp();
+					logic = Launcher.startGame(mode, "AI", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, difficulty, null, 0);
+					logic.registerSetupShipsListener(this);
+					logic.registerGameStartsListener(this);
+					logic.startGame();
 				}
 			}
 		});
@@ -903,5 +910,18 @@ public class MainMenu {
 		threeFieldElementCountDecrease.setToolTipText("Anzahl senken: " + threeFieldElementName);
 		twoFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + twoFieldElementName);
 		twoFieldElementCountDecrease.setToolTipText("Anzahl senken: " + twoFieldElementName);
+	}
+	
+	@Override
+	public void onPlaceShips() {
+		SetUpMenu setUp = new SetUpMenu(frame, "pvc", logic);
+		setUp.setUpPlaceWindow();
+	}
+	
+	@Override
+	public void OnStartGame() {
+		//frame.remove(panel);
+		GameWindow game = new GameWindow(frame, "pvc", logic);
+		game.setUpGameWindow();
 	}
 }

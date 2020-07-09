@@ -45,6 +45,5 @@ public class Human extends LocalPlayer {
 	 */
 	@Override
 	public void placeShips() {
-		randomShipPlacment();
 	}
 }

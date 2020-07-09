@@ -39,9 +39,9 @@ public class AI extends LocalPlayer {
 	@Override
 	public void placeShips() {
 		//noinspection StatementWithEmptyBody
-		//while(!randomShipPlacment()) {
-		//}
-		randomShipPlacment();
+		while(!randomShipPlacment()) {
+		}
+		logic.setShipsPlaced(this);
 	}
 	
 	/**

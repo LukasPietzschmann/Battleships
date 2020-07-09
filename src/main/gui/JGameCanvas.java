@@ -1,9 +1,10 @@
 package gui;
 
 import logic.Direction;
+import logic.GameListener;
 import logic.Launcher;
 import logic.Map;
-import logic.OnMapChangedListener;
+import logic.MapListener;
 import logic.Ship;
 
 import java.awt.Container;
@@ -18,7 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class JGameCanvas extends JPanel implements OnMapChangedListener {
+public class JGameCanvas extends JPanel implements GameListener {
 	private static final long serialVersionUID = 1L;
 	private static final int tW = 32; // tile width
 	private static final int tH = 32; // tile height
@@ -44,7 +45,7 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 	
 	private int numberCounterHorizontal = 0;
 	private int numberCounterVertical = 0;
-
+	
 	private static Image tileset;
 	int groesse;
 	
@@ -92,7 +93,6 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 		}
 		numberCounterHorizontal = 0;
 		numberCounterVertical = 0;
-
 	}
 	
 	protected void paintComponent(Graphics g) {
@@ -135,18 +135,18 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 		int x = ship.getXPos() + 1;
 		int y = ship.getYPos() + 1;
 		for(int i = 0; i < length; i++) {
-
-			if (direction == Direction.north || direction == Direction.south){
-				if (length == 5) map[y][x] = fiveElementVertical[i];
-				if (length == 4) map[y][x] = fourElementVertical[i];
-				if (length == 3) map[y][x] = threeElementVertical[i];
-				if (length == 2) map[y][x] = twoElementVertical[i];
+			
+			if(direction == Direction.north || direction == Direction.south) {
+				if(length == 5) map[y][x] = fiveElementVertical[i];
+				if(length == 4) map[y][x] = fourElementVertical[i];
+				if(length == 3) map[y][x] = threeElementVertical[i];
+				if(length == 2) map[y][x] = twoElementVertical[i];
 			}
-			if (direction == Direction.east || direction == Direction.west){
-				if (length == 5) map[y][x] = fiveElementHorizontal[i];
-				if (length == 4) map[y][x] = fourElementHorizontal[i];
-				if (length == 3) map[y][x] = threeElementHorizontal[i];
-				if (length == 2) map[y][x] = twoElementHorizontal[i];
+			if(direction == Direction.east || direction == Direction.west) {
+				if(length == 5) map[y][x] = fiveElementHorizontal[i];
+				if(length == 4) map[y][x] = fourElementHorizontal[i];
+				if(length == 3) map[y][x] = threeElementHorizontal[i];
+				if(length == 2) map[y][x] = twoElementHorizontal[i];
 			}
 			
 			switch(ship.getDirection()) {
@@ -182,7 +182,7 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 						this.map[y + 1][x + 1] = Tile.MISS;
 						break;
 					case Map.SHIP:
-						Ship ship = map.getShip(x,y);
+						Ship ship = map.getShip(x, y);
 						if(ship.getXPos() == x && ship.getYPos() == y) placeShip(ship);
 						break;
 				}
@@ -190,11 +190,16 @@ public class JGameCanvas extends JPanel implements OnMapChangedListener {
 		}
 		repaint();
 	}
-
-	public void loadTileSet(){
+	
+	@Override
+	public void OnHit(Map map, int x, int y) {
+		//TODO impl
+	}
+	
+	public void loadTileSet() {
 		String theme = Launcher.theme;
-
-		switch(theme){
+		
+		switch(theme) {
 			case "Battleships":
 				ImageIcon tilesetIcon = new ImageIcon(new ImageIcon("src/res/tileset_battleships.png").getImage());
 				tileset = tilesetIcon.getImage();

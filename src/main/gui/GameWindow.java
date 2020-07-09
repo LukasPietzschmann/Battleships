@@ -37,9 +37,8 @@ public class GameWindow {
         this.mode = mode;
         this.logic = logic;
         this.ownPlayer = logic.getOwnPlayer();
-        ownPlayer.registerOnMapChangedListener(grid1);
+        ownPlayer.registerGameListener(grid1);
         setUpGameWindow();
-        grid1.OnMapChanged(ownPlayer.map);
     }
 
     public void setUpGameWindow(){

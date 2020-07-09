@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.ArrayList;
+
 /**
  * Die Klasse Player modelliert einen Spieler auf der höchsten Abstraktionsebene.
  */
@@ -14,6 +16,8 @@ public abstract class Player {
 	 */
 	protected String name;
 	
+	protected ArrayList<GameListener> gameListeners;
+	
 	/**
 	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
 	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
@@ -21,6 +25,11 @@ public abstract class Player {
 	public Player(Logic logic, String name) {
 		this.logic = logic;
 		this.name = name;
+		gameListeners = new ArrayList<>();
+	}
+	
+	public void registerGameListener(GameListener listener){
+		gameListeners.add(listener);
 	}
 	
 	/**
