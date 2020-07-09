@@ -240,7 +240,13 @@ public class Map {
 	public Ship getShip(int x, int y) {
 		return map[y][x].ship;
 	}
-	
+
+	/**
+	 * gibt den Status an der spezifizierten Position zurück.
+	 * @param x Die x - Koordinate des Feldes.
+	 * @param y Die y - Koordinate des Feldes.
+	 * @return Den status der in dem angegebenen Feld steht.
+	 */
 	public int getStat(int x, int y) {
 		return map[y][x].stat;
 	}
@@ -487,7 +493,9 @@ public class Map {
 			}
 		}
 	}
-	
+	/**
+	Überprüft ob das Feld in unsere Map existiert.
+	 */
 	public boolean isInMap(int x, int y) {
 		return x >= 0 && x < map.length && y >= 0 && y < map.length;
 	}

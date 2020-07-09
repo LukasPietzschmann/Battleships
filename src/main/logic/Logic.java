@@ -34,7 +34,15 @@ public class Logic {
 		this(Launcher.SG);
 		//TODO implement
 	}
-	
+
+	/**
+	 *
+	 * @param mode
+	 * @param ship2Count
+	 * @param ship3Count
+	 * @param ship4Count
+	 * @param ship5Count
+	 */
 	private Logic(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		this(mode);
 		ships = new ArrayList<>();
@@ -46,7 +54,19 @@ public class Logic {
 			}
 		}
 	}
-	
+
+	/**
+	 * Konstruktor für AI vs AI
+	 * @param nameAI1
+	 * @param nameAI2
+	 * @param difficultyAI1
+	 * @param difficultyAI2
+	 * @param size
+	 * @param ship2Count
+	 * @param ship3Count
+	 * @param ship4Count
+	 * @param ship5Count
+	 */
 	public Logic(String nameAI1, String nameAI2, Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		this(Launcher.AI_AI, ship2Count, ship3Count, ship4Count, ship5Count);
 		ownPlayer = new AI(this, size, nameAI1, difficultyAI1);
