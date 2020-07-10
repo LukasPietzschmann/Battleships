@@ -19,6 +19,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ * Die Klasse JGameCanvas modelliert ein Spielfeld, auf welchem Schiffe, Treffer und Verfehlungen angezeigt werden.
+ */
 public class JGameCanvas extends JPanel implements GameListener {
 	private static final long serialVersionUID = 1L;
 	private static final int tW = 32; // tile width
@@ -52,6 +55,9 @@ public class JGameCanvas extends JPanel implements GameListener {
 	private static Image tileset;
 	int groesse;
 
+	/**
+	 * Konstruktor, erstellt ein Spielfeld-Objekt
+	 */
 	public JGameCanvas() {
 		groesse = Launcher.gridSize + 1;
 		loadTileSet();
@@ -78,6 +84,9 @@ public class JGameCanvas extends JPanel implements GameListener {
 		this.myTurn = myTurn;
 	}
 
+	/**
+	 * Füllt die Map nur mit Koordinaten und Hintergrund-Tiles, keine Schiffe
+	 */
 	public void initialGrid() {
 		for(int i = 0; i < groesse; i++) {
 			for(int j = 0; j < groesse; j++) {
@@ -101,7 +110,12 @@ public class JGameCanvas extends JPanel implements GameListener {
 		numberCounterHorizontal = 0;
 		numberCounterVertical = 0;
 	}
-	
+
+	/**
+	 * Zeichnet das Spielfeld
+	 *
+	 * @param g
+	 */
 	protected void paintComponent(Graphics g) {
 		int w = getWidth();
 		int h = getHeight();
@@ -111,7 +125,14 @@ public class JGameCanvas extends JPanel implements GameListener {
 			}
 		}
 	}
-	
+
+	/**
+	 * Zeichnet die einzelnen Tiles des Spielfelds
+	 * @param g
+	 * @param t
+	 * @param x
+	 * @param y
+	 */
 	protected void drawTile(Graphics g, Tile t, int x, int y) {
 		// map Tile from the tileset
 		int mx = t.ordinal() % 10;
@@ -121,7 +142,12 @@ public class JGameCanvas extends JPanel implements GameListener {
 		g.drawImage(tileset, x, y, x + w / groesse, y + h / groesse,
 						mx * tW, my * tH, mx * tW + tW, my * tH + tH, this);
 	}
-	
+
+	/**
+	 * Liefert die präferrierte Größe des Spielfelds zurück
+	 *
+	 * @return {@link Dimension}
+	 */
 	public Dimension getPreferredSize() {
 		Dimension d = super.getPreferredSize();
 		Container c = getParent();
@@ -135,7 +161,12 @@ public class JGameCanvas extends JPanel implements GameListener {
 		int s = (Math.min(w, h));
 		return new Dimension(s, s);
 	}
-	
+
+	/**
+	 * Platziert ein Schiff
+	 *
+	 * @param ship
+	 */
 	public void placeShip(Ship ship) {
 		int length = ship.getSize();
 		Direction direction = ship.getDirection();
@@ -204,7 +235,10 @@ public class JGameCanvas extends JPanel implements GameListener {
 		else this.map[y + 1][x + 1] = Tile.MISS;
 		repaint();
 	}
-	
+
+	/**
+	 * Lädt das Tileset des ausgewählten Spielthemas.
+	 */
 	public void loadTileSet() {
 		String theme = Launcher.theme;
 		
@@ -219,7 +253,11 @@ public class JGameCanvas extends JPanel implements GameListener {
 				break;
 		}
 	}
-	
+
+	/**
+	 * Testklasse zur Anzeige des Spielfelds
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -1,15 +1,17 @@
 package gui;
 
 import ai.Difficulty;
-import logic.GameStartsListener;
-import logic.SetUpShipsListener;
-import logic.Launcher;
-import logic.Logic;
+import logic.*;
 
 import java.awt.*;
 
 import javax.swing.*;
 
+/**
+ * Die Klasse MainMenu bildet die Nutzeroberfläche für das Hauptmenü, in welchem der Spieler das Spielthema,
+ * die Anzahl der Schiffe und die Größe des Spielfelds auswählen kann.
+ * Hier kann der Spieler auch auswählen, welchen Spielmodus er spielen möchte.
+ */
 public class MainMenu implements SetUpShipsListener, GameStartsListener {
 	
 	private final JFrame frame;
@@ -81,18 +83,32 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 	private ImageIcon themeIcon;
 	
 	private Logic logic;
-	
+
+	/**
+	 * Konstruktor, erstellt ein MainMenu-Objekt.
+	 *
+	 * @param frame Der übergebene Frame des MainWindow.
+	 */
 	public MainMenu(JFrame frame) {
 		this.frame = frame;
 		loadThemeItems(Launcher.theme);
 	}
-	
+
+	/**
+	 * Konstruktor, erstellt ein MainMenu-Objekt.
+	 *
+	 * @param frame Der übergebene Frame des MainWindow.
+	 * @param theme Das Spielthema (Battleships, Battlecars).
+	 */
 	public MainMenu(JFrame frame, String theme) {
 		this.frame = frame;
 		Launcher.theme = theme;
 		loadThemeItems(Launcher.theme);
 	}
-	
+
+	/**
+	 * Erstellt die grafische Benutzeroberfläche für das Hauptmenü.
+	 */
 	public void setUpMenu() {
 		
 		// Panel Settings
@@ -797,7 +813,10 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		frame.getContentPane().add(panel);
 		frame.setVisible(true);
 	}
-	
+
+	/**
+	 * Wählt das aktuelle Spielthema aus.
+	 */
 	public void selectCurrentThemeButton() {
 		if(Launcher.theme.equals("Battleships")) {
 			battleshipsButton.setSelected(true);
@@ -806,7 +825,12 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 			battlecarsButton.setSelected(true);
 		}
 	}
-	
+
+	/**
+	 * Wirft eine Fehlermeldung aus.
+	 *
+	 * @param i Nummer des Fehlers (1 = Zu viele Schiffe für das ausgewählte Spielfeld, 2 = Keine Schiffe ausgewählt).
+	 */
 	public void throwErrorMessage(int i) {
 		// Too many ships for the specific grid
 		if(i == 1) {
@@ -822,7 +846,10 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 							"Fehlermeldung: Keine Schiffe ausgewählt", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
+	/**
+	 * Anzeigen einer Information über die Urheber des Spiels.
+	 */
 	public void showInfo() {
 		ImageIcon hsaalenIcon = new ImageIcon(new ImageIcon("src/res/hsaalen.png").getImage().getScaledInstance(100, 70, Image.SCALE_SMOOTH));
 		JOptionPane.showOptionDialog(panel, "Dieses Spiel wurde als "
@@ -831,7 +858,12 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 										+ "Fabian Schwarz, Lukas Pietzschmann und Vincent Ugrai",
 						"Super wichtige Information", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, hsaalenIcon, new String[] {"Wirklich toll", "Mega", "Ich bin begeistert"}, null);
 	}
-	
+
+	/**
+	 * Laden eines Spielthemas.
+	 *
+	 * @param theme Name des Spielthemas ("Battleships", "Battlecars").
+	 */
 	public void loadThemeItems(String theme) {
 		
 		if(theme.equals("Battleships")) {
@@ -876,11 +908,19 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 			themeIcon = new ImageIcon(new ImageIcon("src/res/battlecarsThemeIcon2.png").getImage());
 		}
 	}
-	
+
+	/**
+	 * Prüft, ob keine Schiffe ausgewählt sind.
+	 *
+	 *  @return {@code false}, falls Schiffe ausgewählt sind, {@code true},falls keine Schiffe ausgewählt sind.
+	 */
 	public boolean noElementsSelected() {
 		return fiveFieldElementCount + fourFieldElementCount + threeFieldElementCount + twoFieldElementCount == 0;
 	}
-	
+
+	/**
+	 * Aktualisiert die Variablen des neu ausgewählten Spielthemas.
+	 */
 	public void updateThemeItems() {
 		
 		// Update Title

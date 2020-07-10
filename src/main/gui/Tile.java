@@ -1,5 +1,8 @@
 package gui;
 
+/**
+ * Enumeration: Bezeichnungen der einzelnen Tiles im Tileset
+ */
 public enum Tile {
     // Tileset Row 1
     BACKGROUND, FIVEELEMENTONE_HORIZONTAL, FIVEELEMENTTWO_HORIZONTAL, FIVEELEMENTTHREE_HORIZONTAL,

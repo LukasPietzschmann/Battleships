@@ -13,11 +13,16 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
+/**
+ * Die Klasse MainWindow bildet das Grundgerüst für die weiteren GUI-Klassen.
+ */
 public class MainWindow {
 	private JFrame frame;
 	public static Music music;
-	
-	
+
+	/**
+	 * Erstellung des JFrames.
+	 */
 	public void setUpMainWindow(){
 		frame = new JFrame(Launcher.theme);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,7 +31,12 @@ public class MainWindow {
 		frame.setBackground(Color.DARK_GRAY);
 		createMenu();
 	}
-	
+
+	/**
+	 * Erstellung und Aufruf des Hauptmenüs.
+	 * Einbindung der Schriftart "Krungthep".
+	 * Laden der Musikdatei.
+	 */
 	public void createMenu() {
 		
 		MainMenu menu = new MainMenu(frame);

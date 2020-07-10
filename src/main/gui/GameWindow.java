@@ -10,6 +10,9 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
+ */
 public class GameWindow implements MakeMoveListener {
     private final JFrame frame;
     private final String mode;
@@ -32,7 +35,13 @@ public class GameWindow implements MakeMoveListener {
     static Color textColor = MainMenu.textColor;
     Font font = new Font("Krungthep", Font.PLAIN, 20);
 
-
+    /**
+     * Konstruktor, erstellt ein GameWindow-Objekt.
+     *
+     * @param frame Der übergebene Frame des MainWindow
+     * @param mode Der Spielmodus
+     * @param logic Rückverweis auf die Logik
+     */
     public GameWindow(JFrame frame, String mode, Logic logic){
         this.frame = frame;
         this.mode = mode;
@@ -42,6 +51,9 @@ public class GameWindow implements MakeMoveListener {
         setUpGameWindow();
     }
 
+    /**
+     * Erstellt die grafische Benutzeroberfläche für das Spielfenster.
+     */
     public void setUpGameWindow(){
 
         // mainPanel Panel Settings

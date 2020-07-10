@@ -11,6 +11,10 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Die Klasse SetUpMenu bildet die Nutzeroberfläche, auf dem der lokale Spieler seine eigenen
+ * Schiffe platzieren kann.
+ */
 public class SetUpMenu implements GameStartsListener {
 	private final JFrame frame;
 	private final String mode;
@@ -56,7 +60,14 @@ public class SetUpMenu implements GameStartsListener {
 	
 	private final Logic logic;
 	private final LocalPlayer player;
-	
+
+	/**
+	 * Konstruktor, erstellt ein SetUpMenu-Objekt in welchem der lokale Spieler seine Schiffe platzieren kann
+	 *
+	 * @param frame Der übergebene Frame des MainWindow
+	 * @param mode Der Spielmodus
+	 * @param logic Rückverweis auf die Logik
+	 */
 	public SetUpMenu(JFrame frame, String mode, Logic logic) {
 		this.frame = frame;
 		this.mode = mode;
@@ -65,13 +76,20 @@ public class SetUpMenu implements GameStartsListener {
 		player.registerOnMapChangedListener(grid);
 		logic.registerGameStartsListener(this);
 	}
-	
+
+	/**
+	 * Rücksprung ins Hauptmenü
+	 * (wird derzeit nicht genutzt)
+	 */
 	public void backToMenu() {
 		frame.remove(mainPanel);
 		MainMenu menu = new MainMenu(frame);
 		menu.setUpMenu();
 	}
-	
+
+	/**
+	 * Erstellt die grafische Benutzeroberfläche für das Set-Up-Menü
+	 */
 	public void setUpPlaceWindow() {
 		
 		// mainPanel Panel Settings
@@ -350,8 +368,8 @@ public class SetUpMenu implements GameStartsListener {
 		directionButton.setMaximumSize(new Dimension(50, 50));
 		directionButton.setPreferredSize(new Dimension(50, 50));
 		
-		mainPanel.setFocusable(true);
-		mainPanel.addKeyListener(new KeyListener() {
+		frame.setFocusable(true);
+		frame.addKeyListener(new KeyListener() {
 			
 			@Override
 			public void keyTyped(KeyEvent evt) {
@@ -405,7 +423,9 @@ public class SetUpMenu implements GameStartsListener {
 		startButton.setPreferredSize(new Dimension(130, 60));
 		startButton.setFocusable(false);
 		//		startButton.addActionListener(arg0 -> backToMenu());
+		// TODO: Muss überarbeitet werden, sorgt so für fehlerhaftes resizen in der GameWindow-Klasse
 		startButton.addActionListener(arg0 -> logic.setShipsPlaced(player));
+//		startButton.addActionListener(arg0 -> OnStartGame());
 		
 		// soundButton Button Settings
 		soundButton.setText("Lautstärke anpassen");
@@ -439,7 +459,11 @@ public class SetUpMenu implements GameStartsListener {
 			}
 		});
 	}
-	
+
+	/**
+	 * Sperrt die Möglichkeit Schiffe zu platzieren, graut die Schiffsicons aus und setzt die verbleibende
+	 * Anzahl der zu platzierenden Schiffe auf 0
+	 */
 	public void disableShipPlacement() {
 		elementSelected = 0;
 		fiveFieldElementCountLabel.setText(0 + "x");
@@ -455,12 +479,14 @@ public class SetUpMenu implements GameStartsListener {
 		twoFieldElementIcon.setEnabled(false);
 		twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
 	}
-	
+
+	/**
+	 * Startet das eigentliche Spielfenster
+	 */
 	@Override
 	public void OnStartGame() {
 		frame.remove(mainPanel);
 		GameWindow game = new GameWindow(frame, mode, logic);
-		//game.setUpGameWindow();
 	}
 }
 
