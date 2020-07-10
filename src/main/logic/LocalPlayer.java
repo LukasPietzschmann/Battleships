@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public abstract class LocalPlayer extends Player {
 	protected Map map;
 	protected ArrayList<MapListener> mapListeners;
+	protected ArrayList<MakeMoveListener> makeMoveListeners;
 	
 	/**
 	 * @param l "Zurück-Referenz" auf das Logik Objekt.
@@ -18,6 +19,7 @@ public abstract class LocalPlayer extends Player {
 		super(l, name);
 		map = new Map(size);
 		mapListeners = new ArrayList<>();
+		makeMoveListeners = new ArrayList<>();
 	}
 	
 	/**
@@ -100,11 +102,21 @@ public abstract class LocalPlayer extends Player {
 		super.registerGameListener(listener);
 		listener.OnMapChanged(map);
 	}
-	
+
+	public void registerMakeMove(MakeMoveListener listener){
+		makeMoveListeners.add(listener);
+	}
+
 	private void notifyListeners(){
 		for(MapListener listener : mapListeners) listener.OnMapChanged(map);
 	}
-	
+
+	protected void notifyMakeMove(){
+		for (MakeMoveListener makeMoveListener : makeMoveListeners) {
+			makeMoveListener.makeMove();
+		}
+	}
+
 	public boolean canShipBePlaced(Ship ship){
 		return map.canShipBePlaced(ship);
 	}

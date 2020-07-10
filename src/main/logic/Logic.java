@@ -226,7 +226,6 @@ public class Logic extends Thread {
 			}
 		}
 		notifyGameStarts();
-		ownPlayer.hit(0, 0);
 		while(true) {
 			hit = true;
 			while(hit) {
@@ -234,7 +233,7 @@ public class Logic extends Thread {
 					System.out.println(String.format("%s hat gewonnen!!", currPlayer.name));
 					return;
 				}
-				
+
 				hit = currPlayer.doWhatYouHaveToDo();
 				System.out.println(otherPlayer.name);
 				((LocalPlayer) otherPlayer).dumpMap();

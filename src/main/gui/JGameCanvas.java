@@ -24,7 +24,10 @@ public class JGameCanvas extends JPanel implements GameListener {
 	private static final int tW = 32; // tile width
 	private static final int tH = 32; // tile height
 	private final Tile[][] map;
-	
+	private boolean myTurn = false;
+
+
+
 	private static final Tile[] numbers = {Tile.N1, Tile.N2, Tile.N3, Tile.N4, Tile.N5, Tile.N6, Tile.N7, Tile.N8, Tile.N9, Tile.N10,
 					Tile.N11, Tile.N12, Tile.N13, Tile.N14, Tile.N15, Tile.N16, Tile.N17, Tile.N18, Tile.N19, Tile.N20,
 					Tile.N21, Tile.N22, Tile.N23, Tile.N24, Tile.N25, Tile.N26, Tile.N27, Tile.N28, Tile.N29, Tile.N30};
@@ -48,7 +51,7 @@ public class JGameCanvas extends JPanel implements GameListener {
 	
 	private static Image tileset;
 	int groesse;
-	
+
 	public JGameCanvas() {
 		groesse = Launcher.gridSize + 1;
 		loadTileSet();
@@ -70,7 +73,11 @@ public class JGameCanvas extends JPanel implements GameListener {
 			}
 		});
 	}
-	
+
+	public void setMyTurn(boolean myTurn) {
+		this.myTurn = myTurn;
+	}
+
 	public void initialGrid() {
 		for(int i = 0; i < groesse; i++) {
 			for(int j = 0; j < groesse; j++) {

@@ -3,13 +3,14 @@ package gui;
 import logic.Launcher;
 import logic.LocalPlayer;
 import logic.Logic;
+import logic.MakeMoveListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class GameWindow {
+public class GameWindow implements MakeMoveListener {
     private final JFrame frame;
     private final String mode;
     private Logic logic;
@@ -195,4 +196,8 @@ public class GameWindow {
 
     }
 
+    @Override
+    public void makeMove() {
+        grid1.setMyTurn(true);
+    }
 }

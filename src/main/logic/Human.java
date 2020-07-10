@@ -25,6 +25,7 @@ public class Human extends LocalPlayer {
 	 */
 	@Override
 	public boolean doWhatYouHaveToDo() {
+		notifyMakeMove();
 		int x = 0;
 		int y = 0;
 		try {
