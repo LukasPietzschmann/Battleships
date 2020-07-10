@@ -1,5 +1,5 @@
 package logic;
 
 public interface GameListener extends MapListener{
-	void OnHit(Map map, int x, int y, boolean hit);
+	void OnHit(int x, int y, boolean hit);
 }

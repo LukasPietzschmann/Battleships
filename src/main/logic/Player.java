@@ -17,6 +17,12 @@ public abstract class Player {
 	protected String name;
 	
 	protected ArrayList<GameListener> gameListeners;
+
+	protected void notifyOnHit(int x, int y, boolean hit){
+		for (GameListener g: gameListeners) {
+			g.OnHit(x, y, hit);
+		}
+	}
 	
 	/**
 	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.

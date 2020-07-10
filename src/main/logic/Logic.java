@@ -26,7 +26,7 @@ public class Logic extends Thread {
 	private ArrayList<Ship> ships;
 	private CopyOnWriteArrayList<SetUpShipsListener> setUpShipsListeners;
 	private CopyOnWriteArrayList<GameStartsListener> gameStartsListeners;
-	
+
 	private Logic(int MODE) {
 		this.MODE = MODE;
 		setUpShipsListeners = new CopyOnWriteArrayList<>();
@@ -226,7 +226,7 @@ public class Logic extends Thread {
 			}
 		}
 		notifyGameStarts();
-		
+		ownPlayer.hit(0, 0);
 		while(true) {
 			hit = true;
 			while(hit) {

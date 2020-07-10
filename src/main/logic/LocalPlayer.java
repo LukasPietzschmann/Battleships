@@ -30,7 +30,7 @@ public abstract class LocalPlayer extends Player {
 	@Override
 	public Ship hit(int x, int y) {
 		Ship hit = map.hit(x, y);
-		notifyListeners();
+		notifyOnHit(x, y, hit != null);
 		return hit;
 	}
 	

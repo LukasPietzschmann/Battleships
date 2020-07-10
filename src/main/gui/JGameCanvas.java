@@ -192,7 +192,7 @@ public class JGameCanvas extends JPanel implements GameListener {
 	}
 	
 	@Override
-	public void OnHit(Map map, int x, int y, boolean hit) {
+	public void OnHit(int x, int y, boolean hit) {
 		if(hit) this.map[y + 1][x + 1] = Tile.HIT_TRANSPARENT;
 		else this.map[y + 1][x + 1] = Tile.MISS;
 		repaint();
