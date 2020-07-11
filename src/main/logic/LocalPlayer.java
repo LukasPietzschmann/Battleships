@@ -50,7 +50,7 @@ public abstract class LocalPlayer extends Player {
 			return false;
 		}
 		
-		notifyListeners();
+		notifyOnMapChangedListeners();
 		return true;
 	}
 	
@@ -107,8 +107,12 @@ public abstract class LocalPlayer extends Player {
 		makeMoveListeners.add(listener);
 	}
 
-	private void notifyListeners(){
+	private void notifyOnMapChangedListeners(){
 		for(MapListener listener : mapListeners) listener.OnMapChanged(map);
+	}
+	
+	private void notifyOnShipPlacedListeners(Ship ship){
+		for(MapListener listener : mapListeners) listener.OnShipPlaced(ship);
 	}
 
 	protected void notifyMakeMove(){
@@ -123,6 +127,6 @@ public abstract class LocalPlayer extends Player {
 	
 	public void placeShip(Ship ship){
 		map.placeShip(ship);
-		notifyListeners();
+		notifyOnShipPlacedListeners(ship);
 	}
 }

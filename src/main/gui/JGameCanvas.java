@@ -191,6 +191,12 @@ public class JGameCanvas extends JPanel implements GameListener {
 	}
 	
 	@Override
+	public void OnShipPlaced(Ship ship) {
+		placeShip(ship);
+		repaint();
+	}
+	
+	@Override
 	public void OnMapChanged(Map map) {
 		for(int x = 0; x < map.getSize(); x++) {
 			for(int y = 0; y < map.getSize(); y++) {
@@ -220,6 +226,7 @@ public class JGameCanvas extends JPanel implements GameListener {
 		if(hit) this.map[y + 1][x + 1] = Tile.HIT_TRANSPARENT;
 		else this.map[y + 1][x + 1] = Tile.MISS;
 		repaint();
+		//repaint(100, (x + 1) * (getWidth() / groesse), (y + 1) * (getHeight() / groesse), 50, 50);
 	}
 
 	/**

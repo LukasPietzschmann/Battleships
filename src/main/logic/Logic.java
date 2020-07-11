@@ -198,17 +198,16 @@ public class Logic {
 					System.out.println(otherPlayer.name);
 					((LocalPlayer) otherPlayer).dumpMap();
 					System.out.println("\n");
+					try {
+						Thread.sleep(1000);
+					}catch(InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 				
 				Player temp = currPlayer;
 				currPlayer = otherPlayer;
 				otherPlayer = temp;
-				
-				try {
-					Thread.sleep(1000);
-				}catch(InterruptedException e) {
-					e.printStackTrace();
-				}
 			}
 		});
 		t.start();
@@ -226,6 +225,10 @@ public class Logic {
 	
 	public LocalPlayer getOwnPlayer() {
 		return (LocalPlayer) ownPlayer;
+	}
+	
+	public Player getOppPlayer(){
+		return oppPlayer;
 	}
 	
 	public void registerSetupShipsListener(SetUpShipsListener listener) {

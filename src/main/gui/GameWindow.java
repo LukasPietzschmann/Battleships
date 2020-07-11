@@ -4,6 +4,7 @@ import logic.Launcher;
 import logic.LocalPlayer;
 import logic.Logic;
 import logic.MakeMoveListener;
+import logic.Player;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -18,6 +19,7 @@ public class GameWindow implements MakeMoveListener {
     private final String mode;
     private Logic logic;
     private LocalPlayer ownPlayer;
+    private Player oppPlayer;
 
     JGameCanvas grid1 = new JGameCanvas();
     JGameCanvas grid2 = new JGameCanvas();
@@ -47,7 +49,9 @@ public class GameWindow implements MakeMoveListener {
         this.mode = mode;
         this.logic = logic;
         this.ownPlayer = logic.getOwnPlayer();
+        this.oppPlayer = logic.getOppPlayer();
         ownPlayer.registerGameListener(grid1);
+        oppPlayer.registerGameListener(grid2);
     }
 
     /**

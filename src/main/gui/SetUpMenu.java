@@ -12,10 +12,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Die Klasse SetUpMenu bildet die Nutzeroberfläche, auf dem der lokale Spieler seine eigenen
- * Schiffe platzieren kann.
+ * Die Klasse SetUpMenu bildet die Nutzeroberfläche, auf dem der lokale Spieler seine eigenen Schiffe platzieren kann.
  */
-public class SetUpMenu implements GameStartsListener {
+public class SetUpMenu implements GameStartsListener, MapListener {
 	private final JFrame frame;
 	private final String mode;
 	private final JPanel mainPanel = new JPanel();
@@ -59,7 +58,7 @@ public class SetUpMenu implements GameStartsListener {
 	
 	private final Logic logic;
 	private final LocalPlayer player;
-
+	
 	/**
 	 * Konstruktor, erstellt ein SetUpMenu-Objekt in welchem der lokale Spieler seine Schiffe platzieren kann
 	 *
@@ -74,19 +73,20 @@ public class SetUpMenu implements GameStartsListener {
 		grid = new JGameCanvas();
 		player = logic.getOwnPlayer();
 		player.registerOnMapChangedListener(grid);
+		//TODO unregister schreoben
+		player.registerOnMapChangedListener(this);
 		logic.registerGameStartsListener(this);
 	}
-
+	
 	/**
-	 * Rücksprung ins Hauptmenü
-	 * (wird derzeit nicht genutzt)
+	 * Rücksprung ins Hauptmenü (wird derzeit nicht genutzt)
 	 */
 	public void backToMenu() {
 		frame.remove(mainPanel);
 		MainMenu menu = new MainMenu(frame);
 		menu.setUpMenu();
 	}
-
+	
 	/**
 	 * Erstellt die grafische Benutzeroberfläche für das Set-Up-Menü
 	 */
@@ -121,42 +121,6 @@ public class SetUpMenu implements GameStartsListener {
 				if(player.canShipBePlaced(ship)) {
 					player.placeShip(ship);
 					//TODO das lie Logik steuern lassen
-					if(elementSelected == 5) {
-						fiveRemaining--;
-						fiveFieldElementCountLabel.setText(fiveRemaining + "x");
-						if(fiveRemaining == 0) {
-							fiveFieldElementIcon.setEnabled(false);
-							fiveFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-							elementSelected = 0;
-						}
-					}
-					if(elementSelected == 4) {
-						fourRemaining--;
-						fourFieldElementCountLabel.setText(fourRemaining + "x");
-						if(fourRemaining == 0) {
-							fourFieldElementIcon.setEnabled(false);
-							fourFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-							elementSelected = 0;
-						}
-					}
-					if(elementSelected == 3) {
-						threeRemaining--;
-						threeFieldElementCountLabel.setText(threeRemaining + "x");
-						if(threeRemaining == 0) {
-							threeFieldElementIcon.setEnabled(false);
-							threeFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-							elementSelected = 0;
-						}
-					}
-					if(elementSelected == 2) {
-						twoRemaining--;
-						twoFieldElementCountLabel.setText(twoRemaining + "x");
-						if(twoRemaining == 0) {
-							twoFieldElementIcon.setEnabled(false);
-							twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-							elementSelected = 0;
-						}
-					}
 				}
 			}
 			
@@ -452,10 +416,10 @@ public class SetUpMenu implements GameStartsListener {
 			}
 		});
 	}
-
+	
 	/**
-	 * Sperrt die Möglichkeit Schiffe zu platzieren, graut die Schiffsicons aus und setzt die verbleibende
-	 * Anzahl der zu platzierenden Schiffe auf 0
+	 * Sperrt die Möglichkeit Schiffe zu platzieren, graut die Schiffsicons aus und setzt die verbleibende Anzahl der zu
+	 * platzierenden Schiffe auf 0
 	 */
 	public void disableShipPlacement() {
 		elementSelected = 0;
@@ -472,7 +436,7 @@ public class SetUpMenu implements GameStartsListener {
 		twoFieldElementIcon.setEnabled(false);
 		twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
 	}
-
+	
 	/**
 	 * Startet das eigentliche Spielfenster
 	 */
@@ -481,6 +445,53 @@ public class SetUpMenu implements GameStartsListener {
 		frame.remove(mainPanel);
 		GameWindow game = new GameWindow(frame, mode, logic);
 		game.setUpGameWindow();
+	}
+	
+	@Override
+	public void OnMapChanged(Map map) {
+		return;
+	}
+	
+	@Override
+	public void OnShipPlaced(Ship ship) {
+		switch(ship.getSize()) {
+			case 5:
+				fiveRemaining--;
+				fiveFieldElementCountLabel.setText(fiveRemaining + "x");
+				if(fiveRemaining == 0) {
+					fiveFieldElementIcon.setEnabled(false);
+					fiveFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+					elementSelected = 0;
+				}
+				break;
+			case 4:
+				fourRemaining--;
+				fourFieldElementCountLabel.setText(fourRemaining + "x");
+				if(fourRemaining == 0) {
+					fourFieldElementIcon.setEnabled(false);
+					fourFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+					elementSelected = 0;
+				}
+				break;
+			case 3:
+				threeRemaining--;
+				threeFieldElementCountLabel.setText(threeRemaining + "x");
+				if(threeRemaining == 0) {
+					threeFieldElementIcon.setEnabled(false);
+					threeFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+					elementSelected = 0;
+				}
+				break;
+			case 2:
+				twoRemaining--;
+				twoFieldElementCountLabel.setText(twoRemaining + "x");
+				if(twoRemaining == 0) {
+					twoFieldElementIcon.setEnabled(false);
+					twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+					elementSelected = 0;
+				}
+				break;
+		}
 	}
 }
 
