@@ -28,15 +28,6 @@ public class Human extends LocalPlayer {
 		notifyMakeMove();
 		int x = 0;
 		int y = 0;
-		try {
-			BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-			System.out.print("x: ");
-			x = Integer.parseInt(bf.readLine());
-			System.out.print("y: ");
-			y = Integer.parseInt(bf.readLine());
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 		return logic.shoot(x, y, this) != null;
 	}

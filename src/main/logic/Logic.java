@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Die Klasse Logik steuert den kompletten Spielablauf.
  */
-public class Logic extends Thread {
+public class Logic {
 	private volatile boolean ownPlayerShipsPlaced = false;
 	private volatile boolean oppPlayerShipsPlaced = false;
 	private final int MODE;
@@ -151,7 +151,68 @@ public class Logic extends Thread {
 	 * Startet das Spiel.
 	 */
 	public void startGame() {
-		this.start();
+		Thread t = new Thread(() -> {
+			boolean hit;
+			
+			Player currPlayer, otherPlayer;
+			switch(MODE) {
+				case Launcher.NW_CL_AI:
+				case Launcher.PL_NW_CL:
+					currPlayer = oppPlayer;
+					otherPlayer = ownPlayer;
+					break;
+				default: //PL_AI, NW_SV_AI, PL_NW_SV
+					currPlayer = ownPlayer;
+					otherPlayer = oppPlayer;
+			}
+			if(MODE != Launcher.AI_AI) notifyPlaceShips();
+			//oppPlayerShipsPlaced = true;
+			//ownPlayerShipsPlaced = true;
+			currPlayer.placeShips();
+			if(currPlayer == oppPlayer) {
+				while(!oppPlayerShipsPlaced) {
+				}
+			}else {
+				while(!ownPlayerShipsPlaced) {
+				}
+			}
+			otherPlayer.placeShips();
+			if(otherPlayer == oppPlayer) {
+				while(!oppPlayerShipsPlaced) {
+				}
+			}else {
+				while(!ownPlayerShipsPlaced) {
+				}
+			}
+			notifyGameStarts();
+			
+			while(true) {
+				hit = true;
+				while(hit) {
+					if(!otherPlayer.isAlive()) {
+						System.out.println(String.format("%s hat gewonnen!!", currPlayer.name));
+						return;
+					}
+					
+					hit = currPlayer.doWhatYouHaveToDo();
+					System.out.println(otherPlayer.name);
+					((LocalPlayer) otherPlayer).dumpMap();
+					System.out.println("\n");
+				}
+				
+				Player temp = currPlayer;
+				currPlayer = otherPlayer;
+				otherPlayer = temp;
+				
+				try {
+					Thread.sleep(1000);
+				}catch(InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		t.start();
+		
 	}
 	
 	/**
@@ -171,8 +232,16 @@ public class Logic extends Thread {
 		setUpShipsListeners.add(listener);
 	}
 	
+	public void unregisterSetupShipsListener(SetUpShipsListener listener) {
+		setUpShipsListeners.remove(listener);
+	}
+	
 	public void registerGameStartsListener(GameStartsListener listener) {
 		gameStartsListeners.add(listener);
+	}
+	
+	public void unregisterGameStartsListener(GameStartsListener listener) {
+		gameStartsListeners.remove(listener);
 	}
 	
 	private void notifyPlaceShips() {
@@ -181,68 +250,13 @@ public class Logic extends Thread {
 	}
 	
 	private void notifyGameStarts() {
-		Iterator<GameStartsListener> it = gameStartsListeners.iterator();
-		while(it.hasNext()) it.next().OnStartGame();
+		for(GameStartsListener listener : gameStartsListeners) {
+			listener.OnStartGame();
+		}
 	}
 	
 	public synchronized void setShipsPlaced(Player player) {
 		if(player == ownPlayer) ownPlayerShipsPlaced = true;
 		else oppPlayerShipsPlaced = true;
-	}
-	
-	@Override
-	public void run() {
-		super.run();
-		boolean hit;
-		
-		Player currPlayer, otherPlayer;
-		switch(MODE) {
-			case Launcher.NW_CL_AI:
-			case Launcher.PL_NW_CL:
-				currPlayer = oppPlayer;
-				otherPlayer = ownPlayer;
-				break;
-			default: //PL_AI, NW_SV_AI, PL_NW_SV
-				currPlayer = ownPlayer;
-				otherPlayer = oppPlayer;
-		}
-		
-		if(MODE != Launcher.AI_AI) notifyPlaceShips();
-		
-		currPlayer.placeShips();
-		if(currPlayer == oppPlayer) {
-			while(!oppPlayerShipsPlaced) {
-			}
-		}else {
-			while(!ownPlayerShipsPlaced) {
-			}
-		}
-		otherPlayer.placeShips();
-		if(otherPlayer == oppPlayer) {
-			while(!oppPlayerShipsPlaced) {
-			}
-		}else {
-			while(!ownPlayerShipsPlaced) {
-			}
-		}
-		notifyGameStarts();
-		while(true) {
-			hit = true;
-			while(hit) {
-				if(!otherPlayer.isAlive()) {
-					System.out.println(String.format("%s hat gewonnen!!", currPlayer.name));
-					return;
-				}
-
-				hit = currPlayer.doWhatYouHaveToDo();
-				System.out.println(otherPlayer.name);
-				((LocalPlayer) otherPlayer).dumpMap();
-				System.out.println("\n");
-			}
-			
-			Player temp = currPlayer;
-			currPlayer = otherPlayer;
-			otherPlayer = temp;
-		}
 	}
 }

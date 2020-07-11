@@ -48,7 +48,6 @@ public class GameWindow implements MakeMoveListener {
         this.logic = logic;
         this.ownPlayer = logic.getOwnPlayer();
         ownPlayer.registerGameListener(grid1);
-        setUpGameWindow();
     }
 
     /**

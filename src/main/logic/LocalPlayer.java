@@ -123,5 +123,6 @@ public abstract class LocalPlayer extends Player {
 	
 	public void placeShip(Ship ship){
 		map.placeShip(ship);
+		notifyListeners();
 	}
 }

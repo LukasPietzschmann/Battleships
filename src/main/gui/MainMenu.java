@@ -954,13 +954,16 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 	
 	@Override
 	public void onPlaceShips() {
+		logic.unregisterGameStartsListener(this);
+		frame.remove(panel);
 		SetUpMenu setUp = new SetUpMenu(frame, "pvc", logic);
 		setUp.setUpPlaceWindow();
 	}
 	
 	@Override
 	public void OnStartGame() {
-		//frame.remove(panel);
+		logic.unregisterSetupShipsListener(this);
+		frame.remove(panel);
 		GameWindow game = new GameWindow(frame, "pvc", logic);
 		game.setUpGameWindow();
 	}

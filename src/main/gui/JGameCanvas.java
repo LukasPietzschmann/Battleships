@@ -19,34 +19,21 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- * Die Klasse JGameCanvas modelliert ein Spielfeld, auf welchem Schiffe, Treffer und Verfehlungen angezeigt werden.
- */
 public class JGameCanvas extends JPanel implements GameListener {
 	private static final long serialVersionUID = 1L;
 	private static final int tW = 32; // tile width
 	private static final int tH = 32; // tile height
 	private final Tile[][] map;
 	private boolean myTurn = false;
-
-
-
-	private static final Tile[] numbers = {Tile.N1, Tile.N2, Tile.N3, Tile.N4, Tile.N5, Tile.N6, Tile.N7, Tile.N8, Tile.N9, Tile.N10,
-					Tile.N11, Tile.N12, Tile.N13, Tile.N14, Tile.N15, Tile.N16, Tile.N17, Tile.N18, Tile.N19, Tile.N20,
-					Tile.N21, Tile.N22, Tile.N23, Tile.N24, Tile.N25, Tile.N26, Tile.N27, Tile.N28, Tile.N29, Tile.N30};
-	private static final Tile[] fiveElementHorizontal = {Tile.FIVEELEMENTONE_HORIZONTAL, Tile.FIVEELEMENTTWO_HORIZONTAL,
-					Tile.FIVEELEMENTTHREE_HORIZONTAL, Tile.FIVEELEMENTFOUR_HORIZONTAL, Tile.FIVELEMENTFIVE_HORIZONTAL};
-	private static final Tile[] fourElementHorizontal = {Tile.FOURELEMENTONE_HORIZONTAL, Tile.FOURELEMENTTWO_HORIZONTAL,
-					Tile.FOURELEMENTTHREE_HORIZONTAL, Tile.FOURELEMENTFOUR_HORIZONTAL};
-	private static final Tile[] threeElementHorizontal = {Tile.THREEELEMENTONE_HORIZONTAL, Tile.THREEELEMENTTWO_HORIZONTAL,
-					Tile.THREEELEMENTTHREE_HORIZONTAL};
+	
+	private static final Tile[] numbers = {Tile.N1, Tile.N2, Tile.N3, Tile.N4, Tile.N5, Tile.N6, Tile.N7, Tile.N8, Tile.N9, Tile.N10, Tile.N11, Tile.N12, Tile.N13, Tile.N14, Tile.N15, Tile.N16, Tile.N17, Tile.N18, Tile.N19, Tile.N20, Tile.N21, Tile.N22, Tile.N23, Tile.N24, Tile.N25, Tile.N26, Tile.N27, Tile.N28, Tile.N29, Tile.N30};
+	private static final Tile[] fiveElementHorizontal = {Tile.FIVEELEMENTONE_HORIZONTAL, Tile.FIVEELEMENTTWO_HORIZONTAL, Tile.FIVEELEMENTTHREE_HORIZONTAL, Tile.FIVEELEMENTFOUR_HORIZONTAL, Tile.FIVELEMENTFIVE_HORIZONTAL};
+	private static final Tile[] fourElementHorizontal = {Tile.FOURELEMENTONE_HORIZONTAL, Tile.FOURELEMENTTWO_HORIZONTAL, Tile.FOURELEMENTTHREE_HORIZONTAL, Tile.FOURELEMENTFOUR_HORIZONTAL};
+	private static final Tile[] threeElementHorizontal = {Tile.THREEELEMENTONE_HORIZONTAL, Tile.THREEELEMENTTWO_HORIZONTAL, Tile.THREEELEMENTTHREE_HORIZONTAL};
 	private static final Tile[] twoElementHorizontal = {Tile.TWOELEMENTONE_HORIZONTAL, Tile.TWOELEMENTTWO_HORIZONTAL};
-	private static final Tile[] fiveElementVertical = {Tile.FIVEELEMENTONE_VERTICAL, Tile.FIVEELEMENTTWO_VERTICAL,
-					Tile.FIVEELEMENTTHREE_VERTICAL, Tile.FIVEELEMENTFOUR_VERTICAL, Tile.FIVEELEMENTFIVE_VERTICAL};
-	private static final Tile[] fourElementVertical = {Tile.FOURELEMENTONE_VERTICAL, Tile.FOURELEMENTTWO_VERTICAL,
-					Tile.FOURELEMENTTHREE_VERTICAL, Tile.FOURELEMENTFOUR_VERTICAL};
-	private static final Tile[] threeElementVertical = {Tile.THREEELEMENTONE_VERTICAL, Tile.THREEELEMENTWO_VERTICAL,
-					Tile.THREEELEMENTHREE_VERTICAL};
+	private static final Tile[] fiveElementVertical = {Tile.FIVEELEMENTONE_VERTICAL, Tile.FIVEELEMENTTWO_VERTICAL, Tile.FIVEELEMENTTHREE_VERTICAL, Tile.FIVEELEMENTFOUR_VERTICAL, Tile.FIVEELEMENTFIVE_VERTICAL};
+	private static final Tile[] fourElementVertical = {Tile.FOURELEMENTONE_VERTICAL, Tile.FOURELEMENTTWO_VERTICAL, Tile.FOURELEMENTTHREE_VERTICAL, Tile.FOURELEMENTFOUR_VERTICAL};
+	private static final Tile[] threeElementVertical = {Tile.THREEELEMENTONE_VERTICAL, Tile.THREEELEMENTWO_VERTICAL, Tile.THREEELEMENTHREE_VERTICAL};
 	private static final Tile[] twoElementVertical = {Tile.TWOELEMENTONE_VERTICAL, Tile.TWOELEMENTTWO_VERTICAL};
 	
 	private int numberCounterHorizontal = 0;
@@ -139,8 +126,7 @@ public class JGameCanvas extends JPanel implements GameListener {
 		int my = t.ordinal() / 10;
 		int w = getWidth();
 		int h = getHeight();
-		g.drawImage(tileset, x, y, x + w / groesse, y + h / groesse,
-						mx * tW, my * tH, mx * tW + tW, my * tH + tH, this);
+		g.drawImage(tileset, x, y, x + w / groesse, y + h / groesse, mx * tW, my * tH, mx * tW + tW, my * tH + tH, this);
 	}
 
 	/**

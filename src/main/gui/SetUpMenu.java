@@ -20,7 +20,7 @@ public class SetUpMenu implements GameStartsListener {
 	private final String mode;
 	private final JPanel mainPanel = new JPanel();
 	private final JPanel gridHolder = new JPanel(new GridBagLayout());
-	JGameCanvas grid = new JGameCanvas();
+	JGameCanvas grid;
 	private final JPanel options = new JPanel();
 	private final JLabel title = new JLabel();
 	private final JPanel elements = new JPanel();
@@ -56,7 +56,6 @@ public class SetUpMenu implements GameStartsListener {
 	Font font = new Font("Krungthep", Font.PLAIN, 20);
 	int elementSelected;
 	Direction direction = Direction.west;
-	boolean readyToPlay = false;
 	
 	private final Logic logic;
 	private final LocalPlayer player;
@@ -72,6 +71,7 @@ public class SetUpMenu implements GameStartsListener {
 		this.frame = frame;
 		this.mode = mode;
 		this.logic = logic;
+		grid = new JGameCanvas();
 		player = logic.getOwnPlayer();
 		player.registerOnMapChangedListener(grid);
 		logic.registerGameStartsListener(this);
@@ -120,8 +120,7 @@ public class SetUpMenu implements GameStartsListener {
 				Ship ship = new Ship(xGrid, yGrid, direction, elementSelected);
 				if(player.canShipBePlaced(ship)) {
 					player.placeShip(ship);
-					grid.placeShip(ship);
-					grid.repaint();
+					//TODO das lie Logik steuern lassen
 					if(elementSelected == 5) {
 						fiveRemaining--;
 						fiveFieldElementCountLabel.setText(fiveRemaining + "x");
@@ -158,7 +157,6 @@ public class SetUpMenu implements GameStartsListener {
 							elementSelected = 0;
 						}
 					}
-					if(fiveRemaining + fourRemaining + threeRemaining + twoRemaining == 0) readyToPlay = true;
 				}
 			}
 			
@@ -407,8 +405,6 @@ public class SetUpMenu implements GameStartsListener {
 		randomButton.setPreferredSize(new Dimension(130, 60));
 		randomButton.setFocusable(false);
 		randomButton.addActionListener(a -> player.randomShipPlacment());
-		randomButton.addActionListener(a -> disableShipPlacement());
-		randomButton.addActionListener(a -> readyToPlay = true);
 		
 		// startButton Button Settings
 		startButton.setText("Start");
@@ -422,10 +418,7 @@ public class SetUpMenu implements GameStartsListener {
 		startButton.setMaximumSize(new Dimension(130, 60));
 		startButton.setPreferredSize(new Dimension(130, 60));
 		startButton.setFocusable(false);
-		//		startButton.addActionListener(arg0 -> backToMenu());
-		// TODO: Muss überarbeitet werden, sorgt so für fehlerhaftes resizen in der GameWindow-Klasse
 		startButton.addActionListener(arg0 -> logic.setShipsPlaced(player));
-//		startButton.addActionListener(arg0 -> OnStartGame());
 		
 		// soundButton Button Settings
 		soundButton.setText("Lautstärke anpassen");
@@ -487,6 +480,7 @@ public class SetUpMenu implements GameStartsListener {
 	public void OnStartGame() {
 		frame.remove(mainPanel);
 		GameWindow game = new GameWindow(frame, mode, logic);
+		game.setUpGameWindow();
 	}
 }
 
