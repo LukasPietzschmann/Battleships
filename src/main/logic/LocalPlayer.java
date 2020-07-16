@@ -51,6 +51,7 @@ public abstract class LocalPlayer extends Player {
 		}
 		
 		notifyOnMapChangedListeners();
+		notifyOnAllShipsPlacedListeners();
 		return true;
 	}
 	
@@ -113,6 +114,10 @@ public abstract class LocalPlayer extends Player {
 	
 	private void notifyOnShipPlacedListeners(Ship ship){
 		for(MapListener listener : mapListeners) listener.OnShipPlaced(ship);
+	}
+	
+	private void notifyOnAllShipsPlacedListeners(){
+		for(MapListener listener : mapListeners) listener.OnAllShipsPlaced();
 	}
 
 	protected void notifyMakeMove(){

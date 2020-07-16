@@ -197,6 +197,11 @@ public class JGameCanvas extends JPanel implements GameListener {
 	}
 	
 	@Override
+	public void OnAllShipsPlaced() {
+		return;
+	}
+	
+	@Override
 	public void OnMapChanged(Map map) {
 		for(int x = 0; x < map.getSize(); x++) {
 			for(int y = 0; y < map.getSize(); y++) {
