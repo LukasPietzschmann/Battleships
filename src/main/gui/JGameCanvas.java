@@ -45,8 +45,8 @@ public class JGameCanvas extends JPanel implements GameListener {
 	/**
 	 * Konstruktor, erstellt ein Spielfeld-Objekt
 	 */
-	public JGameCanvas() {
-		groesse = Launcher.gridSize + 1;
+	public JGameCanvas(int size) {
+		groesse = size + 1;
 		loadTileSet();
 		map = new Tile[groesse][groesse];
 		initialGrid();
@@ -262,7 +262,7 @@ public class JGameCanvas extends JPanel implements GameListener {
 		frame.setPreferredSize(new Dimension(600, 600));
 		frame.setMinimumSize(new Dimension(600, 600));
 		
-		JGameCanvas canvas = new JGameCanvas();
+		JGameCanvas canvas = new JGameCanvas(Launcher.gridSize);
 		canvas.setLayout(new GridLayout(0, 1));
 		canvas.setVisible(true);
 		

@@ -70,7 +70,7 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 		this.frame = frame;
 		this.mode = mode;
 		this.logic = logic;
-		grid = new JGameCanvas();
+		grid = new JGameCanvas(logic.getSize());
 		player = logic.getOwnPlayer();
 		player.registerOnMapChangedListener(grid);
 		//TODO unregister schreoben

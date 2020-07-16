@@ -91,7 +91,7 @@ public class Network extends Player {
 		int[] shipCount = new int[4];
 		for(int i = 0; i < logic.getAvailableShips().size(); i++)
 			shipCount[logic.getAvailableShips().get(i).getSize() - 2] += 1;
-		networkThread.sendMessage(String.format("%s %d %d %d %d %d\n", SETUP, size, shipCount[0], shipCount[1], shipCount[2], shipCount[3]));
+		networkThread.sendMessage(String.format("%s %d %d %d %d %d\n", SETUP, size, shipCount[3], shipCount[2], shipCount[1], shipCount[0]));
 	}
 	
 	/**

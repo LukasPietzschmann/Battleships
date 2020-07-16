@@ -21,8 +21,8 @@ public class GameWindow implements MakeMoveListener {
     private LocalPlayer ownPlayer;
     private Player oppPlayer;
 
-    JGameCanvas grid1 = new JGameCanvas();
-    JGameCanvas grid2 = new JGameCanvas();
+    JGameCanvas grid1;
+    JGameCanvas grid2;
     private final JPanel grid1Holder = new JPanel(new GridBagLayout());
     private final JPanel grid2Holder = new JPanel(new GridBagLayout());
     private JPanel textbarHolder = new JPanel();
@@ -50,6 +50,8 @@ public class GameWindow implements MakeMoveListener {
         this.logic = logic;
         this.ownPlayer = logic.getOwnPlayer();
         this.oppPlayer = logic.getOppPlayer();
+        grid1 = new JGameCanvas(logic.getSize());
+        grid2 = new JGameCanvas(logic.getSize());
         ownPlayer.registerGameListener(grid1);
         oppPlayer.registerGameListener(grid2);
     }

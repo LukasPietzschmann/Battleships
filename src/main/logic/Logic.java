@@ -24,6 +24,7 @@ public class Logic extends Thread {
 	 */
 	public Player oppPlayer;
 	private ArrayList<Ship> ships;
+	private int size;
 	private CopyOnWriteArrayList<SetUpShipsListener> setUpShipsListeners;
 	private CopyOnWriteArrayList<GameStartsListener> gameStartsListeners;
 
@@ -57,6 +58,7 @@ public class Logic extends Thread {
 	
 	public Logic(String nameAI1, String nameAI2, Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		this(Launcher.AI_AI, ship2Count, ship3Count, ship4Count, ship5Count);
+		this.size = size;
 		ownPlayer = new AI(this, size, nameAI1, difficultyAI1);
 		oppPlayer = new AI(this, size, nameAI2, difficultyAI2);
 	}
@@ -73,6 +75,7 @@ public class Logic extends Thread {
 		this(Launcher.NW_CL_AI);
 		oppPlayer = new Network(this, nameNW, IP);
 		ships = ((Network) oppPlayer).getShips();
+		size = ((Network) oppPlayer).getSize();
 		ownPlayer = new AI(this, ((Network) oppPlayer).getSize(), nameNW, difficulty);
 	}
 	
@@ -86,6 +89,7 @@ public class Logic extends Thread {
 	 */
 	public Logic(String nameAI, String nameNW, Difficulty difficulty, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
 		this(Launcher.NW_SV_AI, ship2Count, ship3Count, ship4Count, ship5Count);
+		this.size = size;
 		ownPlayer = new AI(this, size, nameAI, difficulty);
 		oppPlayer = new Network(this, nameNW, size);
 	}
@@ -100,6 +104,7 @@ public class Logic extends Thread {
 	 */
 	public Logic(String nameAI, String namePL, int size, Difficulty difficulty, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		this(Launcher.PL_AI, ship2Count, ship3Count, ship4Count, ship5Count);
+		this.size = size;
 		ownPlayer = new Human(this, size, namePL);
 		oppPlayer = new AI(this, size, nameAI, difficulty);
 	}
@@ -115,6 +120,7 @@ public class Logic extends Thread {
 		this(Launcher.PL_NW_CL);
 		oppPlayer = new Network(this, nameNW, IP);
 		ships = ((Network) oppPlayer).getShips();
+		size = ((Network) oppPlayer).getSize();
 		ownPlayer = new Human(this, ((Network) oppPlayer).getSize(), namePl);
 	}
 	
@@ -127,6 +133,7 @@ public class Logic extends Thread {
 	 */
 	public Logic(String namePl, String nameNW, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
 		this(Launcher.PL_NW_SV, ship2Count, ship3Count, ship4Count, ship5Count);
+		this.size = size;
 		ownPlayer = new Human(this, size, namePl);
 		oppPlayer = new Network(this, nameNW, size);
 	}
@@ -220,6 +227,10 @@ public class Logic extends Thread {
 	 */
 	public ArrayList<Ship> getAvailableShips() {
 		return ships;
+	}
+	
+	public int getSize(){
+		return size;
 	}
 	
 	public LocalPlayer getOwnPlayer() {
