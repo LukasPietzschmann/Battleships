@@ -32,9 +32,7 @@ public class Launcher {
 	 */
 	public static final int PL_NW_SV = 5;
 	public static final int AI_AI = 6;
-	
-	private static Launcher instance;
-	public static int gridSize = 10;
+	public static int gridSize = 15;
 	public static String theme = "Battleships";
 	public static String themeIdentifierPlural = "Schiffe";
 	public static String themeIdentifierSingular = "Schiff";
@@ -65,22 +63,13 @@ public class Launcher {
 		return null;
 	}
 	
-	public static Launcher getInstance() {
-		if(instance == null) return Launcher.instance = new Launcher();
-		return instance;
-	}
-	
 	public static boolean enoughShips(int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		int totalShipParts = 2*ship2Count + 3*ship3Count + 4*ship4Count + 5*ship5Count;
 		int totalGridTiles = gridSize*gridSize;
 		double fillFactor = (double)totalShipParts/(double)totalGridTiles;
 		System.out.println(fillFactor);
 		// Belegungsfaktor darf nicht größer als 25% sein
-		if (fillFactor > 0.25){
-			return false;
-		} else {
-			return true;
-		}
+		return !(fillFactor > 0.25);
 
 	}
 	

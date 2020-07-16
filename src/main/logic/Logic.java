@@ -27,7 +27,7 @@ public class Logic extends Thread {
 	private int size;
 	private CopyOnWriteArrayList<SetUpShipsListener> setUpShipsListeners;
 	private CopyOnWriteArrayList<GameStartsListener> gameStartsListeners;
-
+	
 	private Logic(int MODE) {
 		this.MODE = MODE;
 		setUpShipsListeners = new CopyOnWriteArrayList<>();
@@ -172,7 +172,7 @@ public class Logic extends Thread {
 					currPlayer = ownPlayer;
 					otherPlayer = oppPlayer;
 			}
-			if(!(MODE == Launcher.AI_AI ||MODE == Launcher.NW_SV_AI || MODE == Launcher.NW_CL_AI))  notifyPlaceShips();
+			if(!(MODE == Launcher.AI_AI || MODE == Launcher.NW_SV_AI || MODE == Launcher.NW_CL_AI)) notifyPlaceShips();
 			//oppPlayerShipsPlaced = true;
 			//ownPlayerShipsPlaced = true;
 			currPlayer.placeShips();
@@ -205,7 +205,7 @@ public class Logic extends Thread {
 					
 					hit = currPlayer.doWhatYouHaveToDo();
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(50);
 					}catch(InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -217,7 +217,6 @@ public class Logic extends Thread {
 			}
 		});
 		t.start();
-		
 	}
 	
 	/**
@@ -229,7 +228,7 @@ public class Logic extends Thread {
 		return ships;
 	}
 	
-	public int getSize(){
+	public int getSize() {
 		return size;
 	}
 	
@@ -237,7 +236,7 @@ public class Logic extends Thread {
 		return (LocalPlayer) ownPlayer;
 	}
 	
-	public Player getOppPlayer(){
+	public Player getOppPlayer() {
 		return oppPlayer;
 	}
 	
@@ -258,8 +257,7 @@ public class Logic extends Thread {
 	}
 	
 	private void notifyPlaceShips() {
-		Iterator<SetUpShipsListener> it = setUpShipsListeners.iterator();
-		while(it.hasNext()) it.next().onPlaceShips();
+		for(SetUpShipsListener listener : setUpShipsListeners) listener.onPlaceShips();
 	}
 	
 	private void notifyGameStarts() {

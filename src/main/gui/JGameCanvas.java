@@ -4,7 +4,6 @@ import logic.Direction;
 import logic.GameListener;
 import logic.Launcher;
 import logic.Map;
-import logic.MapListener;
 import logic.Ship;
 
 import java.awt.Container;
@@ -250,27 +249,5 @@ public class JGameCanvas extends JPanel implements GameListener {
 				tileset = tilesetIcon.getImage();
 				break;
 		}
-	}
-
-	/**
-	 * Testklasse zur Anzeige des Spielfelds
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setPreferredSize(new Dimension(600, 600));
-		frame.setMinimumSize(new Dimension(600, 600));
-		
-		JGameCanvas canvas = new JGameCanvas(Launcher.gridSize);
-		canvas.setLayout(new GridLayout(0, 1));
-		canvas.setVisible(true);
-		
-		frame.getContentPane().add(canvas);
-		frame.setVisible(true);
-		
-		Map map = new Map(Launcher.gridSize);
-		Ship ship = new Ship(1, 8, Direction.west, 3);
-		map.placeShip(ship);
 	}
 }

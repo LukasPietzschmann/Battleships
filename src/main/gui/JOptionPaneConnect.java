@@ -89,11 +89,5 @@ public class JOptionPaneConnect {
 	public String getRole() {
 		return role;
 	}
-	
-	public static void main(String[] args) {
-		JOptionPaneConnect connect = new JOptionPaneConnect(null);
-		connect.displayGui();
-	}
-	
 }
 

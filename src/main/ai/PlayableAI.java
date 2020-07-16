@@ -6,8 +6,6 @@ import logic.Map;
 import logic.Player;
 import logic.Ship;
 
-import java.io.IOException;
-
 public abstract class PlayableAI {
 	protected static final int NO_SHIP = 1;
 	protected static final int MABY_SHIP = 0;

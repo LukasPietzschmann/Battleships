@@ -117,10 +117,5 @@ public class JOptionPaneConnectAI {
 	public Difficulty getDifficulty() {
 		return difficulty;
 	}
-	
-	public static void main(String[] args) {
-		JOptionPaneConnectAI connect = new JOptionPaneConnectAI(null);
-		connect.displayGui();
-	}
 }
 

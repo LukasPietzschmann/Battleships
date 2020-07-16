@@ -2,7 +2,6 @@ package ai;
 
 import logic.Direction;
 import logic.Map;
-import logic.Ship;
 
 import java.util.Random;
 
