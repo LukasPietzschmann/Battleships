@@ -1,12 +1,14 @@
 package network;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class NetworkThread extends Thread {
 	private enum Type {
@@ -23,72 +25,84 @@ public class NetworkThread extends Thread {
 	public NetworkThread(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;
 		type = Type.Server;
-		recieveQueue = new ArrayBlockingQueue<>(1);
-		sendQueue = new ArrayBlockingQueue<>(1);
+		recieveQueue = new LinkedBlockingQueue<>();
+		sendQueue = new LinkedBlockingQueue<>();
+		
+		try {
+			clientSocket = serverSocket.accept();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		Thread serverSendThread = new Thread(() -> {
+			try {
+				OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
+				
+				while(true) {
+					String msg = sendQueue.take();
+					out.write(msg);
+					out.flush();
+					System.out.println("Server sent " + msg);
+				}
+			}catch(IOException | InterruptedException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		Thread serverRecieveThread = new Thread(() -> {
+			try {
+				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				
+				while(true) {
+					String msg = in.readLine();
+					recieveQueue.offer(msg);
+					System.out.println("Server recieved " + msg);
+				}
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		serverSendThread.start();
+		serverRecieveThread.start();
 	}
 	
 	public NetworkThread(Socket clientSocket) {
 		this.clientSocket = clientSocket;
 		type = Type.Client;
-		recieveQueue = new ArrayBlockingQueue<>(1);
-		sendQueue = new ArrayBlockingQueue<>(1);
-	}
-	
-	@Override
-	public void run() {
-		super.run();
+		recieveQueue = new LinkedBlockingQueue<>();
+		sendQueue = new LinkedBlockingQueue<>();
 		
-		try {
-			BufferedReader in;
-			OutputStreamWriter out;
-			if(type == Type.Server) {
-				Socket socket = serverSocket.accept();
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				out = new OutputStreamWriter(socket.getOutputStream());
+		Thread clientSendThread = new Thread(() -> {
+			try {
+				OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
+				
 				while(true) {
-					//noinspection DuplicatedCode
-					while(true) {
-						String msg = sendQueue.take();
-						if(msg == null) continue;
-						System.out.println("Server sent: Message " + msg.replace("\n", ""));
-						out.write(msg);
-						out.flush();
-						break;
-					}
-					while(true) {
-						String msg = in.readLine();
-						if(msg == null) continue;
-						System.out.println("Server recieved: Message " + msg.replace("\n", ""));
-						recieveQueue.offer(msg);
-						break;
-					}
+					String msg = sendQueue.take();
+					out.write(msg);
+					out.flush();
+					System.out.println("Client sent " + msg);
 				}
-			}else {
-				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				out = new OutputStreamWriter(clientSocket.getOutputStream());
-				while(true) {
-					while(true) {
-						String msg = in.readLine();
-						if(msg == null) continue;
-						System.out.println("Client recieved: " + msg.replace("\n", ""));
-						recieveQueue.offer(msg);
-						break;
-					}
-					//noinspection DuplicatedCode
-					while(true) {
-						String msg = sendQueue.take();
-						if(msg == null) continue;
-						System.out.println("Client sent: " + msg.replace("\n", ""));
-						out.write(msg);
-						out.flush();
-						break;
-					}
-				}
+			}catch(IOException | InterruptedException e) {
+				e.printStackTrace();
 			}
-		}catch(Exception e) {
-			System.err.println("NE Error");
-			e.printStackTrace();
-		}
+		});
+		
+		Thread clientRecieveThread = new Thread(() -> {
+			try {
+				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				
+				while(true) {
+					String msg = in.readLine();
+					recieveQueue.offer(msg);
+					System.out.println("Client recieved " + msg);
+				}
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		clientSendThread.start();
+		clientRecieveThread.start();
 	}
 	
 	public synchronized boolean sendMessage(String message) {

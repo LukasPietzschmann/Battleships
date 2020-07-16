@@ -70,7 +70,7 @@ public class Network extends Player {
 		super(logic, name);
 		networkThread = new NetworkThread(new ServerSocket(PORT));
 		networkThread.start();
-		networkThread.sendMessage(String.format("%s %d", LOAD, id));
+		networkThread.sendMessage(String.format("%s %d\n", LOAD, id));
 		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(CONFIRM)) throw new UnexpectedMessageException(m);
 	}
@@ -92,8 +92,6 @@ public class Network extends Player {
 		for(int i = 0; i < logic.getAvailableShips().size(); i++)
 			shipCount[logic.getAvailableShips().get(i).getSize() - 2] += 1;
 		networkThread.sendMessage(String.format("%s %d %d %d %d %d\n", SETUP, size, shipCount[0], shipCount[1], shipCount[2], shipCount[3]));
-		Message m = new Message(networkThread.recieveMessage());
-		if(!m.getMessageType().equals(CONFIRM)) throw new UnexpectedMessageException(m);
 	}
 	
 	/**
@@ -124,7 +122,6 @@ public class Network extends Player {
 				for(int j = 0; j < m.getArgs()[posis[i]]; j++) ships.add(new Ship(0, 0, Direction.north, i + 2));
 			}
 			shipCount = ships.size();
-			networkThread.sendMessage(String.format("%s\n", CONFIRM));
 		}else if(m.getMessageType().equals(LOAD)) {
 			//TODO implement
 		}else throw new UnexpectedMessageException(m);
@@ -185,10 +182,16 @@ public class Network extends Player {
 		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(CONFIRM))
 			throw new UnexpectedMessageException(m);
+		logic.setShipsPlaced(this);
 	}
 	
 	@Override
 	public boolean isAlive() {
 		return shipCount > 0;
+	}
+	
+	@Override
+	public void oppPlacedShips() {
+		networkThread.sendMessage(String.format("%s\n", CONFIRM));
 	}
 }

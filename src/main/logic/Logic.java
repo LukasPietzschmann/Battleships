@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Die Klasse Logik steuert den kompletten Spielablauf.
  */
-public class Logic {
+public class Logic extends Thread {
 	private volatile boolean ownPlayerShipsPlaced = false;
 	private volatile boolean oppPlayerShipsPlaced = false;
 	private final int MODE;
@@ -165,7 +165,7 @@ public class Logic {
 					currPlayer = ownPlayer;
 					otherPlayer = oppPlayer;
 			}
-			if(MODE != Launcher.AI_AI) notifyPlaceShips();
+			if(!(MODE == Launcher.AI_AI ||MODE == Launcher.NW_SV_AI || MODE == Launcher.NW_CL_AI))  notifyPlaceShips();
 			//oppPlayerShipsPlaced = true;
 			//ownPlayerShipsPlaced = true;
 			currPlayer.placeShips();
@@ -176,6 +176,7 @@ public class Logic {
 				while(!ownPlayerShipsPlaced) {
 				}
 			}
+			otherPlayer.oppPlacedShips();
 			otherPlayer.placeShips();
 			if(otherPlayer == oppPlayer) {
 				while(!oppPlayerShipsPlaced) {
@@ -184,6 +185,7 @@ public class Logic {
 				while(!ownPlayerShipsPlaced) {
 				}
 			}
+			currPlayer.oppPlacedShips();
 			notifyGameStarts();
 			
 			while(true) {
@@ -195,9 +197,6 @@ public class Logic {
 					}
 					
 					hit = currPlayer.doWhatYouHaveToDo();
-					System.out.println(otherPlayer.name);
-					((LocalPlayer) otherPlayer).dumpMap();
-					System.out.println("\n");
 					try {
 						Thread.sleep(1000);
 					}catch(InterruptedException e) {

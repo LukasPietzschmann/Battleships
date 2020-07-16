@@ -35,7 +35,7 @@ public class Map {
 	 * Die Anzahl an noch nicht zerstörten Schiffen.
 	 */
 	private int shipsNr;
-	
+
 	/**
 	 * Erstellt ein Spielfeld mit der spezifizierten Größe.
 	 *
@@ -49,7 +49,7 @@ public class Map {
 			}
 		}
 	}
-	
+
 	/**
 	 * Gibt das Spielfeld auf der Konsole aus.
 	 */
@@ -80,14 +80,14 @@ public class Map {
 			System.out.print("\n");
 		}
 	}
-	
+
 	/**
 	 * @return die Größe des Spielfelds.
 	 */
 	public int getSize() {
 		return map.length;
 	}
-	
+
 	/**
 	 * Schießt auf ein spezifiziertes Feld der Map.
 	 *
@@ -102,14 +102,14 @@ public class Map {
 		}else if(map[y][x].stat == SHIP) {
 			map[y][x].stat = SUCC_HIT;
 			map[y][x].ship.hit();
-			
+
 			if(!map[y][x].ship.isAlive()) {
 				shipsNr -= 1;
 				Ship ship = map[y][x].ship;
 				int sx, sy, start, end;
 				sx = ship.getXPos();
 				sy = ship.getYPos();
-				
+
 				switch(ship.getDirection()) {
 					case north:
 						start = sy;
@@ -209,7 +209,7 @@ public class Map {
 						break;
 				}
 			}
-			
+
 			return map[y][x].ship;
 		}else if(map[y][x].stat == SUCC_HIT) {
 			return null;
@@ -220,7 +220,7 @@ public class Map {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Gibt die Anzahl der noch nicht versenkten Schiffe zurück.
 	 *
@@ -229,7 +229,7 @@ public class Map {
 	public int shipsNr() {
 		return shipsNr;
 	}
-	
+
 	/**
 	 * Gibt das Schiff an der spezifizierten Position zurück.
 	 *
@@ -240,11 +240,11 @@ public class Map {
 	public Ship getShip(int x, int y) {
 		return map[y][x].ship;
 	}
-	
+
 	public int getStat(int x, int y) {
 		return map[y][x].stat;
 	}
-	
+
 	/**
 	 * Platziert ein Schiff auf der Karte. Es wird nicht überprüft, ob das platzieren dieses Schiffs möglich, oder erlaubt
 	 * ist. Das muss der Benutzer selbst mit {@link #canShipBePlaced(Ship)} überprüfen.
@@ -280,7 +280,7 @@ public class Map {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Entfernt ein Schiff aus der Map. Überprüft nicht, ob das Schiff tatsächlich auf der Karte vorhanden ist.
 	 *
@@ -315,7 +315,7 @@ public class Map {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Überprüft, ob das Schiff regelkonform auf dem Spielfeld platziert werden darf. Muss vor der verwendung von {@link
 	 * #placeShip(Ship)} aufgerufen werden.
@@ -327,7 +327,7 @@ public class Map {
 		int x = ship.getXPos();
 		int y = ship.getYPos();
 		int shipSize = ship.getSize();
-		
+
 		switch(ship.getDirection()) {
 			case north:
 				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y + i)|| map[y][x].stat == SHIP) return false;
@@ -470,10 +470,10 @@ public class Map {
 				}
 				break;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Setzt das Spielfeld auf den Anfangszustand zurück. (Auf jedem Feld Wasser)
 	 */
@@ -487,11 +487,11 @@ public class Map {
 			}
 		}
 	}
-	
+
 	public boolean isInMap(int x, int y) {
 		return x >= 0 && x < map.length && y >= 0 && y < map.length;
 	}
-	
+
 	/**
 	 * Nach Außen nicht sichtbare Hilfsklasse zur modellierung des Spielfelds.
 	 */
@@ -506,7 +506,7 @@ public class Map {
 		 * referenziert.
 		 */
 		private Ship ship;
-		
+
 		/**
 		 * Erstellt einen Platz, der nur Wasser enthält.
 		 */

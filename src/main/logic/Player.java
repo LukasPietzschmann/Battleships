@@ -65,4 +65,8 @@ public abstract class Player {
 	 * @return {@code true}, falls der Spieler noch "lebende" Schiffe hat. Sonst {@code false}.
 	 */
 	public abstract boolean isAlive();
+	
+	public void oppPlacedShips(){
+		return;
+	}
 }
