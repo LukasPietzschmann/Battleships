@@ -10,11 +10,13 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
  */
-public class GameWindow implements MakeMoveListener {
+public class GameWindow {
     private final JFrame frame;
     private final String mode;
     private Logic logic;
@@ -54,6 +56,7 @@ public class GameWindow implements MakeMoveListener {
         grid2 = new JGameCanvas(logic.getSize());
         ownPlayer.registerGameListener(grid1);
         oppPlayer.registerGameListener(grid2);
+        ownPlayer.registerMakeMove(grid2, grid2.getClickQueue());
     }
 
     /**
@@ -211,10 +214,5 @@ public class GameWindow implements MakeMoveListener {
         frame.pack();
 
 
-    }
-
-    @Override
-    public void makeMove() {
-        grid1.setMyTurn(true);
     }
 }

@@ -24,7 +24,13 @@ public class Human extends LocalPlayer {
 		notifyMakeMove();
 		int x = 0;
 		int y = 0;
-		
+		try {
+			int[] click = clickQueue.take();
+			x = click[0];
+			y = click[1];
+		}catch(InterruptedException e) {
+			e.printStackTrace();
+		}
 		return logic.shoot(x, y, this) != null;
 	}
 	

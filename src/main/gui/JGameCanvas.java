@@ -3,6 +3,7 @@ package gui;
 import logic.Direction;
 import logic.GameListener;
 import logic.Launcher;
+import logic.MakeMoveListener;
 import logic.Map;
 import logic.Ship;
 
@@ -13,12 +14,16 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.accessibility.AccessibleContext;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class JGameCanvas extends JPanel implements GameListener {
+public class JGameCanvas extends JPanel implements GameListener, MakeMoveListener {
 	private static final long serialVersionUID = 1L;
 	private static final int tW = 32; // tile width
 	private static final int tH = 32; // tile height
@@ -40,11 +45,14 @@ public class JGameCanvas extends JPanel implements GameListener {
 	
 	private static Image tileset;
 	int groesse;
+	
+	private BlockingQueue<int[]> clickQueue;
 
 	/**
 	 * Konstruktor, erstellt ein Spielfeld-Objekt
 	 */
 	public JGameCanvas(int size) {
+		clickQueue = new LinkedBlockingQueue<>();
 		groesse = size + 1;
 		loadTileSet();
 		map = new Tile[groesse][groesse];
@@ -64,12 +72,41 @@ public class JGameCanvas extends JPanel implements GameListener {
 				}
 			}
 		});
+		
+		addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int panelsize = getWidth();
+				double tilesize = (double) panelsize / (double) groesse;
+				int x = e.getX();
+				int y = e.getY();
+				int xGrid = (int) ((double) x / tilesize);
+				int yGrid = (int) ((double) y / tilesize);
+				if(xGrid != 0 && yGrid != 0) clickQueue.offer(new int[]{xGrid - 1, yGrid - 1});
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+			
+			}
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+			
+			}
+		});
 	}
-
-	public void setMyTurn(boolean myTurn) {
-		this.myTurn = myTurn;
-	}
-
+	
 	/**
 	 * Füllt die Map nur mit Koordinaten und Hintergrund-Tiles, keine Schiffe
 	 */
@@ -249,5 +286,19 @@ public class JGameCanvas extends JPanel implements GameListener {
 				tileset = tilesetIcon.getImage();
 				break;
 		}
+	}
+	
+	@Override
+	public void makeMove() {
+		myTurn = true;
+	}
+	
+	public BlockingQueue<int[]> getClickQueue() {
+		return clickQueue;
+	}
+	
+	@Override
+	public AccessibleContext getAccessibleContext() {
+		return super.getAccessibleContext();
 	}
 }
