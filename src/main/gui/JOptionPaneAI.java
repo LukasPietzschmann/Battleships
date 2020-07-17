@@ -59,10 +59,5 @@ public class JOptionPaneAI {
 	public Difficulty getDifficulty() {
 		return difficulty;
 	}
-	
-	public static void main(String[] args) {
-		JOptionPaneAI connect = new JOptionPaneAI(null);
-		connect.displayGui();
-	}
 }
 

@@ -10,19 +10,21 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
  */
-public class GameWindow implements MakeMoveListener {
+public class GameWindow {
     private final JFrame frame;
     private final String mode;
     private Logic logic;
     private LocalPlayer ownPlayer;
     private Player oppPlayer;
 
-    JGameCanvas grid1 = new JGameCanvas();
-    JGameCanvas grid2 = new JGameCanvas();
+    JGameCanvas grid1;
+    JGameCanvas grid2;
     private final JPanel grid1Holder = new JPanel(new GridBagLayout());
     private final JPanel grid2Holder = new JPanel(new GridBagLayout());
     private JPanel textbarHolder = new JPanel();
@@ -50,8 +52,11 @@ public class GameWindow implements MakeMoveListener {
         this.logic = logic;
         this.ownPlayer = logic.getOwnPlayer();
         this.oppPlayer = logic.getOppPlayer();
+        grid1 = new JGameCanvas(logic.getSize());
+        grid2 = new JGameCanvas(logic.getSize());
         ownPlayer.registerGameListener(grid1);
         oppPlayer.registerGameListener(grid2);
+        ownPlayer.registerMakeMove(grid2, grid2.getClickQueue());
     }
 
     /**
@@ -209,10 +214,5 @@ public class GameWindow implements MakeMoveListener {
         frame.pack();
 
 
-    }
-
-    @Override
-    public void makeMove() {
-        grid1.setMyTurn(true);
     }
 }

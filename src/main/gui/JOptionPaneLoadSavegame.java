@@ -41,11 +41,5 @@ public class JOptionPaneLoadSavegame {
 	public String getSavegameId() {
 		return textfield.getText();
 	}
-	
-	public static void main(String[] args) {
-
-		JOptionPaneLoadSavegame connect = new JOptionPaneLoadSavegame(null);
-		connect.displayGui();
-	}
 }
 

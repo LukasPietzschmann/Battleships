@@ -70,7 +70,7 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 		this.frame = frame;
 		this.mode = mode;
 		this.logic = logic;
-		grid = new JGameCanvas();
+		grid = new JGameCanvas(logic.getSize());
 		player = logic.getOwnPlayer();
 		player.registerOnMapChangedListener(grid);
 		//TODO unregister schreoben
@@ -450,6 +450,30 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 	@Override
 	public void OnMapChanged(Map map) {
 		return;
+	}
+	
+	@Override
+	public void OnAllShipsPlaced() {
+		fiveRemaining = 0;
+		fourRemaining = 0;
+		threeRemaining = 0;
+		twoRemaining = 0;
+		
+		fiveFieldElementCountLabel.setText(fiveRemaining + "x");
+		fourFieldElementCountLabel.setText(fiveRemaining + "x");
+		threeFieldElementCountLabel.setText(fiveRemaining + "x");
+		twoFieldElementCountLabel.setText(fiveRemaining + "x");
+		
+		fiveFieldElementIcon.setEnabled(false);
+		fiveFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+		fourFieldElementIcon.setEnabled(false);
+		fourFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+		threeFieldElementIcon.setEnabled(false);
+		threeFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+		twoFieldElementIcon.setEnabled(false);
+		twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
+		
+		elementSelected = 0;
 	}
 	
 	@Override

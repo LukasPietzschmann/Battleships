@@ -191,7 +191,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 					difficulty = connect.getDifficulty();
 					panel.setVisible(false);
 					//logic = Launcher.startGame(Launcher.AI_AI, "AI1", "AI2", twoFieldElementCount,threeFieldElementCount,fourFieldElementCount, fiveFieldElementCount, "", difficulty, Difficulty.medium, 0);
-					logic = Launcher.startGame(Launcher.PL_AI, "PL", "AI", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", difficulty, null, 0);
+					logic = Launcher.startGame(Launcher.PL_AI, "AI", "PL", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", difficulty, null, 0);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startGame();

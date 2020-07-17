@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Die Klasse LocalPlayer modelliert einen Spieler, der am selben Computer sitzt.
@@ -9,6 +10,7 @@ public abstract class LocalPlayer extends Player {
 	protected Map map;
 	protected ArrayList<MapListener> mapListeners;
 	protected ArrayList<MakeMoveListener> makeMoveListeners;
+	protected BlockingQueue<int[]> clickQueue;
 	
 	/**
 	 * @param l "Zurück-Referenz" auf das Logik Objekt.
@@ -51,6 +53,7 @@ public abstract class LocalPlayer extends Player {
 		}
 		
 		notifyOnMapChangedListeners();
+		notifyOnAllShipsPlacedListeners();
 		return true;
 	}
 	
@@ -103,7 +106,8 @@ public abstract class LocalPlayer extends Player {
 		listener.OnMapChanged(map);
 	}
 
-	public void registerMakeMove(MakeMoveListener listener){
+	public void registerMakeMove(MakeMoveListener listener, BlockingQueue<int[]> clickQueue){
+		this.clickQueue = clickQueue;
 		makeMoveListeners.add(listener);
 	}
 
@@ -113,6 +117,10 @@ public abstract class LocalPlayer extends Player {
 	
 	private void notifyOnShipPlacedListeners(Ship ship){
 		for(MapListener listener : mapListeners) listener.OnShipPlaced(ship);
+	}
+	
+	private void notifyOnAllShipsPlacedListeners(){
+		for(MapListener listener : mapListeners) listener.OnAllShipsPlaced();
 	}
 
 	protected void notifyMakeMove(){
