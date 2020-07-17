@@ -74,7 +74,6 @@ public class Launcher {
 		int totalShipParts = 2*ship2Count + 3*ship3Count + 4*ship4Count + 5*ship5Count;
 		int totalGridTiles = gridSize*gridSize;
 		double fillFactor = (double)totalShipParts/(double)totalGridTiles;
-		System.out.println(fillFactor);
 		// Belegungsfaktor darf nicht größer als 25% sein
 		if (fillFactor > 0.25){
 			return false;
