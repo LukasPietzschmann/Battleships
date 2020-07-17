@@ -7,6 +7,7 @@ import logic.Player;
 import logic.Ship;
 
 public abstract class PlayableAI {
+	protected static final int WAIT_TIME = 500;
 	protected static final int NO_SHIP = 1;
 	protected static final int MABY_SHIP = 0;
 	protected Player player;

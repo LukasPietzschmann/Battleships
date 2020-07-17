@@ -19,7 +19,11 @@ class EasyAI extends PlayableAI {
 	@Override
 	public boolean makeMove() {
 		Random rnd = new Random();
-		
+		try {
+			Thread.sleep(WAIT_TIME);
+		}catch(InterruptedException e) {
+			e.printStackTrace();
+		}
 		return logic.shoot(rnd.nextInt(map.getSize()), rnd.nextInt(map.getSize()), player) != null;
 	}
 }
