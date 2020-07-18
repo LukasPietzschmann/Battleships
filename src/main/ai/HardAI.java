@@ -32,7 +32,8 @@ public class HardAI extends PlayableAI {
 			do {
 				x = rnd.nextInt(map.getSize());
 				y = rnd.nextInt(map.getSize());
-			}while(x % minSize != 0 || y % minSize != 0 || enemyMap[y][x] != NOT_SHOT);
+				//TODO minsize mit einberechnen
+			}while(!isOnMinGrid(x,y) || enemyMap[y][x] != NOT_SHOT);
 			
 			enemyMap[y][x] = ALREADY_SHOT;
 			if(logic.shoot(x, y, player) == null) return false;
@@ -51,6 +52,12 @@ public class HardAI extends PlayableAI {
 		}
 		if(ship.isAlive()) currMission.wasHit(true, enemyMap);
 		else {
+			for(Ship s : ships) {
+				if(s.getSize() == ship.getSize()){
+					ships.remove(s);
+					break;
+				}
+			}
 			currMission = null;
 			genMinSize();
 		}
@@ -62,5 +69,13 @@ public class HardAI extends PlayableAI {
 		int min = Integer.MAX_VALUE;
 		for(Ship ship : ships) if(ship.getSize() < min) min = ship.getSize();
 		minSize = min;
+	}
+	
+	private boolean isOnMinGrid(int x, int y){
+		for(int i = 0; i < minSize; i++) {
+			if(y % minSize == i && x % minSize == i) return true;
+		}
+		
+		return false;
 	}
 }
