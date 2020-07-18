@@ -101,7 +101,7 @@ public class GameWindow {
         // mainPanel Layout
         mainPanel.add(textbarHolder, BorderLayout.NORTH);
         mainPanel.add(gridHolder, BorderLayout.CENTER);
-        mainPanel.add(statsOptions, BorderLayout.EAST);
+        mainPanel.add(statsOptions, BorderLayout.SOUTH);
 
         // textbar
         textbar.setText("Test Test Spielanweisung Test Test");
@@ -202,9 +202,9 @@ public class GameWindow {
         statisticsTitle.setForeground(textColor);
         statisticsTitle.setFont(font);
 
-        statsOptions.add(statisticsTitle, BorderLayout.NORTH);
-        statsOptions.add(stats, BorderLayout.CENTER);
-        statsOptions.add(options, BorderLayout.SOUTH);
+//        statsOptions.add(statisticsTitle, BorderLayout.NORTH);
+//        statsOptions.add(stats, BorderLayout.CENTER);
+        statsOptions.add(options, BorderLayout.EAST);
 
         options.add(buttonsHolder);
 
