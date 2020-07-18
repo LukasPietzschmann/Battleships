@@ -1,5 +1,6 @@
 package logic;
 
+import java.security.KeyFactory;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
@@ -34,9 +35,18 @@ public abstract class LocalPlayer extends Player {
 	@Override
 	public Ship hit(int x, int y) {
 		Ship hit = map.hit(x, y);
-		if(hit == null) notifyOnHit(x, y, false);
-		else if(!hit.isAlive()) notifyOnMapChangedListeners();
-		else notifyOnHit(x, y, true);
+		if(hit == null) {
+			notifyOnHit(x, y, false);
+			notifyOnEnemyHit(x, y,false);
+		}
+		else if(!hit.isAlive()) {
+			notifyOnMapChangedListeners();
+			notifyOnEnemyMapChangedListener();
+		}
+		else {
+			notifyOnHit(x, y, true);
+			notifyOnEnemyHit(x,y,true);
+		}
 		return hit;
 	}
 	
@@ -116,6 +126,12 @@ public abstract class LocalPlayer extends Player {
 	
 	private void notifyOnMapChangedListeners() {
 		for(MapListener listener : mapListeners) listener.OnMapChanged(map);
+	}
+	
+	private void notifyOnEnemyMapChangedListener(){
+		for(GameListener listener : enemyGameListeners) {
+			listener.OnMapChanged(map.getEnemyPerspective());
+		}
 	}
 	
 	private void notifyOnShipPlacedListeners(Ship ship) {

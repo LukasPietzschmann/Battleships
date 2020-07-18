@@ -55,8 +55,9 @@ public class GameWindow implements GameEndsListener {
         this.oppPlayer = logic.getOppPlayer();
         grid1 = new JGameCanvas(logic.getSize());
         grid2 = new JGameCanvas(logic.getSize());
+        //TODO register enemyGameListener
         ownPlayer.registerGameListener(grid1);
-        oppPlayer.registerGameListener(grid2);
+        oppPlayer.registerEnemyGameListener(grid2);
         ownPlayer.registerMakeMove(grid2, grid2.getClickQueue());
         logic.registerGameEndListener(grid2);
         logic.registerGameEndListener(this);

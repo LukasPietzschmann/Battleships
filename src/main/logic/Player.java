@@ -17,10 +17,17 @@ public abstract class Player {
 	protected String name;
 	
 	protected ArrayList<GameListener> gameListeners;
+	protected ArrayList<GameListener> enemyGameListeners;
 
 	protected void notifyOnHit(int x, int y, boolean hit){
 		for (GameListener g: gameListeners) {
 			g.OnHit(x, y, hit);
+		}
+	}
+	
+	protected void notifyOnEnemyHit(int x, int y, boolean hit){
+		for (GameListener listener: enemyGameListeners) {
+			listener.OnHit(x, y, hit);
 		}
 	}
 	
@@ -32,10 +39,15 @@ public abstract class Player {
 		this.logic = logic;
 		this.name = name;
 		gameListeners = new ArrayList<>();
+		enemyGameListeners = new ArrayList<>();
 	}
 	
 	public void registerGameListener(GameListener listener){
 		gameListeners.add(listener);
+	}
+	
+	public void registerEnemyGameListener(GameListener listener){
+		enemyGameListeners.add(listener);
 	}
 	
 	/**

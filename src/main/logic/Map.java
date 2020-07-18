@@ -47,6 +47,16 @@ public class Map {
 			}
 		}
 	}
+	
+	public Map(Map map){
+		this.shipsNr = map.shipsNr;
+		this.map = new MapTile[map.getSize()][map.getSize()];
+		for(int i = 0; i < this.map.length; i++) {
+			for(int j = 0; j < this.map.length; j++) {
+				this.map[i][j] = new MapTile(map.map[i][j]);
+			}
+		}
+	}
 
 	/**
 	 * Gibt das Spielfeld auf der Konsole aus.
@@ -489,6 +499,19 @@ public class Map {
 	public boolean isInMap(int x, int y) {
 		return x >= 0 && x < map.length && y >= 0 && y < map.length;
 	}
+	
+	public Map getEnemyPerspective(){
+		Map enemyMap = new Map(this);
+		for(int i = 0; i < enemyMap.map.length; i++) {
+			for(int j = 0; j < enemyMap.map.length; j++) {
+				if(enemyMap.map[i][j].stat == SHIP) {
+					enemyMap.map[i][j].stat = WATER;
+				}
+			}
+		}
+		
+		return enemyMap;
+	}
 
 	/**
 	 * Nach Außen nicht sichtbare Hilfsklasse zur modellierung des Spielfelds.
@@ -511,6 +534,11 @@ public class Map {
 		private MapTile() {
 			stat = WATER;
 			ship = null;
+		}
+		
+		private MapTile(MapTile tile){
+			this.stat = tile.stat;
+			this.ship = tile.ship;
 		}
 	}
 }
