@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 public class MainWindow {
 	private JFrame frame;
 	public static Music music;
+	public static Font font;
 
 	/**
 	 * Erstellung des JFrames.
@@ -55,5 +56,7 @@ public class MainWindow {
 		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 		}
+
+		font = new Font("Krungthep", Font.PLAIN, 20);
 	}
 }

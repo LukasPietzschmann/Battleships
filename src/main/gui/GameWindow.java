@@ -38,7 +38,7 @@ public class GameWindow implements GameEndsListener {
 
     static Color backgroundColor = MainMenu.backgroundColor;
     static Color textColor = MainMenu.textColor;
-    Font font = new Font("Krungthep", Font.PLAIN, 20);
+    public static Font font = new Font("Krungthep", Font.PLAIN, 20);
 
     /**
      * Konstruktor, erstellt ein GameWindow-Objekt.
@@ -212,15 +212,21 @@ public class GameWindow implements GameEndsListener {
         options.add(buttonsHolder);
 
         // frame Settings
-        frame.getContentPane().add(mainPanel);
+        frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
         frame.setVisible(true);
         frame.pack();
 
 
     }
-    
+
+
     @Override
     public void OnGameEnds(Player winningPlayer) {
-        JOptionPane.showMessageDialog(null, String.format("%s hat gewonnen", winningPlayer.getName()), "End", JOptionPane.PLAIN_MESSAGE);
+        if (winningPlayer == ownPlayer){
+            new EndWindow(0, frame);
+        } else {
+            new EndWindow(1, frame);
+        }
+//        JOptionPane.showMessageDialog(null, String.format("%s hat gewonnen", winningPlayer.getName()), "End", JOptionPane.PLAIN_MESSAGE);
     }
 }
