@@ -32,7 +32,6 @@ public class HardAI extends PlayableAI {
 			do {
 				x = rnd.nextInt(map.getSize());
 				y = rnd.nextInt(map.getSize());
-				//TODO minsize mit einberechnen
 			}while(!isOnMinGrid(x,y) || enemyMap[y][x] != NOT_SHOT);
 			
 			enemyMap[y][x] = ALREADY_SHOT;

@@ -137,6 +137,7 @@ public abstract class LocalPlayer extends Player {
 	}
 	
 	public void placeShip(Ship ship) {
+		if(!canShipBePlaced(ship)) return;
 		map.placeShip(ship);
 		notifyOnShipPlacedListeners(ship);
 	}
