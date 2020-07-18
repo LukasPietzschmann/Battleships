@@ -31,10 +31,10 @@ public class MediumAI extends PlayableAI {
 			do {
 				x = rnd.nextInt(map.getSize());
 				y = rnd.nextInt(map.getSize());
-			}while(enemyMap[y][x] == NO_SHIP);
-			
+			}while(enemyMap[y][x] != NOT_SHOT);
+			enemyMap[y][x] = ALREADY_SHOT;
 			if(logic.shoot(x, y, player) == null) return false;
-			currMission = new Mission(x, y, map);
+			currMission = new Mission(x, y, map, enemyMap);
 			return true;
 		}
 		
@@ -42,12 +42,12 @@ public class MediumAI extends PlayableAI {
 		y = currMission.getNextY();
 		
 		Ship ship = logic.shoot(x, y, player);
+		enemyMap[y][x] = ALREADY_SHOT;
 		if(ship == null) {
-			currMission.wasHit(false);
+			currMission.wasHit(false, enemyMap);
 			return false;
 		}
-		enemyMap[y][x] = NO_SHIP;
-		if(ship.isAlive()) currMission.wasHit(true);
+		if(ship.isAlive()) currMission.wasHit(true, enemyMap);
 		else currMission = null;
 		
 		return true;

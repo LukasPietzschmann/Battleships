@@ -32,23 +32,24 @@ public class HardAI extends PlayableAI {
 			do {
 				x = rnd.nextInt(map.getSize());
 				y = rnd.nextInt(map.getSize());
-			}while(x % minSize != 0 || y % minSize != 0 || enemyMap[y][x] != MABY_SHIP);
+			}while(x % minSize != 0 || y % minSize != 0 || enemyMap[y][x] != NOT_SHOT);
 			
+			enemyMap[y][x] = ALREADY_SHOT;
 			if(logic.shoot(x, y, player) == null) return false;
-			currMission = new Mission(x, y, map);
+			currMission = new Mission(x, y, map, enemyMap);
 			return true;
 		}
 		
 		x = currMission.getNextX();
 		y = currMission.getNextY();
 		
+		enemyMap[y][x] = ALREADY_SHOT;
 		Ship ship = logic.shoot(x, y, player);
 		if(ship == null) {
-			currMission.wasHit(false);
+			currMission.wasHit(false, enemyMap);
 			return false;
 		}
-		enemyMap[y][x] = NO_SHIP;
-		if(ship.isAlive()) currMission.wasHit(true);
+		if(ship.isAlive()) currMission.wasHit(true, enemyMap);
 		else {
 			currMission = null;
 			genMinSize();
