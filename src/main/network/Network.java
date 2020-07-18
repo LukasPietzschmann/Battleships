@@ -162,6 +162,7 @@ public class Network extends Player {
 	
 	@Override
 	public Ship hit(int x, int y) {
+		//TODO notify hit
 		networkThread.sendMessage(String.format("%s %d %d\n", SHOOT, y, x));
 		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(ANSWER))

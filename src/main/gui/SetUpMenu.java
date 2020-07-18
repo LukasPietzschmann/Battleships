@@ -117,11 +117,7 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 				int y = e.getY();
 				int xGrid = (int) ((double) x / tilesize) - 1;
 				int yGrid = (int) ((double) y / tilesize) - 1;
-				Ship ship = new Ship(xGrid, yGrid, direction, elementSelected);
-				if(player.canShipBePlaced(ship)) {
-					player.placeShip(ship);
-					//TODO das lie Logik steuern lassen
-				}
+				player.placeShip(new Ship(xGrid, yGrid, direction, elementSelected));
 			}
 			
 			@Override

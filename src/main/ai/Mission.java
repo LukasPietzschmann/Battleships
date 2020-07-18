@@ -22,7 +22,7 @@ public class Mission {
 	private Direction unsureDir;
 	private Map map;
 	
-	public Mission(int startX, int startY, Map map) {
+	public Mission(int startX, int startY, Map map, int[][] enemyMap) {
 		this.startX = startX;
 		this.startY = startY;
 		lastXHit = startX;
@@ -31,15 +31,15 @@ public class Mission {
 		this.map = map;
 		
 		state = State.firstHit;
-		getNextPoint(true);
+		getNextPoint(true, enemyMap);
 	}
 	
-	private boolean getNextPoint(boolean hit) {
+	private boolean getNextPoint(boolean hit, int[][] enemyMap) {
 		if(state == State.firstHit) {
 			Random rnd = new Random();
 			do {
 				unsureDir = Direction.values()[rnd.nextInt(Direction.values().length)];
-			}while(!isValidDirection(unsureDir, startX, startY));
+			}while(!isValidDirection(unsureDir, startX, startY, enemyMap));
 			nextX = getXInDirection(unsureDir, startX);
 			nextY = getYInDirection(unsureDir, startY);
 			lastXHit = nextX;
@@ -48,7 +48,7 @@ public class Mission {
 		}
 		if(state == State.someHits) {
 			if(hit) {
-				if(isValidDirection(lastHitDir, lastXHit, lastYHit)) {
+				if(isValidDirection(lastHitDir, lastXHit, lastYHit, enemyMap)) {
 					nextX = getXInDirection(lastHitDir, lastXHit);
 					nextY = getYInDirection(lastHitDir, lastYHit);
 					lastXHit = nextX;
@@ -56,7 +56,7 @@ public class Mission {
 					return true;
 				}else {
 					unsureDir = mirrorDirection(lastHitDir);
-					if(isValidDirection(unsureDir, startX, startY)) {
+					if(isValidDirection(unsureDir, startX, startY, enemyMap)) {
 						nextX = getXInDirection(unsureDir, startX);
 						nextY = getYInDirection(unsureDir, startY);
 						lastXHit = nextX;
@@ -66,7 +66,7 @@ public class Mission {
 				}
 			}else {
 				unsureDir = mirrorDirection(lastHitDir);
-				if(isValidDirection(unsureDir, startX, startY)) {
+				if(isValidDirection(unsureDir, startX, startY, enemyMap)) {
 					nextX = getXInDirection(unsureDir, startX);
 					nextY = getYInDirection(unsureDir, startY);
 					lastXHit = nextX;
@@ -79,8 +79,10 @@ public class Mission {
 		return false;
 	}
 	
-	private boolean isValidDirection(Direction dir, int x, int y) {
-		return map.isInMap(getXInDirection(dir, x), getYInDirection(dir, y));
+	private boolean isValidDirection(Direction dir, int x, int y, int[][] enemyMap) {
+		int newX = getXInDirection(dir, x);
+		int newY = getYInDirection(dir, y);
+		return map.isInMap(newX, newY) && enemyMap[newY][newX] == PlayableAI.NOT_SHOT;
 	}
 	
 	private int getXInDirection(Direction dir, int x) {
@@ -128,7 +130,7 @@ public class Mission {
 		return nextY;
 	}
 	
-	public void wasHit(boolean hit) {
+	public void wasHit(boolean hit, int[][] enemyMap) {
 		if(hit && unsureDir != null) {
 			lastHitDir = unsureDir;
 			unsureDir = null;
@@ -136,6 +138,6 @@ public class Mission {
 		if(state == State.firstHit && hit) {
 			state = State.someHits;
 		}
-		getNextPoint(hit);
+		getNextPoint(hit, enemyMap);
 	}
 }

@@ -7,9 +7,9 @@ import logic.Player;
 import logic.Ship;
 
 public abstract class PlayableAI {
-	protected static final int WAIT_TIME = 500;
-	protected static final int NO_SHIP = 1;
-	protected static final int MABY_SHIP = 0;
+	protected static final int WAIT_TIME = 20;
+	protected static final int ALREADY_SHOT = 1;
+	protected static final int NOT_SHOT = 0;
 	protected Player player;
 	protected Logic logic;
 	protected Map map;
@@ -31,7 +31,7 @@ public abstract class PlayableAI {
 	
 	public PlayableAI(Player player, Logic logic, Map map) {
 		enemyMap = new int[map.getSize()][map.getSize()];
-		for(int i = 0; i < map.getSize(); i++) for(int j = 0; j < map.getSize(); j++) enemyMap[i][j] = MABY_SHIP;
+		for(int i = 0; i < map.getSize(); i++) for(int j = 0; j < map.getSize(); j++) enemyMap[i][j] = NOT_SHOT;
 		this.player = player;
 		this.logic = logic;
 		this.map = map;
