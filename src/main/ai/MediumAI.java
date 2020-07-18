@@ -20,6 +20,11 @@ public class MediumAI extends PlayableAI {
 	 */
 	@Override
 	protected boolean makeMove() {
+		try {
+			Thread.sleep(WAIT_TIME);
+		}catch(InterruptedException e) {
+			e.printStackTrace();
+		}
 		int x, y;
 		if(currMission == null) {
 			Random rnd = new Random();

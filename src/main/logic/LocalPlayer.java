@@ -107,7 +107,7 @@ public abstract class LocalPlayer extends Player {
 	}
 
 	public void registerMakeMove(MakeMoveListener listener, BlockingQueue<int[]> clickQueue){
-		this.clickQueue = clickQueue;
+		if(clickQueue != null) this.clickQueue = clickQueue;
 		makeMoveListeners.add(listener);
 	}
 

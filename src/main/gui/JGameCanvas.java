@@ -82,7 +82,13 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 				int y = e.getY();
 				int xGrid = (int) ((double) x / tilesize);
 				int yGrid = (int) ((double) y / tilesize);
-				if(xGrid != 0 && yGrid != 0) clickQueue.offer(new int[]{xGrid - 1, yGrid - 1});
+				if(xGrid != 0 && yGrid != 0 && myTurn) {
+					System.out.println("Jawollek");
+					clickQueue.offer(new int[] {xGrid - 1, yGrid - 1});
+					myTurn = false;
+				}else{
+					System.out.println("nope");
+				}
 			}
 			
 			@Override

@@ -21,13 +21,18 @@ public class HardAI extends PlayableAI {
 	//TODO Rand um versunkene Schiffe platzieren und berücksichtigen
 	@Override
 	protected boolean makeMove() {
+		try {
+			Thread.sleep(WAIT_TIME);
+		}catch(InterruptedException e) {
+			e.printStackTrace();
+		}
 		int x, y;
 		if(currMission == null) {
 			Random rnd = new Random();
 			do {
 				x = rnd.nextInt(map.getSize());
 				y = rnd.nextInt(map.getSize());
-			}while(x % minSize == 0 && y % minSize == 0 && enemyMap[y][x] == NO_SHIP);
+			}while(x % minSize != 0 || y % minSize != 0 || enemyMap[y][x] != MABY_SHIP);
 			
 			if(logic.shoot(x, y, player) == null) return false;
 			currMission = new Mission(x, y, map);

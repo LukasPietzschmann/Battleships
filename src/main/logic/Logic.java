@@ -204,11 +204,6 @@ public class Logic extends Thread {
 					}
 					
 					hit = currPlayer.doWhatYouHaveToDo();
-					try {
-						Thread.sleep(50);
-					}catch(InterruptedException e) {
-						e.printStackTrace();
-					}
 				}
 				
 				Player temp = currPlayer;
