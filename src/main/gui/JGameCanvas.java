@@ -1,11 +1,6 @@
 package gui;
 
-import logic.Direction;
-import logic.GameListener;
-import logic.Launcher;
-import logic.MakeMoveListener;
-import logic.Map;
-import logic.Ship;
+import logic.*;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -23,7 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class JGameCanvas extends JPanel implements GameListener, MakeMoveListener {
+public class JGameCanvas extends JPanel implements GameListener, MakeMoveListener, GameEndsListener {
 	private static final long serialVersionUID = 1L;
 	private static final int tW = 32; // tile width
 	private static final int tH = 32; // tile height
@@ -261,7 +256,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 						if(ship.getXPos() == x && ship.getYPos() == y) placeShip(ship);
 						break;
 					case Map.DEFINITELY_NO_SHIP:
-						this.map[y + 1][x + 1] = Tile.GREY;
+						this.map[y + 1][x + 1] = Tile.DEFINITELY_NO_SHIP;
 						break;
 				}
 			}
@@ -307,5 +302,10 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	@Override
 	public AccessibleContext getAccessibleContext() {
 		return super.getAccessibleContext();
+	}
+	
+	@Override
+	public void OnGameEnds(Player winningPlayer) {
+		myTurn = false;
 	}
 }
