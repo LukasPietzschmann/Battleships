@@ -153,7 +153,6 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		title.add(themeTitle);
 		title.add(Box.createHorizontalStrut(10));
 		title.add(Box.createHorizontalGlue());
-		
 		themeIconTitle.add(themeIconPanel, BorderLayout.CENTER);
 		themeIconTitle.add(title, BorderLayout.NORTH);
 		themeIconTitle.add(Box.createHorizontalStrut(2000), BorderLayout.SOUTH);
@@ -858,7 +857,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 										+ "Teil eines Programmierpraktikums\n"
 										+ "an der Hochschule Aalen geschrieben von:\n\n"
 										+ "Fabian Schwarz, Lukas Pietzschmann und Vincent Ugrai",
-						"Super wichtige Information", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, hsaalenIcon, new String[] {"Wirklich toll", "Mega", "Ich bin begeistert"}, null);
+						"About", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, hsaalenIcon,new String[] {}, null);
 	}
 
 	/**
