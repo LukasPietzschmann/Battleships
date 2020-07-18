@@ -200,7 +200,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		
 		// Player vs. Player Button
 		JButton pvpButton = new JButton("Spieler vs. 'Netzwerk'");
-		ImageIcon pvpIcon = new ImageIcon(new ImageIcon("src/res/playerVsPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+		ImageIcon pvpIcon = new ImageIcon(new ImageIcon("src/res/playerVsComputerOrPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		pvpButton.setIcon(pvpIcon);
 		pvpButton.setHorizontalAlignment(SwingConstants.LEFT);
 		pvpButton.setBorder(null);
@@ -237,7 +237,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		
 		// Computer vs. Computer Button
 		JButton cvcButton = new JButton("Computer vs. Computer");
-		ImageIcon cvcIcon = new ImageIcon(new ImageIcon("src/res/computerVsComputer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+		ImageIcon cvcIcon = new ImageIcon(new ImageIcon("src/res/computerVsComputerOrPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		cvcButton.setIcon(cvcIcon);
 		cvcButton.setHorizontalAlignment(SwingConstants.LEFT);
 		cvcButton.setBorder(null);

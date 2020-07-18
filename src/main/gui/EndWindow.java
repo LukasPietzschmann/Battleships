@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class EndWindow {
     JFrame frame;
-    JDialog winDialog = new JDialog();
+    JDialog dialog = new JDialog();
     JPanel mainPanel = new JPanel();
     JPanel rightPanel = new JPanel();
 
@@ -30,12 +30,12 @@ public class EndWindow {
 
     private void setUpMainWindow(){
 
-        winDialog.setSize(500, 300);
-        winDialog.setResizable(false);
-        winDialog.getContentPane().setBackground(MainMenu.backgroundColor);
-        winDialog.setUndecorated(true);
-        winDialog.setLocationRelativeTo(frame);
-        winDialog.getRootPane().
+        dialog.setSize(500, 300);
+        dialog.setResizable(false);
+        dialog.getContentPane().setBackground(MainMenu.backgroundColor);
+        dialog.setUndecorated(true);
+        dialog.setLocationRelativeTo(frame);
+        dialog.getRootPane().
                 setBorder(BorderFactory.createLineBorder(MainMenu.textColor, 2, true));
 
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
@@ -70,14 +70,14 @@ public class EndWindow {
         rightPanel.add(button);
 
 
-        winDialog.add(mainPanel);
-        winDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-        winDialog.setVisible(true);
+        dialog.add(mainPanel);
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        dialog.setVisible(true);
     }
 
     private void backToMenu(){
         frame.dispose();
-        winDialog.dispose();
+        dialog.dispose();
         MainWindow.music.stopMusic();
         Launcher.soundPlaying = false;
         Launcher.main(null);
