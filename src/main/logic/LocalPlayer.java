@@ -34,7 +34,9 @@ public abstract class LocalPlayer extends Player {
 	@Override
 	public Ship hit(int x, int y) {
 		Ship hit = map.hit(x, y);
-		notifyOnHit(x, y, hit != null);
+		if(hit == null) notifyOnHit(x, y, false);
+		else if(!hit.isAlive()) notifyOnMapChangedListeners();
+		else notifyOnHit(x, y, true);
 		return hit;
 	}
 	
@@ -103,37 +105,38 @@ public abstract class LocalPlayer extends Player {
 	@Override
 	public void registerGameListener(GameListener listener) {
 		super.registerGameListener(listener);
-		listener.OnMapChanged(map);
+		registerOnMapChangedListener(listener);
+		notifyOnMapChangedListeners();
 	}
-
-	public void registerMakeMove(MakeMoveListener listener, BlockingQueue<int[]> clickQueue){
+	
+	public void registerMakeMove(MakeMoveListener listener, BlockingQueue<int[]> clickQueue) {
 		if(clickQueue != null) this.clickQueue = clickQueue;
 		makeMoveListeners.add(listener);
 	}
-
-	private void notifyOnMapChangedListeners(){
+	
+	private void notifyOnMapChangedListeners() {
 		for(MapListener listener : mapListeners) listener.OnMapChanged(map);
 	}
 	
-	private void notifyOnShipPlacedListeners(Ship ship){
+	private void notifyOnShipPlacedListeners(Ship ship) {
 		for(MapListener listener : mapListeners) listener.OnShipPlaced(ship);
 	}
 	
-	private void notifyOnAllShipsPlacedListeners(){
+	private void notifyOnAllShipsPlacedListeners() {
 		for(MapListener listener : mapListeners) listener.OnAllShipsPlaced();
 	}
-
-	protected void notifyMakeMove(){
-		for (MakeMoveListener makeMoveListener : makeMoveListeners) {
+	
+	protected void notifyMakeMove() {
+		for(MakeMoveListener makeMoveListener : makeMoveListeners) {
 			makeMoveListener.makeMove();
 		}
 	}
-
-	public boolean canShipBePlaced(Ship ship){
+	
+	public boolean canShipBePlaced(Ship ship) {
 		return map.canShipBePlaced(ship);
 	}
 	
-	public void placeShip(Ship ship){
+	public void placeShip(Ship ship) {
 		map.placeShip(ship);
 		notifyOnShipPlacedListeners(ship);
 	}

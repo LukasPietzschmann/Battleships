@@ -1,11 +1,6 @@
 package gui;
 
-import logic.Direction;
-import logic.GameListener;
-import logic.Launcher;
-import logic.MakeMoveListener;
-import logic.Map;
-import logic.Ship;
+import logic.*;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -23,7 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class JGameCanvas extends JPanel implements GameListener, MakeMoveListener {
+public class JGameCanvas extends JPanel implements GameListener, MakeMoveListener, GameEndsListener {
 	private static final long serialVersionUID = 1L;
 	private static final int tW = 32; // tile width
 	private static final int tH = 32; // tile height
@@ -47,7 +42,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	int groesse;
 	
 	private BlockingQueue<int[]> clickQueue;
-
+	
 	/**
 	 * Konstruktor, erstellt ein Spielfeld-Objekt
 	 */
@@ -83,11 +78,8 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 				int xGrid = (int) ((double) x / tilesize);
 				int yGrid = (int) ((double) y / tilesize);
 				if(xGrid != 0 && yGrid != 0 && myTurn) {
-					System.out.println("Jawollek");
 					clickQueue.offer(new int[] {xGrid - 1, yGrid - 1});
 					myTurn = false;
-				}else{
-					System.out.println("nope");
 				}
 			}
 			
@@ -139,7 +131,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 		numberCounterHorizontal = 0;
 		numberCounterVertical = 0;
 	}
-
+	
 	/**
 	 * Zeichnet das Spielfeld
 	 *
@@ -154,9 +146,10 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 			}
 		}
 	}
-
+	
 	/**
 	 * Zeichnet die einzelnen Tiles des Spielfelds
+	 *
 	 * @param g
 	 * @param t
 	 * @param x
@@ -170,7 +163,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 		int h = getHeight();
 		g.drawImage(tileset, x, y, x + w / groesse, y + h / groesse, mx * tW, my * tH, mx * tW + tW, my * tH + tH, this);
 	}
-
+	
 	/**
 	 * Liefert die präferrierte Größe des Spielfelds zurück
 	 *
@@ -189,7 +182,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 		int s = (Math.min(w, h));
 		return new Dimension(s, s);
 	}
-
+	
 	/**
 	 * Platziert ein Schiff
 	 *
@@ -262,6 +255,9 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 						Ship ship = map.getShip(x, y);
 						if(ship.getXPos() == x && ship.getYPos() == y) placeShip(ship);
 						break;
+					case Map.DEFINITELY_NO_SHIP:
+						this.map[y + 1][x + 1] = Tile.DEFINITELY_NO_SHIP;
+						break;
 				}
 			}
 		}
@@ -275,7 +271,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 		repaint();
 		//repaint(100, (x + 1) * (getWidth() / groesse), (y + 1) * (getHeight() / groesse), 50, 50);
 	}
-
+	
 	/**
 	 * Lädt das Tileset des ausgewählten Spielthemas.
 	 */
@@ -306,5 +302,10 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	@Override
 	public AccessibleContext getAccessibleContext() {
 		return super.getAccessibleContext();
+	}
+	
+	@Override
+	public void OnGameEnds(Player winningPlayer) {
+		myTurn = false;
 	}
 }

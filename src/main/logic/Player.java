@@ -69,4 +69,8 @@ public abstract class Player {
 	public void oppPlacedShips(){
 		return;
 	}
+	
+	public String getName(){
+		return name;
+	}
 }

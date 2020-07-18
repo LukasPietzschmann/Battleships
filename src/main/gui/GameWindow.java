@@ -1,5 +1,6 @@
 package gui;
 
+import logic.GameEndsListener;
 import logic.Launcher;
 import logic.LocalPlayer;
 import logic.Logic;
@@ -16,7 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
  */
-public class GameWindow {
+public class GameWindow implements GameEndsListener {
     private final JFrame frame;
     private final String mode;
     private Logic logic;
@@ -57,6 +58,8 @@ public class GameWindow {
         ownPlayer.registerGameListener(grid1);
         oppPlayer.registerGameListener(grid2);
         ownPlayer.registerMakeMove(grid2, grid2.getClickQueue());
+        logic.registerGameEndListener(grid2);
+        logic.registerGameEndListener(this);
     }
 
     /**
@@ -214,5 +217,10 @@ public class GameWindow {
         frame.pack();
 
 
+    }
+    
+    @Override
+    public void OnGameEnds(Player winningPlayer) {
+        JOptionPane.showMessageDialog(null, String.format("%s hat gewonnen", winningPlayer.getName()), "End", JOptionPane.PLAIN_MESSAGE);
     }
 }

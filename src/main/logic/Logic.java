@@ -27,11 +27,13 @@ public class Logic extends Thread {
 	private int size;
 	private CopyOnWriteArrayList<SetUpShipsListener> setUpShipsListeners;
 	private CopyOnWriteArrayList<GameStartsListener> gameStartsListeners;
+	private CopyOnWriteArrayList<GameEndsListener> gameEndsListeners;
 	
 	private Logic(int MODE) {
 		this.MODE = MODE;
 		setUpShipsListeners = new CopyOnWriteArrayList<>();
 		gameStartsListeners = new CopyOnWriteArrayList<>();
+		gameEndsListeners = new CopyOnWriteArrayList<>();
 	}
 	
 	/**
@@ -200,6 +202,7 @@ public class Logic extends Thread {
 				while(hit) {
 					if(!otherPlayer.isAlive()) {
 						System.out.println(String.format("%s hat gewonnen!!", currPlayer.name));
+						notifyGameEndsListener(currPlayer);
 						return;
 					}
 					
@@ -251,6 +254,10 @@ public class Logic extends Thread {
 		gameStartsListeners.remove(listener);
 	}
 	
+	public void registerGameEndListener(GameEndsListener listener){
+		gameEndsListeners.add(listener);
+	}
+	
 	private void notifyPlaceShips() {
 		for(SetUpShipsListener listener : setUpShipsListeners) listener.onPlaceShips();
 	}
@@ -258,6 +265,12 @@ public class Logic extends Thread {
 	private void notifyGameStarts() {
 		for(GameStartsListener listener : gameStartsListeners) {
 			listener.OnStartGame();
+		}
+	}
+	
+	private void notifyGameEndsListener(Player winningPlayer){
+		for(GameEndsListener listener : gameEndsListeners) {
+			listener.OnGameEnds(winningPlayer);
 		}
 	}
 	
