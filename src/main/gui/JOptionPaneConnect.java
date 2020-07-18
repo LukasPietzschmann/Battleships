@@ -40,7 +40,7 @@ public class JOptionPaneConnect {
 			role = "server";
 			textfield.setEnabled(false);
 			ip.setEnabled(false);
-			textfield.setText("192.168.21.2");
+			textfield.setText("127.0.0.1");
 			panel.validate();
 			panel.repaint();
 		});
@@ -58,7 +58,7 @@ public class JOptionPaneConnect {
 		connectGroup.add(serverButton);
 		connectGroup.add(clientButton);
 		ip = new JLabel("IP-Adresse");
-		textfield = new JTextField("192.168.21.2");
+		textfield = new JTextField("127.0.0.1");
 		textfield.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (textfield.isEnabled()) textfield.setText("");

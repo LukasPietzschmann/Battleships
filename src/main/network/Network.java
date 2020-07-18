@@ -64,8 +64,6 @@ public class Network extends Player {
 	 */
 	private int shipCount;
 	
-	//TODO set Ships placed in der Logik aufrufen
-	
 	public Network(Logic logic, String name, long id) throws IOException {
 		super(logic, name);
 		networkThread = new NetworkThread(new ServerSocket(PORT));
@@ -162,7 +160,6 @@ public class Network extends Player {
 	
 	@Override
 	public Ship hit(int x, int y) {
-		//TODO notify hit
 		networkThread.sendMessage(String.format("%s %d %d\n", SHOOT, y, x));
 		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(ANSWER))
@@ -171,10 +168,16 @@ public class Network extends Player {
 		// wenn hier false dann pass senden
 		int answ = m.getArgs()[Message.ANSWER_POS];
 		if(answ == 0) {
+			notifyOnHit(x,y,false);
 			networkThread.sendMessage(String.format("%s\n", PASS));
 			return null;
 		}
-		if(answ == 1) return Ship.defaultShip(x, y);
+		if(answ == 1) {
+			notifyOnHit(x,y,true);
+			return Ship.defaultShip(x, y);
+		}
+		//TODO notifyOnMapChange
+		notifyOnHit(x,y,true);
 		return Ship.defaultSunkenShip(x, y);
 	}
 	
