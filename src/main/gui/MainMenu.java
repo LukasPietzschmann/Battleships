@@ -835,7 +835,8 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 	public void throwErrorMessage(int i) {
 		// Too many ships for the specific grid
 		if(i == 1) {
-			JOptionPane.showMessageDialog(panel, "Zu viele " + Launcher.themeIdentifierPlural + " für das gewählte Spielfeld.\nBelegungsfaktor darf höchstens" +
+			JOptionPane.showMessageDialog(panel, "Zu viele " + Launcher.themeIdentifierPlural + " für das gewählte Spielfeld.\nBelegungsfaktor beträgt " +
+							Launcher.getFillFactor(fiveFieldElementCount, fourFieldElementCount, threeFieldElementCount, twoFieldElementCount) + "%, darf aber höchstens" +
 							" 25% betragen.\nAnzahl der " + Launcher.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
 							"Fehlermeldung: Zu viele " + Launcher.themeIdentifierPlural + "für das Spielfeld", JOptionPane.ERROR_MESSAGE);
 			return;
