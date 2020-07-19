@@ -15,9 +15,10 @@ import javax.swing.*;
 public class MainMenu implements SetUpShipsListener, GameStartsListener {
 	
 	private final JFrame frame;
+	JLayeredPane layeredPane = new JLayeredPane();
+	JLabel backgroundPanel = new JLabel();
 	private final JPanel panel = new JPanel();
 	private final JPanel themeIconTitle = new JPanel();
-	private JPanel themeIconPanel = new JPanel();
 	private final JPanel modes = new JPanel();
 	private final JPanel title = new JPanel();
 	JLabel themeTitle = new JLabel();
@@ -80,7 +81,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 	public static Color textColor = Color.LIGHT_GRAY;
 	public static Color backgroundColor = new Color(35, 35, 35);
 	
-	private ImageIcon themeIcon;
+	private ImageIcon themeBackground;
 	
 	private Logic logic;
 
@@ -113,9 +114,11 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		
 		// Panel Settings
 		panel.setLayout(new BorderLayout());
-		panel.setOpaque(true);
-		panel.setBackground(backgroundColor);
+		panel.setOpaque(false);
+//		panel.setBackground(backgroundColor);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 10, 30, 60));
+		panel.setSize(1130, 700);
+		panel.setLocation(0,0);
 		
 		// Panel Layout
 		panel.add(modes, BorderLayout.SOUTH);
@@ -126,18 +129,6 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		themeIconTitle.setLayout(new BorderLayout());
 		themeIconTitle.setOpaque(false);
 		
-		// themeIcon JPanel
-		themeIconPanel = new JPanel() {
-			private static final long serialVersionUID = 1L;
-			
-			protected void paintComponent(Graphics g) {
-				Image themeImage = themeIcon.getImage();
-				super.paintComponent(g);
-				g.drawImage(themeImage, 0, 0, getWidth(), getHeight(), this);
-			}
-		};
-		themeIconPanel.setOpaque(false);
-		
 		// Title Settings
 		title.setOpaque(false);
 		
@@ -147,13 +138,14 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		themeTitle.setText(Launcher.theme);
 		themeTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 		themeTitle.setForeground(textColor);
+		themeTitle.setBackground(new Color(35,35,35,180));
+		themeTitle.setOpaque(true);
 		
 		// Title Layout
 		title.add(Box.createHorizontalGlue());
 		title.add(themeTitle);
 		title.add(Box.createHorizontalStrut(10));
 		title.add(Box.createHorizontalGlue());
-		themeIconTitle.add(themeIconPanel, BorderLayout.CENTER);
 		themeIconTitle.add(title, BorderLayout.NORTH);
 		themeIconTitle.add(Box.createHorizontalStrut(2000), BorderLayout.SOUTH);
 		
@@ -189,6 +181,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 				if(n == 0) {
 					difficulty = connect.getDifficulty();
 					panel.setVisible(false);
+					layeredPane.setVisible(false);
 					//logic = Launcher.startGame(Launcher.AI_AI, "AI1", "AI2", twoFieldElementCount,threeFieldElementCount,fourFieldElementCount, fiveFieldElementCount, "", difficulty, Difficulty.medium, 0);
 					logic = Launcher.startGame(Launcher.PL_AI, "AI", "PL", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", difficulty, null, 0);
 					logic.registerSetupShipsListener(this);
@@ -226,6 +219,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 					clientIP = connect.getIP();
 					role = connect.getRole();
 					panel.setVisible(false);
+					layeredPane.setVisible(false);
 					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
 					logic = Launcher.startGame(mode, "PL", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, null, null, 0);
 					logic.registerSetupShipsListener(this);
@@ -264,6 +258,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 					role = connect.getRole();
 					difficulty = connect.getDifficulty();
 					panel.setVisible(false);
+					layeredPane.setVisible(false);
 					int mode = role.equals("server") ? Launcher.NW_SV_AI : Launcher.NW_CL_AI;
 					logic = Launcher.startGame(mode, "AI", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, difficulty, null, 0);
 					logic.registerSetupShipsListener(this);
@@ -733,6 +728,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		gridSlider.addChangeListener(event -> {
 			Launcher.gridSize = gridSlider.getValue();
 			gridText.setText("Feldgröße: " + gridSlider.getValue() + "*" + gridSlider.getValue());
+
 		});
 		
 		// Counters Layout
@@ -770,6 +766,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		themesHeading.setForeground(textColor);
 		
 		battleshipsButton.setPreferredSize(new Dimension(210, 30));
+		battleshipsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		battleshipsButton.setFont(themesFont);
 		battleshipsButton.setContentAreaFilled(false);
 		battleshipsButton.setForeground(textColor);
@@ -784,6 +781,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 			counters.setVisible(true);
 		});
 		battlecarsButton.setPreferredSize(new Dimension(210, 30));
+		battlecarsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		battlecarsButton.setFont(themesFont);
 		battlecarsButton.setContentAreaFilled(false);
 		battlecarsButton.setForeground(textColor);
@@ -808,9 +806,21 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		themes.add(battleshipsButton);
 		themes.add(battlecarsButton);
 		themes.add(Box.createVerticalGlue());
-		
+
+		// Background Panel
+//		JLabel backgroundPanel = new JLabel();
+		backgroundPanel.setSize(1130, 700);
+		backgroundPanel.setIcon(themeBackground);
+		backgroundPanel.setLocation(0, 0);
+
+		// LayeredPane Layout
+		layeredPane.add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);
+		layeredPane.add(panel, JLayeredPane.POPUP_LAYER);
+
 		// Frame Settings
-		frame.getContentPane().add(panel);
+		frame.getContentPane().add(layeredPane);
+		frame.setSize(1130, 728);
+		frame.setResizable(false);
 		frame.setVisible(true);
 	}
 
@@ -884,8 +894,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/destroyer.png").getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
 			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/submarine.png").getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
 			
-			themeIcon = new ImageIcon(new ImageIcon("src/res/battleshipsThemeIcon.png").getImage());
-			//			themeIcon = new ImageIcon(new ImageIcon("src/res/battleshipsThemeIcon2.png").getImage());
+			themeBackground = new ImageIcon(new ImageIcon("src/res/MB_Battleships.jpg").getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH));
 			
 		}
 		
@@ -906,7 +915,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/sportscar.png").getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
 			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/kombi.png").getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
 			
-			themeIcon = new ImageIcon(new ImageIcon("src/res/battlecarsThemeIcon2.png").getImage());
+			themeBackground = new ImageIcon(new ImageIcon("src/res/MB_Battlecars.jpg").getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH));
 		}
 	}
 
@@ -927,9 +936,8 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		// Update Title
 		themeTitle.setText(Launcher.theme);
 		
-		// Update ThemeIcon
-		themeIconPanel.repaint();
-		themeIconPanel.revalidate();
+		// Update ThemeBackground
+		backgroundPanel.setIcon(themeBackground);
 		
 		// Update Icons
 		fiveFieldElementIcon.setIcon(fiveFieldElementIconFromSide);
@@ -951,6 +959,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		threeFieldElementCountDecrease.setToolTipText("Anzahl senken: " + threeFieldElementName);
 		twoFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + twoFieldElementName);
 		twoFieldElementCountDecrease.setToolTipText("Anzahl senken: " + twoFieldElementName);
+
 	}
 	
 	@Override

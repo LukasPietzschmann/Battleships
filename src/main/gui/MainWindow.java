@@ -27,8 +27,8 @@ public class MainWindow {
 	public void setUpMainWindow(){
 		frame = new JFrame(Launcher.theme);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setPreferredSize(new Dimension(1130, 700));
-		frame.setMinimumSize(new Dimension(1130, 700));
+		frame.setPreferredSize(new Dimension(1130, 728));
+		frame.setMinimumSize(new Dimension(1130, 728));
 		frame.setBackground(Color.DARK_GRAY);
 		createMenu();
 	}

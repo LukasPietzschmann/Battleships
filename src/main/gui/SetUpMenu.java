@@ -68,6 +68,7 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 	 */
 	public SetUpMenu(JFrame frame, String mode, Logic logic) {
 		this.frame = frame;
+		this.frame.setResizable(true);
 		this.mode = mode;
 		this.logic = logic;
 		grid = new JGameCanvas(logic.getSize());
