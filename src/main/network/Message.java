@@ -1,5 +1,7 @@
 package network;
 
+import java.util.Locale;
+
 import static network.Network.*;
 
 public class Message {
@@ -18,7 +20,7 @@ public class Message {
 	public Message(String message) throws UnknownMessageException {
 		String[] splitted = message.split(" ");
 		String msgType = splitted[0];
-		
+		msgType.toUpperCase(Locale.ROOT);
 		if(msgType.contains(SHOOT)) {
 			type = SHOOT;
 			args = new int[2];
