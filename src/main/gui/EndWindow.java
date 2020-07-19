@@ -35,6 +35,7 @@ public class EndWindow {
         dialog.getContentPane().setBackground(MainMenu.backgroundColor);
         dialog.setUndecorated(true);
         dialog.setLocationRelativeTo(frame);
+        dialog.setAlwaysOnTop(true);
         dialog.getRootPane().
                 setBorder(BorderFactory.createLineBorder(MainMenu.textColor, 2, true));
 
