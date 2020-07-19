@@ -4,15 +4,12 @@ import logic.GameEndsListener;
 import logic.Launcher;
 import logic.LocalPlayer;
 import logic.Logic;
-import logic.MakeMoveListener;
 import logic.Player;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
@@ -20,19 +17,20 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class GameWindow implements GameEndsListener {
     private final JFrame frame;
     private final String mode;
-    private Logic logic;
-    private LocalPlayer ownPlayer;
-    private Player oppPlayer;
+    private final Logic logic;
+    private final LocalPlayer ownPlayer;
+    private final Player oppPlayer;
 
     JGameCanvas grid1;
     JGameCanvas grid2;
+    JPanel gridHolder = new JPanel();
     private final JPanel grid1Holder = new JPanel(new GridBagLayout());
     private final JPanel grid2Holder = new JPanel(new GridBagLayout());
-    private JPanel textbarHolder = new JPanel();
-    private JLabel textbar = new JLabel();
-    private JPanel statsOptions = new JPanel();
-    private JPanel stats = new JPanel();
-    private JPanel options = new JPanel();
+    private final JPanel textbarHolder = new JPanel();
+    private final JLabel textbar = new JLabel();
+    private final JPanel statsOptions = new JPanel();
+    private final JPanel stats = new JPanel();
+    private final JPanel options = new JPanel();
 
     JPanel mainPanel = new JPanel();
 
@@ -92,7 +90,6 @@ public class GameWindow implements GameEndsListener {
         grid2Holder.add(grid2);
 
         // gridHolder
-        JPanel gridHolder = new JPanel();
         gridHolder.setLayout(new BoxLayout(gridHolder, BoxLayout.X_AXIS));
         gridHolder.setOpaque(false);
 
@@ -220,14 +217,19 @@ public class GameWindow implements GameEndsListener {
 
     }
 
+    public void backToMenu(){
+        mainPanel.remove(gridHolder);
+        frame.remove(mainPanel);
+        MainMenu menu = new MainMenu(frame);
+        menu.setUpMenu();
+    }
 
     @Override
     public void OnGameEnds(Player winningPlayer) {
         if (winningPlayer == ownPlayer){
-            new EndWindow(0, frame);
+            new EndWindow(0, frame, this).setUpMainWindow();
         } else {
-            new EndWindow(1, frame);
+            new EndWindow(1, frame, this).setUpMainWindow();
         }
-//        JOptionPane.showMessageDialog(null, String.format("%s hat gewonnen", winningPlayer.getName()), "End", JOptionPane.PLAIN_MESSAGE);
     }
 }

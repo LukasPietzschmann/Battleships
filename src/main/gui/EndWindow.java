@@ -1,11 +1,11 @@
 package gui;
 
-import logic.Launcher;
 import javax.swing.*;
 import java.awt.*;
 
 public class EndWindow {
     JFrame frame;
+    GameWindow gw;
     JDialog dialog = new JDialog();
     JPanel mainPanel = new JPanel();
     JPanel rightPanel = new JPanel();
@@ -13,8 +13,9 @@ public class EndWindow {
     ImageIcon icon = new ImageIcon();
     JLabel message = new JLabel();
 
-    EndWindow(int result, JFrame frame){
+    EndWindow(int result, JFrame frame, GameWindow gw){
         this.frame = frame;
+        this.gw = gw;
         switch (result) {
             case (0):
                 icon = new ImageIcon(new ImageIcon("src/res/win.png").getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH));
@@ -25,10 +26,9 @@ public class EndWindow {
                 message.setText("<html>Schade! <p/>Du hast verloren!</html>");
                 break;
         }
-        setUpMainWindow();
     }
 
-    private void setUpMainWindow(){
+    public void setUpMainWindow(){
 
         dialog.setSize(500, 300);
         dialog.setResizable(false);
@@ -64,24 +64,18 @@ public class EndWindow {
         button.setBorder(null);
         button.setToolTipText("Zurück zum Hauptmenü");
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button.addActionListener(arg0 -> backToMenu());
+        button.addActionListener(arg0 -> {
+            dialog.dispose();
+            gw.backToMenu();
+        });
 
         rightPanel.add(message);
         rightPanel.add(Box.createVerticalStrut(20));
         rightPanel.add(button);
 
-
         dialog.add(mainPanel);
         dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         dialog.setVisible(true);
-    }
-
-    private void backToMenu(){
-        frame.dispose();
-        dialog.dispose();
-        MainWindow.music.stopMusic();
-        Launcher.soundPlaying = false;
-        Launcher.main(null);
     }
 
 }
