@@ -389,7 +389,7 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 		}else {
 			soundButton.setIcon(soundOffIcon);
 		}
-		//		soundButton.setHorizontalAlignment(SwingConstants.LEFT);
+		soundButton.setHorizontalAlignment(SwingConstants.LEFT);
 		soundButton.setBorder(null);
 		soundButton.setContentAreaFilled(false);
 		soundButton.setToolTipText("Lautstärke anpassen");

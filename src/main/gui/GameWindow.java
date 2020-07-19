@@ -212,9 +212,6 @@ public class GameWindow implements GameEndsListener {
         // frame Settings
         frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
         frame.setVisible(true);
-        frame.pack();
-
-
     }
 
     public void backToMenu(){
