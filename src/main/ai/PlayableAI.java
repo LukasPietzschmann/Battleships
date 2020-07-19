@@ -6,8 +6,9 @@ import logic.Map;
 import logic.Player;
 import logic.Ship;
 
+//TODO in medium und hart while schleife nur size * size oft ausprobieren dann zufällig
 public abstract class PlayableAI {
-	protected static final int WAIT_TIME = 20;
+	protected static final int WAIT_TIME = 100;
 	protected static final int ALREADY_SHOT = 1;
 	protected static final int NOT_SHOT = 0;
 	protected Player player;

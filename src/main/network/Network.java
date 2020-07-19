@@ -1,7 +1,9 @@
 package network;
 
 import logic.Direction;
+import logic.GameListener;
 import logic.Logic;
+import logic.Map;
 import logic.Player;
 import logic.Ship;
 
@@ -64,6 +66,8 @@ public class Network extends Player {
 	 */
 	private int shipCount;
 	
+	private Map map;
+	
 	public Network(Logic logic, String name, long id) throws IOException {
 		super(logic, name);
 		networkThread = new NetworkThread(new ServerSocket(PORT));
@@ -83,6 +87,7 @@ public class Network extends Player {
 	 */
 	public Network(Logic logic, String name, int size) throws IOException {
 		super(logic, name);
+		map = new Map(size);
 		networkThread = new NetworkThread(new ServerSocket(PORT));
 		networkThread.start();
 		shipCount = logic.getAvailableShips().size();
@@ -113,6 +118,7 @@ public class Network extends Player {
 		
 		if(m.getMessageType().equals(SETUP)) {
 			size = m.getArgs()[Message.SIZE_POS];
+			map = new Map(size);
 			
 			ships = new ArrayList<>();
 			int[] posis = new int[] {Message.SHIPS2_POS, Message.SHIPS3_POS, Message.SHIPS4_POS, Message.SHIPS5_POS};
@@ -168,16 +174,26 @@ public class Network extends Player {
 		// wenn hier false dann pass senden
 		int answ = m.getArgs()[Message.ANSWER_POS];
 		if(answ == 0) {
+			map.setHit(x,y,false);
 			notifyOnHit(x,y,false);
+			notifyOnEnemyHit(x,y,false);
 			networkThread.sendMessage(String.format("%s\n", PASS));
 			return null;
 		}
 		if(answ == 1) {
+			map.setHit(x,y,true);
 			notifyOnHit(x,y,true);
+			notifyOnEnemyHit(x,y,true);
 			return Ship.defaultShip(x, y);
 		}
 		//TODO notifyOnMapChange
+		map.setHit(x,y,true);
+		map.surroundShip(x,y);
 		notifyOnHit(x,y,true);
+		notifyOnEnemyHit(x,y,true);
+		for(GameListener listener : enemyGameListeners) {
+			listener.OnMapChanged(map);
+		}
 		shipCount -= 1;
 		return Ship.defaultSunkenShip(x, y);
 	}

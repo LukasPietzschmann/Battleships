@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.ArrayList;
+
 /**
  * Die Klasse Map modelliert das Spielfeld eines {@link LocalPlayer}.
  */
@@ -113,109 +115,7 @@ public class Map {
 
 			if(!map[y][x].ship.isAlive()) {
 				shipsNr -= 1;
-				Ship ship = map[y][x].ship;
-				int sx, sy, start, end;
-				sx = ship.getXPos();
-				sy = ship.getYPos();
-
-				switch(ship.getDirection()) {
-					case north:
-						start = sy;
-						end = (sy + ship.getSize()) - 1;
-						//Kucken on oben Platz ist
-						if(start > 0) {
-							start -= 1;
-							map[start][sx].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob unten Platz ist
-						if(end < map.length - 1) {
-							end += 1;
-							map[end][sx].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob links Platz ist
-						if(sx > 0) {
-							//Links setzen, wenn oben Platz ist, auch oben linkts, wenn unten Platz ist auch unten links
-							for(int i = start; i <= end; i++) map[i][sx - 1].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob rechts Platz ist
-						if(sx < map.length - 1) {
-							//Rechts setzen, wenn oben Platz ist, auch oben rechts, wenn unten Platz ist auch unten rechts
-							for(int i = start; i <= end; i++) map[i][sx + 1].stat = DEFINITELY_NO_SHIP;
-						}
-						break;
-					case south:
-						start = sy;
-						end = (sy - ship.getSize()) + 1;
-						//Kucken on oben Platz ist
-						if(start < map.length - 1) {
-							start += 1;
-							map[start][sx].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob unten Platz ist
-						if(end > 0) {
-							end -= 1;
-							map[end][sx].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob links Platz ist
-						if(sx > 0) {
-							//Links setzen, wenn oben Platz ist, auch oben linkts, wenn unten Platz ist auch unten links
-							for(int i = start; i >= end; i--) map[i][sx - 1].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob rechts Platz ist
-						if(sx < map.length - 1) {
-							//Rechts setzen, wenn oben Platz ist, auch oben rechts, wenn unten Platz ist auch unten rechts
-							for(int i = start; i >= end; i--) map[i][sx + 1].stat = DEFINITELY_NO_SHIP;
-						}
-						break;
-					case west:
-						start = sx;
-						end = (sx + ship.getSize()) - 1;
-						//Kucken ob links Platz ist und links mittig setzen
-						if(start > 0) {
-							start -= 1;
-							map[sy][start].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob rechts Platz ist und rechts mittig setzen
-						if(end < map.length - 1) {
-							end += 1;
-							map[sy][end].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob oben Platz ist
-						if(sy > 0) {
-							//Oben setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
-							for(int i = start; i <= end; i++) map[sy - 1][i].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob unten Platz ist
-						if(sy < map.length - 1) {
-							//Unten setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
-							for(int i = start; i <= end; i++) map[sy + 1][i].stat = DEFINITELY_NO_SHIP;
-						}
-						break;
-					case east:
-						start = sx;
-						end = (sx - ship.getSize()) + 1;
-						//Kucken ob rechts Platz ist und links mittig setzen
-						if(start < map.length - 1) {
-							start += 1;
-							map[sy][start].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob links Platz ist und rechts mittig setzen
-						if(end > 0) {
-							end -= 1;
-							map[sy][end].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob oben Platz ist
-						if(sy > 0) {
-							//Oben setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
-							for(int i = start; i >= end; i--) map[sy - 1][i].stat = DEFINITELY_NO_SHIP;
-						}
-						//Kucken ob unten Platz ist
-						if(sy < map.length - 1) {
-							//Unten setzen, wenn links Platz ist, auch unten linkts, wenn rechts Platz ist auch unten Rechts
-							for(int i = start; i >= end; i--) map[sy + 1][i].stat = DEFINITELY_NO_SHIP;
-						}
-						break;
-				}
+				setDefinitelyNoShip(map[y][x].ship);
 			}
 
 			return map[y][x].ship;
@@ -227,6 +127,161 @@ public class Map {
 			return null;
 		}
 		return null;
+	}
+	
+	private void setDefinitelyNoShip(Ship ship){
+		int sx, sy, start, end;
+		sx = ship.getXPos();
+		sy = ship.getYPos();
+		
+		switch(ship.getDirection()) {
+			case north:
+				start = sy;
+				end = (sy + ship.getSize()) - 1;
+				//Kucken on oben Platz ist
+				if(start > 0) {
+					start -= 1;
+					map[start][sx].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob unten Platz ist
+				if(end < map.length - 1) {
+					end += 1;
+					map[end][sx].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob links Platz ist
+				if(sx > 0) {
+					//Links setzen, wenn oben Platz ist, auch oben linkts, wenn unten Platz ist auch unten links
+					for(int i = start; i <= end; i++) map[i][sx - 1].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob rechts Platz ist
+				if(sx < map.length - 1) {
+					//Rechts setzen, wenn oben Platz ist, auch oben rechts, wenn unten Platz ist auch unten rechts
+					for(int i = start; i <= end; i++) map[i][sx + 1].stat = DEFINITELY_NO_SHIP;
+				}
+				break;
+			case south:
+				start = sy;
+				end = (sy - ship.getSize()) + 1;
+				//Kucken on oben Platz ist
+				if(start < map.length - 1) {
+					start += 1;
+					map[start][sx].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob unten Platz ist
+				if(end > 0) {
+					end -= 1;
+					map[end][sx].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob links Platz ist
+				if(sx > 0) {
+					//Links setzen, wenn oben Platz ist, auch oben linkts, wenn unten Platz ist auch unten links
+					for(int i = start; i >= end; i--) map[i][sx - 1].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob rechts Platz ist
+				if(sx < map.length - 1) {
+					//Rechts setzen, wenn oben Platz ist, auch oben rechts, wenn unten Platz ist auch unten rechts
+					for(int i = start; i >= end; i--) map[i][sx + 1].stat = DEFINITELY_NO_SHIP;
+				}
+				break;
+			case west:
+				start = sx;
+				end = (sx + ship.getSize()) - 1;
+				//Kucken ob links Platz ist und links mittig setzen
+				if(start > 0) {
+					start -= 1;
+					map[sy][start].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob rechts Platz ist und rechts mittig setzen
+				if(end < map.length - 1) {
+					end += 1;
+					map[sy][end].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob oben Platz ist
+				if(sy > 0) {
+					//Oben setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
+					for(int i = start; i <= end; i++) map[sy - 1][i].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob unten Platz ist
+				if(sy < map.length - 1) {
+					//Unten setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
+					for(int i = start; i <= end; i++) map[sy + 1][i].stat = DEFINITELY_NO_SHIP;
+				}
+				break;
+			case east:
+				start = sx;
+				end = (sx - ship.getSize()) + 1;
+				//Kucken ob rechts Platz ist und links mittig setzen
+				if(start < map.length - 1) {
+					start += 1;
+					map[sy][start].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob links Platz ist und rechts mittig setzen
+				if(end > 0) {
+					end -= 1;
+					map[sy][end].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob oben Platz ist
+				if(sy > 0) {
+					//Oben setzen, wenn links Platz ist, auch oben linkts, wenn rechts Platz ist auch oben Rechts
+					for(int i = start; i >= end; i--) map[sy - 1][i].stat = DEFINITELY_NO_SHIP;
+				}
+				//Kucken ob unten Platz ist
+				if(sy < map.length - 1) {
+					//Unten setzen, wenn links Platz ist, auch unten linkts, wenn rechts Platz ist auch unten Rechts
+					for(int i = start; i >= end; i--) map[sy + 1][i].stat = DEFINITELY_NO_SHIP;
+				}
+				break;
+		}
+	}
+	
+	public void setHit(int x, int y, boolean succ){
+		//map[y][x].stat = succ ? SUCC_HIT : UNSUCC_HIT;
+		if(succ) {
+			map[y][x].stat = SUCC_HIT;
+			if(map[y][x].ship == null) map[y][x].ship = Ship.defaultShip(x,y);
+		}else map[y][x].stat = UNSUCC_HIT;
+	}
+	
+	public void surroundShip(int x, int y){
+		ArrayList<int[]> points = new ArrayList<>();
+		recFindShip(x,y, null, points);
+		
+		Ship ship;
+		//ist x koordinate gleich
+		if(points.get(0)[0] == points.get(1)[0]){
+			int min = Integer.MAX_VALUE;
+			for(int[] point : points) if(point[1] < min) min = point[1];
+			ship = new Ship(points.get(0)[0], min, Direction.north, points.size());
+		}else/*ist y Koordinate gleich*/{
+			int min = Integer.MAX_VALUE;
+			for(int[] point : points) if(point[0] < min) min = point[0];
+			ship = new Ship(min, points.get(0)[1], Direction.west, points.size());
+		}
+		
+		setDefinitelyNoShip(ship);
+	}
+	
+	private void recFindShip(int x, int y, Direction from, ArrayList<int[]> result){
+		result.add(new int[]{x, y});
+		//oben kucken
+		if(isInMap(x, y - 1) && map[y - 1][x].stat == SUCC_HIT && from != Direction.north){
+			recFindShip(x,y - 1, Direction.south, result);
+		}
+		
+		//unten kucken
+		if(isInMap(x, y + 1) && map[y + 1][x].stat == SUCC_HIT && from != Direction.south){
+			recFindShip(x,y + 1, Direction.north, result);
+		}
+		
+		//links kucken
+		if(isInMap(x - 1, y) && map[y][x - 1].stat == SUCC_HIT && from != Direction.west){
+			recFindShip(x - 1,y, Direction.east, result);
+		}
+		
+		//rechts kucken
+		if(isInMap(x + 1, y) && map[y][x + 1].stat == SUCC_HIT && from != Direction.east){
+			recFindShip(x + 1,y, Direction.west, result);
+		}
 	}
 
 	/**

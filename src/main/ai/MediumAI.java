@@ -28,10 +28,12 @@ public class MediumAI extends PlayableAI {
 		int x, y;
 		if(currMission == null) {
 			Random rnd = new Random();
+			int counter = 0;
 			do {
+				counter++;
 				x = rnd.nextInt(map.getSize());
 				y = rnd.nextInt(map.getSize());
-			}while(enemyMap[y][x] != NOT_SHOT);
+			}while(enemyMap[y][x] != NOT_SHOT && counter < Math.pow(logic.getSize(), 2) * 2);
 			enemyMap[y][x] = ALREADY_SHOT;
 			if(logic.shoot(x, y, player) == null) return false;
 			currMission = new Mission(x, y, map, enemyMap);
