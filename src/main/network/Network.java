@@ -144,7 +144,7 @@ public class Network extends Player {
 			if(ship.isAlive()) a = 1;
 			else {
 				a = 2;
-				shipCount -= 1;
+				//shipCount -= 1;
 			}
 		}else a = 0;
 		networkThread.sendMessage(String.format("%s %d\n", ANSWER, a));
@@ -178,6 +178,7 @@ public class Network extends Player {
 		}
 		//TODO notifyOnMapChange
 		notifyOnHit(x,y,true);
+		shipCount -= 1;
 		return Ship.defaultSunkenShip(x, y);
 	}
 	
