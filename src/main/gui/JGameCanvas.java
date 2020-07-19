@@ -266,7 +266,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	
 	@Override
 	public void OnHit(int x, int y, boolean hit) {
-		if(hit) this.map[y + 1][x + 1] = Tile.HIT_TRANSPARENT;
+		if(hit) this.map[y + 1][x + 1] = Tile.HIT_WATER;
 		else this.map[y + 1][x + 1] = Tile.MISS;
 		repaint();
 		//repaint(100, (x + 1) * (getWidth() / groesse), (y + 1) * (getHeight() / groesse), 50, 50);
