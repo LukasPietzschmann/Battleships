@@ -199,12 +199,12 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		});
 		
 		// Player vs. Player Button
-		JButton pvpButton = new JButton("Spieler vs. 'Netzwerk'");
+		JButton pvpButton = new JButton("Spieler vs. Netzwerk");
 		ImageIcon pvpIcon = new ImageIcon(new ImageIcon("src/res/playerVsComputerOrPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		pvpButton.setIcon(pvpIcon);
 		pvpButton.setHorizontalAlignment(SwingConstants.LEFT);
 		pvpButton.setBorder(null);
-		pvpButton.setToolTipText("Spieler vs. 'Netzwerk'");
+		pvpButton.setToolTipText("Spieler vs. Netzwerk");
 		pvpButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		pvpButton.setMinimumSize(new Dimension(225, 150));
 		pvpButton.setMaximumSize(new Dimension(225, 150));
@@ -236,12 +236,12 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		});
 		
 		// Computer vs. Computer Button
-		JButton cvcButton = new JButton("Computer vs. Computer");
+		JButton cvcButton = new JButton("Computer vs. Netzwerk");
 		ImageIcon cvcIcon = new ImageIcon(new ImageIcon("src/res/computerVsComputerOrPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		cvcButton.setIcon(cvcIcon);
 		cvcButton.setHorizontalAlignment(SwingConstants.LEFT);
 		cvcButton.setBorder(null);
-		cvcButton.setToolTipText("Computer vs. Computer");
+		cvcButton.setToolTipText("Computer vs. Netzwerk");
 		cvcButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		cvcButton.setMinimumSize(new Dimension(225, 150));
 		cvcButton.setMaximumSize(new Dimension(225, 150));
