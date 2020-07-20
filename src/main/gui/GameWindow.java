@@ -27,7 +27,8 @@ public class GameWindow implements GameEndsListener {
     private final JPanel grid1Holder = new JPanel(new GridBagLayout());
     private final JPanel grid2Holder = new JPanel(new GridBagLayout());
     private final JPanel textbarHolder = new JPanel();
-    private final JLabel textbar = new JLabel();
+    private final JLabel line1 = new JLabel();
+    private final JLabel line2 = new JLabel();
     private final JPanel statsOptions = new JPanel();
     private final JPanel stats = new JPanel();
     private final JPanel options = new JPanel();
@@ -103,13 +104,26 @@ public class GameWindow implements GameEndsListener {
         mainPanel.add(gridHolder, BorderLayout.CENTER);
         mainPanel.add(statsOptions, BorderLayout.SOUTH);
 
-        // textbar
-        textbar.setText("Test Test Spielanweisung Test Test");
-        textbar.setForeground(textColor);
-        textbar.setFont(font);
-        textbar.setOpaque(false);
-        textbar.setSize(new Dimension(200, 200));
-        textbarHolder.add(textbar);
+        // textlines
+        line1.setText("Event: Getroffen!, Versenkt!, Daneben!");
+        line1.setForeground(textColor);
+        line1.setFont(font);
+        line1.setOpaque(false);
+        line1.setSize(new Dimension(200, 200));
+        line1.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        line2.setText("Aktueller Spieler: Spieler X ist an der Reihe.");
+        line2.setForeground(textColor);
+        line2.setFont(font);
+        line2.setOpaque(false);
+        line2.setSize(new Dimension(200, 200));
+        line2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        line2.setBorder(new EmptyBorder(0, 0, 20, 0));
+
+        textbarHolder.setLayout(new BoxLayout(textbarHolder, BoxLayout.PAGE_AXIS));
+
+        textbarHolder.add(line1);
+        textbarHolder.add(line2);
         textbarHolder.setOpaque(false);
 
         // stats Elements
