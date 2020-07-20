@@ -71,7 +71,8 @@ public class Network extends Player {
 	public Network(Logic logic, String name, long id) throws IOException {
 		super(logic, name);
 		networkThread = new NetworkThread(new ServerSocket(PORT));
-		networkThread.start();
+		//networkThread.start();
+		logic.registerGameEndListener(networkThread);
 		networkThread.sendMessage(String.format("%s %d\n", LOAD, id));
 		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(CONFIRM)) throw new UnexpectedMessageException(m);
@@ -89,7 +90,8 @@ public class Network extends Player {
 		super(logic, name);
 		map = new Map(size);
 		networkThread = new NetworkThread(new ServerSocket(PORT));
-		networkThread.start();
+		//networkThread.start();
+		logic.registerGameEndListener(networkThread);
 		shipCount = logic.getAvailableShips().size();
 		int[] shipCount = new int[4];
 		for(int i = 0; i < logic.getAvailableShips().size(); i++)
@@ -108,12 +110,13 @@ public class Network extends Player {
 		super(logic, name);
 		try {
 			networkThread = new NetworkThread(new Socket(ip, PORT));
+			logic.registerGameEndListener(networkThread);
 		}catch(IOException e) {
 			e.printStackTrace();
 			System.err.println("NW Error");
 			return;
 		}
-		networkThread.start();
+		//networkThread.start();
 		Message m = new Message(networkThread.recieveMessage());
 		
 		if(m.getMessageType().equals(SETUP)) {
@@ -186,7 +189,6 @@ public class Network extends Player {
 			notifyOnEnemyHit(x,y,true);
 			return Ship.defaultShip(x, y);
 		}
-		//TODO notifyOnMapChange
 		map.setHit(x,y,true);
 		map.surroundShip(x,y);
 		notifyOnHit(x,y,true);

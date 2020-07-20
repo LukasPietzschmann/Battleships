@@ -177,6 +177,7 @@ public class Logic extends Thread {
 			if(!(MODE == Launcher.AI_AI || MODE == Launcher.NW_SV_AI || MODE == Launcher.NW_CL_AI)) notifyPlaceShips();
 			//oppPlayerShipsPlaced = true;
 			//ownPlayerShipsPlaced = true;
+			//TODO netwokr listener
 			currPlayer.placeShips();
 			if(currPlayer == oppPlayer) {
 				while(!oppPlayerShipsPlaced) {
