@@ -313,4 +313,9 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	public void OnNotAllShipsPlaced() {
 		return;
 	}
+	
+	@Override
+	public void OnOpponentLeft() {
+		//TODO
+	}
 }

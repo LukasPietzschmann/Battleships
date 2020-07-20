@@ -228,4 +228,9 @@ public class GameWindow implements GameEndsListener {
             new EndWindow(1, frame, this).setUpMainWindow();
         }
     }
+    
+    @Override
+    public void OnOpponentLeft() {
+        //TODO
+    }
 }

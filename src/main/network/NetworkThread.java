@@ -36,14 +36,18 @@ public class NetworkThread implements GameEndsListener {
 				OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
 				
 				while(!serverSocket.isClosed()) {
-					String msg = sendQueue.take();
-					out.write(msg);
-					out.flush();
-					System.out.println("Server sent " + msg);
+					try {
+						String msg = sendQueue.take();
+						out.write(msg);
+						out.flush();
+						System.out.println("Server sent " + msg);
+					}catch(Exception e) {
+						break;
+					}
 				}
 				
 				out.close();
-			}catch(IOException | InterruptedException e) {
+			}catch(IOException e) {
 				e.printStackTrace();
 			}
 		});
@@ -55,6 +59,7 @@ public class NetworkThread implements GameEndsListener {
 				while(!serverSocket.isClosed()) {
 					try {
 						String msg = in.readLine();
+						if(msg == null) break;
 						recieveQueue.offer(msg);
 						System.out.println("Server recieved " + msg);
 					}catch(SocketException e) {
@@ -93,14 +98,18 @@ public class NetworkThread implements GameEndsListener {
 				OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
 				
 				while(!clientSocket.isClosed()) {
-					String msg = sendQueue.take();
-					out.write(msg);
-					out.flush();
-					System.out.println("Client sent " + msg);
+					try {
+						String msg = sendQueue.take();
+						out.write(msg);
+						out.flush();
+						System.out.println("Client sent " + msg);
+					}catch(Exception e) {
+						break;
+					}
 				}
 				
 				out.close();
-			}catch(IOException | InterruptedException e) {
+			}catch(IOException e) {
 				e.printStackTrace();
 			}
 		});
@@ -112,6 +121,7 @@ public class NetworkThread implements GameEndsListener {
 				while(!clientSocket.isClosed()) {
 					try {
 						String msg = in.readLine();
+						if(msg == null) break;
 						recieveQueue.offer(msg);
 						System.out.println("Client recieved " + msg);
 					}catch(SocketException e) {
@@ -150,5 +160,10 @@ public class NetworkThread implements GameEndsListener {
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void OnOpponentLeft() {
+		//TODO
 	}
 }
