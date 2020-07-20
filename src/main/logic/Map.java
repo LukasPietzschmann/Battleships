@@ -264,22 +264,22 @@ public class Map {
 	private void recFindShip(int x, int y, Direction from, ArrayList<int[]> result){
 		result.add(new int[]{x, y});
 		//oben kucken
-		if(isInMap(x, y - 1) && map[y - 1][x].stat == SUCC_HIT && from != Direction.north){
+		if(isInMap(x, y - 1) && map[y - 1][x].ship != null && from != Direction.north){
 			recFindShip(x,y - 1, Direction.south, result);
 		}
 		
 		//unten kucken
-		if(isInMap(x, y + 1) && map[y + 1][x].stat == SUCC_HIT && from != Direction.south){
+		if(isInMap(x, y + 1) && map[y + 1][x].ship != null && from != Direction.south){
 			recFindShip(x,y + 1, Direction.north, result);
 		}
 		
 		//links kucken
-		if(isInMap(x - 1, y) && map[y][x - 1].stat == SUCC_HIT && from != Direction.west){
+		if(isInMap(x - 1, y) && map[y][x - 1].ship != null && from != Direction.west){
 			recFindShip(x - 1,y, Direction.east, result);
 		}
 		
 		//rechts kucken
-		if(isInMap(x + 1, y) && map[y][x + 1].stat == SUCC_HIT && from != Direction.east){
+		if(isInMap(x + 1, y) && map[y][x + 1].ship != null && from != Direction.east){
 			recFindShip(x + 1,y, Direction.west, result);
 		}
 	}
