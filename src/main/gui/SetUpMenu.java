@@ -516,7 +516,8 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 	
 	@Override
 	public void OnNotAllShipsPlaced() {
-		JOptionPane.showMessageDialog(null, "Jajaja dachtest du könntest bescheisen!", "", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(frame, "Um zu starten müssen erst alle " + Launcher.themeIdentifierPlural
+				+ " platziert werden!", "Platzierung nicht abgeschlossen", JOptionPane.ERROR_MESSAGE);
 	}
 }
 
