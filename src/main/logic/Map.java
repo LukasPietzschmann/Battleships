@@ -567,7 +567,11 @@ public class Map {
 		
 		return enemyMap;
 	}
-
+	
+	public int getShipsNr() {
+		return shipsNr;
+	}
+	
 	/**
 	 * Nach Außen nicht sichtbare Hilfsklasse zur modellierung des Spielfelds.
 	 */

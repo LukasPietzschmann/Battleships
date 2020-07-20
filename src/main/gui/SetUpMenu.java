@@ -514,6 +514,11 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 				break;
 		}
 	}
+	
+	@Override
+	public void OnNotAllShipsPlaced() {
+		JOptionPane.showMessageDialog(null, "Jajaja dachtest du könntest bescheisen!", "", JOptionPane.INFORMATION_MESSAGE);
+	}
 }
 
 
