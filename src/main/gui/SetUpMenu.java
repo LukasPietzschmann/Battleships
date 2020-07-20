@@ -382,7 +382,6 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 		startButton.addActionListener(arg0 -> logic.setShipsPlaced(player));
 		
 		// soundButton Button Settings
-		soundButton.setText("Lautstärke anpassen");
 		Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		if(Launcher.soundPlaying) {
