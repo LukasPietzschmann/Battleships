@@ -1,15 +1,19 @@
 package network;
 
+import logic.GameEndsListener;
+import logic.Player;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class NetworkThread extends Thread {
+public class NetworkThread implements GameEndsListener {
 	private enum Type {
 		Server,
 		Client
@@ -27,21 +31,18 @@ public class NetworkThread extends Thread {
 		recieveQueue = new LinkedBlockingQueue<>();
 		sendQueue = new LinkedBlockingQueue<>();
 		
-		try {
-			clientSocket = serverSocket.accept();
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
 		Thread serverSendThread = new Thread(() -> {
 			try {
 				OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
 				
-				while(true) {
+				while(!serverSocket.isClosed()) {
 					String msg = sendQueue.take();
 					out.write(msg);
 					out.flush();
 					System.out.println("Server sent " + msg);
 				}
+				
+				out.close();
 			}catch(IOException | InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -51,18 +52,34 @@ public class NetworkThread extends Thread {
 			try {
 				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				
-				while(true) {
-					String msg = in.readLine();
-					recieveQueue.offer(msg);
-					System.out.println("Server recieved " + msg);
+				while(!serverSocket.isClosed()) {
+					try {
+						String msg = in.readLine();
+						recieveQueue.offer(msg);
+						System.out.println("Server recieved " + msg);
+					}catch(SocketException e) {
+						break;
+					}
 				}
+				
+				in.close();
 			}catch(IOException e) {
 				e.printStackTrace();
 			}
 		});
 		
-		serverSendThread.start();
-		serverRecieveThread.start();
+		Thread acceptT = new Thread(() -> {
+			try {
+				clientSocket = serverSocket.accept();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+			serverSendThread.start();
+			serverRecieveThread.start();
+			
+		});
+		
+		acceptT.start();
 	}
 	
 	public NetworkThread(Socket clientSocket) {
@@ -75,12 +92,14 @@ public class NetworkThread extends Thread {
 			try {
 				OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
 				
-				while(true) {
+				while(!clientSocket.isClosed()) {
 					String msg = sendQueue.take();
 					out.write(msg);
 					out.flush();
 					System.out.println("Client sent " + msg);
 				}
+				
+				out.close();
 			}catch(IOException | InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -90,11 +109,17 @@ public class NetworkThread extends Thread {
 			try {
 				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				
-				while(true) {
-					String msg = in.readLine();
-					recieveQueue.offer(msg);
-					System.out.println("Client recieved " + msg);
+				while(!clientSocket.isClosed()) {
+					try {
+						String msg = in.readLine();
+						recieveQueue.offer(msg);
+						System.out.println("Client recieved " + msg);
+					}catch(SocketException e) {
+						break;
+					}
 				}
+				
+				in.close();
 			}catch(IOException e) {
 				e.printStackTrace();
 			}
@@ -114,6 +139,16 @@ public class NetworkThread extends Thread {
 		}catch(InterruptedException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	@Override
+	public void OnGameEnds(Player winningPlayer) {
+		try {
+			if(clientSocket != null)clientSocket.close();
+			if(serverSocket != null)serverSocket.close();
+		}catch(IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

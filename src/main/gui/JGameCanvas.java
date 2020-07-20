@@ -308,4 +308,9 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	public void OnGameEnds(Player winningPlayer) {
 		myTurn = false;
 	}
+	
+	@Override
+	public void OnNotAllShipsPlaced() {
+		return;
+	}
 }

@@ -18,6 +18,9 @@ public class LoadingScreen extends JFrame {
     private final JLabel line1 = new JLabel();
     private final JLabel line2 = new JLabel();
     private final JLabel line3 = new JLabel();
+    
+    public static final int WAIT_FOR_SHIP_PLACEMENT = 1;
+    public static final int WAIT_FOR_CONNECT = 0;
 
     public LoadingScreen(JFrame frame, int mode){ // mode 0 = Warten auf Client, mode 1 = Warten auf Platzierung
         this.frame = frame;
@@ -139,7 +142,7 @@ public class LoadingScreen extends JFrame {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1130, 700);
-        new LoadingScreen(frame, 0);
+        frame.setSize(400, 300);
+        new LoadingScreen(frame, WAIT_FOR_CONNECT);
     }
 }

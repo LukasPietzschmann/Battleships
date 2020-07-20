@@ -142,6 +142,12 @@ public abstract class LocalPlayer extends Player {
 		for(MapListener listener : mapListeners) listener.OnAllShipsPlaced();
 	}
 	
+	protected void notifyOnNotAllShipsPlaced(){
+		for(MapListener listener : mapListeners) {
+			listener.OnNotAllShipsPlaced();
+		}
+	}
+	
 	protected void notifyMakeMove() {
 		for(MakeMoveListener makeMoveListener : makeMoveListeners) {
 			makeMoveListener.makeMove();

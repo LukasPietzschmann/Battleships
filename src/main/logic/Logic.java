@@ -177,6 +177,7 @@ public class Logic extends Thread {
 			if(!(MODE == Launcher.AI_AI || MODE == Launcher.NW_SV_AI || MODE == Launcher.NW_CL_AI)) notifyPlaceShips();
 			//oppPlayerShipsPlaced = true;
 			//ownPlayerShipsPlaced = true;
+			//TODO netwokr listener
 			currPlayer.placeShips();
 			if(currPlayer == oppPlayer) {
 				while(!oppPlayerShipsPlaced) {
@@ -254,7 +255,7 @@ public class Logic extends Thread {
 		gameStartsListeners.remove(listener);
 	}
 	
-	public void registerGameEndListener(GameEndsListener listener){
+	public void registerGameEndListener(GameEndsListener listener) {
 		gameEndsListeners.add(listener);
 	}
 	
@@ -268,13 +269,18 @@ public class Logic extends Thread {
 		}
 	}
 	
-	private void notifyGameEndsListener(Player winningPlayer){
+	private void notifyGameEndsListener(Player winningPlayer) {
 		for(GameEndsListener listener : gameEndsListeners) {
 			listener.OnGameEnds(winningPlayer);
 		}
 	}
 	
 	public synchronized void setShipsPlaced(Player player) {
+		if(player instanceof LocalPlayer && ((LocalPlayer) player).map.getShipsNr() != getAvailableShips().size()) {
+			//nicht alle wurden platziert
+			((LocalPlayer) player).notifyOnNotAllShipsPlaced();
+			return;
+		}
 		if(player == ownPlayer) ownPlayerShipsPlaced = true;
 		else oppPlayerShipsPlaced = true;
 	}
