@@ -115,7 +115,6 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		// Panel Settings
 		panel.setLayout(new BorderLayout());
 		panel.setOpaque(false);
-//		panel.setBackground(backgroundColor);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 10, 30, 60));
 		panel.setSize(1130, 700);
 		panel.setLocation(0,0);
