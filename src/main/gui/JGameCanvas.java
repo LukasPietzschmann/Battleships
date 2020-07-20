@@ -195,17 +195,30 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 		int y = ship.getYPos() + 1;
 		for(int i = 0; i < length; i++) {
 			
-			if(direction == Direction.north || direction == Direction.south) {
+			if(direction == Direction.north ) {
 				if(length == 5) map[y][x] = fiveElementVertical[i];
 				if(length == 4) map[y][x] = fourElementVertical[i];
 				if(length == 3) map[y][x] = threeElementVertical[i];
 				if(length == 2) map[y][x] = twoElementVertical[i];
+			}else if(direction == Direction.south){
+				System.out.println("now");
+				if(length == 5) map[y][x] = fiveElementVertical[4 - i];
+				if(length == 4) map[y][x] = fourElementVertical[3 - i];
+				if(length == 3) map[y][x] = threeElementVertical[2 - i];
+				if(length == 2) map[y][x] = twoElementVertical[1 - i];
 			}
-			if(direction == Direction.east || direction == Direction.west) {
+			else if(direction == Direction.west) {
 				if(length == 5) map[y][x] = fiveElementHorizontal[i];
 				if(length == 4) map[y][x] = fourElementHorizontal[i];
 				if(length == 3) map[y][x] = threeElementHorizontal[i];
 				if(length == 2) map[y][x] = twoElementHorizontal[i];
+			}
+			else if(direction == Direction.east) {
+				System.out.println("now");
+				if(length == 5) map[y][x] = fiveElementHorizontal[4 - i];
+				if(length == 4) map[y][x] = fourElementHorizontal[3 - i];
+				if(length == 3) map[y][x] = threeElementHorizontal[2 - i];
+				if(length == 2) map[y][x] = twoElementHorizontal[1 - i];
 			}
 			
 			switch(ship.getDirection()) {
@@ -238,6 +251,8 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	
 	@Override
 	public void OnMapChanged(Map map) {
+		map.dump();
+		System.out.println(" ");
 		for(int x = 0; x < map.getSize(); x++) {
 			for(int y = 0; y < map.getSize(); y++) {
 				int stat = map.getStat(x, y);
