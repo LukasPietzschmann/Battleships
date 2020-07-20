@@ -541,6 +541,7 @@ public class Map {
 	 * Setzt das Spielfeld auf den Anfangszustand zurück. (Auf jedem Feld Wasser)
 	 */
 	public void reset() {
+		shipsNr = 0;
 		map = new MapTile[map.length][map.length];
 		for(int i = 0; i < map.length; i++) {
 			for(int j = 0; j < map.length; j++) {
