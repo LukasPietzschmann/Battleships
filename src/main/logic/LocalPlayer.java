@@ -36,16 +36,20 @@ public abstract class LocalPlayer extends Player {
 	public Ship hit(int x, int y) {
 		Ship hit = map.hit(x, y);
 		if(hit == null) {
-			notifyOnHit(x, y, false);
-			notifyOnEnemyHit(x, y,false);
+			//notifyOnHit(x, y, false);
+			//notifyOnEnemyHit(x, y,false);
+			notifyOnMapChangedListeners();
+			notifyOnEnemyMapChangedListener();
 		}
 		else if(!hit.isAlive()) {
 			notifyOnMapChangedListeners();
 			notifyOnEnemyMapChangedListener();
 		}
 		else {
-			notifyOnHit(x, y, true);
-			notifyOnEnemyHit(x,y,true);
+			//notifyOnHit(x, y, true);
+			//notifyOnEnemyHit(x,y,true);
+			notifyOnMapChangedListeners();
+			notifyOnEnemyMapChangedListener();
 		}
 		return hit;
 	}
