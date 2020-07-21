@@ -266,7 +266,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
     
     @Override
     public void OnPlayersTurn(Player player) {
-        if (player.getName() == ownPlayer.getName()){
+        if (player == ownPlayer){
             playersTurnLine.setText("Du bist an der Reihe.");
             grid1.setBorder(emptyBorder);
             grid2.setBorder(activeBorder);
