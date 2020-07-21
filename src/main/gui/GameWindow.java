@@ -39,6 +39,8 @@ public class GameWindow implements GameEndsListener, GameEventListener {
     static Color backgroundColor = MainMenu.backgroundColor;
     static Color textColor = MainMenu.textColor;
     public static Font font = new Font("Krungthep", Font.PLAIN, 20);
+    EmptyBorder emptyBorder = new EmptyBorder(3, 3, 3, 3);
+    Border activeBorder = BorderFactory.createLineBorder(Color.GREEN, 3);
 
     /**
      * Konstruktor, erstellt ein GameWindow-Objekt.
@@ -74,9 +76,6 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         mainPanel.setBackground(backgroundColor);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30 , 30, 30, 30));
 
-        EmptyBorder emptyBorder = new EmptyBorder(3, 3, 3, 3);
-        Border activeBorder = BorderFactory.createLineBorder(Color.GREEN, 3);
-
         // grid1
         grid1.setOpaque(false);
         grid1.setSize(grid1.getPreferredSize());
@@ -107,7 +106,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         mainPanel.add(statsOptions, BorderLayout.SOUTH);
 
         // textlines
-        eventLine.setText("Event: ");
+        eventLine.setText(" ");
         eventLine.setForeground(textColor);
         eventLine.setFont(font);
         eventLine.setOpaque(false);
@@ -254,19 +253,28 @@ public class GameWindow implements GameEndsListener, GameEventListener {
     public void OnEventFired(int event) {
         switch(event){
             case HIT:
-                eventLine.setText(String.format("Event: %s", "Getroffen!"));
+                eventLine.setText("Treffer!");
                 break;
             case HIT_DEAD:
-                eventLine.setText(String.format("Event: %s", "Versenkt!"));
+                eventLine.setText(Launcher.themeIdentifierSingular + " zerstört!");
                 break;
             case MISS:
-                eventLine.setText(String.format("Event: %s", "Daneben!"));
+                eventLine.setText("Daneben!");
                 break;
         }
     }
     
     @Override
     public void OnPlayersTurn(Player player) {
-        playersTurnLine.setText(String.format("Aktueller Spieler: Spieler %s ist an der Reihe.", player.getName()));
+        if (player.getName() == ownPlayer.getName()){
+            playersTurnLine.setText("Du bist an der Reihe.");
+            grid1.setBorder(emptyBorder);
+            grid2.setBorder(activeBorder);
+        } else {
+            playersTurnLine.setText("Gegner ist der an der Reihe");
+            grid1.setBorder(activeBorder);
+            grid2.setBorder(emptyBorder);
+        }
+
     }
 }
