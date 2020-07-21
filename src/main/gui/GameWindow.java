@@ -246,7 +246,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
     
     @Override
     public void OnOpponentLeft() {
-        //TODO
+        new EndWindow(EndWindow.OPP_LEFT, frame, this).setUpMainWindow();
     }
     
     @Override

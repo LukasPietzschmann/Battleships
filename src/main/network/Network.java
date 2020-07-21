@@ -70,7 +70,7 @@ public class Network extends Player {
 	
 	public Network(Logic logic, String name, long id) throws IOException {
 		super(logic, name);
-		networkThread = new NetworkThread(new ServerSocket(PORT));
+		networkThread = new NetworkThread(new ServerSocket(PORT), logic);
 		//networkThread.start();
 		logic.registerGameEndListener(networkThread);
 		networkThread.sendMessage(String.format("%s %d\n", LOAD, id));
@@ -89,7 +89,7 @@ public class Network extends Player {
 	public Network(Logic logic, String name, int size) throws IOException {
 		super(logic, name);
 		map = new Map(size);
-		networkThread = new NetworkThread(new ServerSocket(PORT));
+		networkThread = new NetworkThread(new ServerSocket(PORT), logic);
 		//networkThread.start();
 		logic.registerGameEndListener(networkThread);
 		shipCount = logic.getAvailableShips().size();
@@ -109,7 +109,7 @@ public class Network extends Player {
 	public Network(Logic logic, String name, String ip) {
 		super(logic, name);
 		try {
-			networkThread = new NetworkThread(new Socket(ip, PORT));
+			networkThread = new NetworkThread(new Socket(ip, PORT), logic);
 			logic.registerGameEndListener(networkThread);
 		}catch(IOException e) {
 			e.printStackTrace();
