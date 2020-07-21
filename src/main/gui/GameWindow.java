@@ -226,6 +226,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         // frame Settings
         frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
         frame.setVisible(true);
+        frame.setResizable(true);
     }
 
     public void backToMenu(){
