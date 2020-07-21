@@ -143,7 +143,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
 
         // saveButton
         JButton saveButton = new JButton("Spiel speichern");
-        ImageIcon loadIcon = new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("loadSaveIcon.png").getPath()).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        ImageIcon loadIcon = new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("loadSaveIcon.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
         saveButton.setIcon(loadIcon);
         saveButton.setHorizontalAlignment(SwingConstants.LEFT);
         saveButton.setBorder(null);
@@ -162,8 +162,8 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         // soundButton Button Settings
         JButton soundButton = new JButton();
         soundButton.setText("Lautstärke anpassen");
-        Icon soundOnIcon = new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("soundOnIcon.png").getPath()).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-        Icon soundOffIcon = new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("soundOffIcon.png").getPath()).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        Icon soundOnIcon = new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("soundOnIcon.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        Icon soundOffIcon = new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("soundOffIcon.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
         if(Launcher.soundPlaying) {
             soundButton.setIcon(soundOnIcon);
         }else {

@@ -39,11 +39,3 @@ jar {
         attributes 'Main-Class': 'Schiffeversenken.logic.Launcher'
     }
 }
-
-sourceSets {
-    main {
-        resources {
-            srcDirs "src/main/resources"
-        }
-    }
-}
