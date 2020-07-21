@@ -20,7 +20,7 @@ public class HardAI extends PlayableAI {
 	
 	//TODO Rand um versunkene Schiffe platzieren und berücksichtigen
 	@Override
-	protected boolean makeMove() {
+	protected Ship makeMove() {
 		try {
 			Thread.sleep(WAIT_TIME);
 		}catch(InterruptedException e) {
@@ -37,9 +37,9 @@ public class HardAI extends PlayableAI {
 			}while((!isOnMinGrid(x,y) || enemyMap[y][x] != NOT_SHOT) && counter < Math.pow(logic.getSize(), 2) * 2);
 			
 			enemyMap[y][x] = ALREADY_SHOT;
-			if(logic.shoot(x, y, player) == null) return false;
-			currMission = new Mission(x, y, map, enemyMap);
-			return true;
+			Ship ship;
+			if((ship = logic.shoot(x, y, player)) != null) currMission = new Mission(x, y, map, enemyMap);
+			return ship;
 		}
 		
 		x = currMission.getNextX();
@@ -49,7 +49,7 @@ public class HardAI extends PlayableAI {
 		Ship ship = logic.shoot(x, y, player);
 		if(ship == null) {
 			currMission.wasHit(false, enemyMap);
-			return false;
+			return null;
 		}
 		if(ship.isAlive()) currMission.wasHit(true, enemyMap);
 		else {
@@ -63,7 +63,7 @@ public class HardAI extends PlayableAI {
 			genMinSize();
 		}
 		
-		return true;
+		return ship;
 	}
 	
 	private void genMinSize() {

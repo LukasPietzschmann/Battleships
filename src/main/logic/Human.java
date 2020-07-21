@@ -20,7 +20,7 @@ public class Human extends LocalPlayer {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public boolean doWhatYouHaveToDo() {
+	public Ship doWhatYouHaveToDo() {
 		notifyMakeMove();
 		int x = 0;
 		int y = 0;
@@ -31,7 +31,7 @@ public class Human extends LocalPlayer {
 		}catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		return logic.shoot(x, y, this) != null;
+		return logic.shoot(x, y, this);
 	}
 	
 	/**

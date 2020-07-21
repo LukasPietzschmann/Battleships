@@ -1,6 +1,7 @@
 package gui;
 
 import logic.GameEndsListener;
+import logic.GameEventListener;
 import logic.Launcher;
 import logic.LocalPlayer;
 import logic.Logic;
@@ -14,7 +15,7 @@ import java.awt.*;
 /**
  * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
  */
-public class GameWindow implements GameEndsListener {
+public class GameWindow implements GameEndsListener, GameEventListener {
     private final JFrame frame;
     private final String mode;
     private final Logic logic;
@@ -27,8 +28,8 @@ public class GameWindow implements GameEndsListener {
     private final JPanel grid1Holder = new JPanel(new GridBagLayout());
     private final JPanel grid2Holder = new JPanel(new GridBagLayout());
     private final JPanel textbarHolder = new JPanel();
-    private final JLabel line1 = new JLabel();
-    private final JLabel line2 = new JLabel();
+    private final JLabel eventLine = new JLabel();
+    private final JLabel playersTurnLine = new JLabel();
     private final JPanel statsOptions = new JPanel();
     private final JPanel stats = new JPanel();
     private final JPanel options = new JPanel();
@@ -59,6 +60,7 @@ public class GameWindow implements GameEndsListener {
         ownPlayer.registerMakeMove(grid2, grid2.getClickQueue());
         logic.registerGameEndListener(grid2);
         logic.registerGameEndListener(this);
+        logic.registerGameEventListener(this);
     }
 
     /**
@@ -105,25 +107,25 @@ public class GameWindow implements GameEndsListener {
         mainPanel.add(statsOptions, BorderLayout.SOUTH);
 
         // textlines
-        line1.setText("Event: Getroffen!, Versenkt!, Daneben!");
-        line1.setForeground(textColor);
-        line1.setFont(font);
-        line1.setOpaque(false);
-        line1.setSize(new Dimension(200, 200));
-        line1.setAlignmentX(Component.CENTER_ALIGNMENT);
+        eventLine.setText("Event: ");
+        eventLine.setForeground(textColor);
+        eventLine.setFont(font);
+        eventLine.setOpaque(false);
+        eventLine.setSize(new Dimension(200, 200));
+        eventLine.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        line2.setText("Aktueller Spieler: Spieler X ist an der Reihe.");
-        line2.setForeground(textColor);
-        line2.setFont(font);
-        line2.setOpaque(false);
-        line2.setSize(new Dimension(200, 200));
-        line2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        line2.setBorder(new EmptyBorder(0, 0, 20, 0));
+        playersTurnLine.setText("Aktueller Spieler: Spieler X ist an der Reihe.");
+        playersTurnLine.setForeground(textColor);
+        playersTurnLine.setFont(font);
+        playersTurnLine.setOpaque(false);
+        playersTurnLine.setSize(new Dimension(200, 200));
+        playersTurnLine.setAlignmentX(Component.CENTER_ALIGNMENT);
+        playersTurnLine.setBorder(new EmptyBorder(0, 0, 20, 0));
 
         textbarHolder.setLayout(new BoxLayout(textbarHolder, BoxLayout.PAGE_AXIS));
 
-        textbarHolder.add(line1);
-        textbarHolder.add(line2);
+        textbarHolder.add(eventLine);
+        textbarHolder.add(playersTurnLine);
         textbarHolder.setOpaque(false);
 
         // stats Elements
@@ -246,5 +248,25 @@ public class GameWindow implements GameEndsListener {
     @Override
     public void OnOpponentLeft() {
         //TODO
+    }
+    
+    @Override
+    public void OnEventFired(int event) {
+        switch(event){
+            case HIT:
+                eventLine.setText(String.format("Event: %s", "Getroffen!"));
+                break;
+            case HIT_DEAD:
+                eventLine.setText(String.format("Event: %s", "Versenkt!"));
+                break;
+            case MISS:
+                eventLine.setText(String.format("Event: %s", "Daneben!"));
+                break;
+        }
+    }
+    
+    @Override
+    public void OnPlayersTurn(Player player) {
+        playersTurnLine.setText(String.format("Aktueller Spieler: Spieler %s ist an der Reihe.", player.getName()));
     }
 }

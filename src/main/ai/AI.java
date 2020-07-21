@@ -50,7 +50,7 @@ public class AI extends LocalPlayer {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public boolean doWhatYouHaveToDo() {
+	public Ship doWhatYouHaveToDo() {
 		return ai.makeMove();
 	}
 }

@@ -1,6 +1,5 @@
 package logic;
 
 public interface MakeMoveListener {
-
-    void makeMove();
+	void makeMove();
 }

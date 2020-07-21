@@ -37,7 +37,7 @@ public abstract class PlayableAI {
 		this.map = map;
 	}
 	
-	protected abstract boolean makeMove();
+	protected abstract Ship makeMove();
 	
 	/**
 	 * Spiegelt die Richtung. Bsp: {@code Direction.north} wird gespielgelt zu {@code Direction.south}.

@@ -143,7 +143,7 @@ public class Network extends Player {
 	}
 	
 	@Override
-	public boolean doWhatYouHaveToDo() {
+	public Ship doWhatYouHaveToDo() {
 		// warte bis gegner geschossen hat
 		
 		Message m = new Message(networkThread.recieveMessage());
@@ -164,7 +164,7 @@ public class Network extends Player {
 			if(!m.getMessageType().equals(PASS))
 				throw new UnexpectedMessageException(m);
 		}
-		return a != 0;
+		return ship;
 	}
 	
 	@Override

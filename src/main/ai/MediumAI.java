@@ -19,7 +19,7 @@ public class MediumAI extends PlayableAI {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	protected boolean makeMove() {
+	protected Ship makeMove() {
 		try {
 			Thread.sleep(WAIT_TIME);
 		}catch(InterruptedException e) {
@@ -35,9 +35,9 @@ public class MediumAI extends PlayableAI {
 				y = rnd.nextInt(map.getSize());
 			}while(enemyMap[y][x] != NOT_SHOT && counter < Math.pow(logic.getSize(), 2) * 2);
 			enemyMap[y][x] = ALREADY_SHOT;
-			if(logic.shoot(x, y, player) == null) return false;
-			currMission = new Mission(x, y, map, enemyMap);
-			return true;
+			Ship ship;
+			if((ship = logic.shoot(x, y, player)) != null) currMission = new Mission(x, y, map, enemyMap);
+			return ship;
 		}
 		
 		x = currMission.getNextX();
@@ -47,11 +47,11 @@ public class MediumAI extends PlayableAI {
 		enemyMap[y][x] = ALREADY_SHOT;
 		if(ship == null) {
 			currMission.wasHit(false, enemyMap);
-			return false;
+			return null;
 		}
 		if(ship.isAlive()) currMission.wasHit(true, enemyMap);
 		else currMission = null;
 		
-		return true;
+		return ship;
 	}
 }

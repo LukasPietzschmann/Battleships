@@ -3,6 +3,7 @@ package ai;
 import logic.Logic;
 import logic.Map;
 import logic.Player;
+import logic.Ship;
 
 import java.util.Random;
 
@@ -17,13 +18,13 @@ class EasyAI extends PlayableAI {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public boolean makeMove() {
+	public Ship makeMove() {
 		Random rnd = new Random();
 		try {
 			Thread.sleep(WAIT_TIME);
 		}catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		return logic.shoot(rnd.nextInt(map.getSize()), rnd.nextInt(map.getSize()), player) != null;
+		return logic.shoot(rnd.nextInt(map.getSize()), rnd.nextInt(map.getSize()), player);
 	}
 }

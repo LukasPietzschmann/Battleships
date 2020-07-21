@@ -5,6 +5,7 @@ import ai.Difficulty;
 import network.Network;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -28,12 +29,14 @@ public class Logic extends Thread {
 	private CopyOnWriteArrayList<SetUpShipsListener> setUpShipsListeners;
 	private CopyOnWriteArrayList<GameStartsListener> gameStartsListeners;
 	private CopyOnWriteArrayList<GameEndsListener> gameEndsListeners;
+	private CopyOnWriteArrayList<GameEventListener> gameEventListeners;
 	
 	private Logic(int MODE) {
 		this.MODE = MODE;
 		setUpShipsListeners = new CopyOnWriteArrayList<>();
 		gameStartsListeners = new CopyOnWriteArrayList<>();
 		gameEndsListeners = new CopyOnWriteArrayList<>();
+		gameEventListeners = new CopyOnWriteArrayList<>();
 	}
 	
 	/**
@@ -161,7 +164,7 @@ public class Logic extends Thread {
 	 */
 	public void startGame() {
 		Thread t = new Thread(() -> {
-			boolean hit;
+			Ship hit;
 			
 			Player currPlayer, otherPlayer;
 			switch(MODE) {
@@ -199,8 +202,9 @@ public class Logic extends Thread {
 			notifyGameStarts();
 			
 			while(true) {
-				hit = true;
-				while(hit) {
+				notifyPlayersTurnListener(currPlayer);
+				hit = Ship.defaultShip(0,0);
+				while(hit != null) {
 					if(!otherPlayer.isAlive()) {
 						System.out.println(String.format("%s hat gewonnen!!", currPlayer.name));
 						notifyGameEndsListener(currPlayer);
@@ -208,6 +212,9 @@ public class Logic extends Thread {
 					}
 					
 					hit = currPlayer.doWhatYouHaveToDo();
+					if(hit == null) notifyGameEventListener(GameEventListener.MISS);
+					else if(hit.isAlive()) notifyGameEventListener(GameEventListener.HIT);
+					else notifyGameEventListener(GameEventListener.HIT_DEAD);
 				}
 				
 				Player temp = currPlayer;
@@ -257,6 +264,22 @@ public class Logic extends Thread {
 	
 	public void registerGameEndListener(GameEndsListener listener) {
 		gameEndsListeners.add(listener);
+	}
+	
+	public void registerGameEventListener(GameEventListener listener){
+		gameEventListeners.add(listener);
+	}
+	
+	private void notifyGameEventListener(int event){
+		for(GameEventListener listener : gameEventListeners) {
+			listener.OnEventFired(event);
+		}
+	}
+	
+	private void notifyPlayersTurnListener(Player player){
+		for(GameEventListener listener : gameEventListeners) {
+			listener.OnPlayersTurn(player);
+		}
 	}
 	
 	private void notifyPlaceShips() {
