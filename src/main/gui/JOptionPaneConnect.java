@@ -17,8 +17,10 @@ import javax.swing.JTextField;
 public class JOptionPaneConnect {
 	private Component parentComponent;
 	private Object[] options = {"Bestätigen", "Abbrechen"};
-	private JTextField textfield;
+	private JTextField ipTextField;
+	private JTextField portTextField;
 	private JLabel ip;
+	private JLabel port;
 	private String role = "server";
 	
 	public JOptionPaneConnect(Component parentComponent) {
@@ -38,9 +40,12 @@ public class JOptionPaneConnect {
 		serverButton.setSelected(true);
 		serverButton.addActionListener(arg0 -> {
 			role = "server";
-			textfield.setEnabled(false);
+			ipTextField.setEnabled(false);
 			ip.setEnabled(false);
-			textfield.setText("127.0.0.1");
+			ipTextField.setText("127.0.0.1");
+			portTextField.setEnabled(false);
+			port.setEnabled(false);
+			portTextField.setText("4444");
 			panel.validate();
 			panel.repaint();
 		});
@@ -48,8 +53,10 @@ public class JOptionPaneConnect {
 		clientButton.setPreferredSize(new Dimension(210, 30));
 		clientButton.addActionListener(arg0 -> {
 			role = "client";
-			textfield.setEnabled(true);
+			ipTextField.setEnabled(true);
+			portTextField.setEnabled(true);
 			ip.setEnabled(true);
+			port.setEnabled(true);
 			panel.validate();
 			panel.repaint();
 		});
@@ -58,30 +65,48 @@ public class JOptionPaneConnect {
 		connectGroup.add(serverButton);
 		connectGroup.add(clientButton);
 		ip = new JLabel("IP-Adresse");
-		textfield = new JTextField("127.0.0.1");
-		textfield.addMouseListener(new MouseAdapter() {
+		ipTextField = new JTextField("127.0.0.1");
+		ipTextField.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (textfield.isEnabled()) textfield.setText("");
+				if (ipTextField.isEnabled()) ipTextField.setText("");
 			}
 		});
-		textfield.setEnabled(false);
+		ipTextField.setEnabled(false);
 		ip.setEnabled(false);
+
+		port = new JLabel("Port");
+		portTextField = new JTextField("4444");
+		portTextField.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (portTextField.isEnabled()) portTextField.setText("");
+			}
+		});
+		portTextField.setEnabled(false);
+		port.setEnabled(false);
+
+
 		panel.add(Box.createVerticalGlue());
 		panel.add(serverButton);
 		panel.add(clientButton);
 		panel.add(Box.createVerticalStrut(15));
 		panel.add(ip);
-		panel.add(textfield);
+		panel.add(ipTextField);
+		panel.add(port);
+		panel.add(portTextField);
 		panel.add(Box.createVerticalGlue());
 		return panel;
 	}
 	
 	public String getIP() {
-		if (role.equals("server")) {
-			return null;
-		}
 		if (role.equals("client")) {
-			return textfield.getText();
+			return ipTextField.getText();
+		}
+		return null;
+	}
+
+	public String getPort(){
+		if (role.equals("client")){
+			return portTextField.getText();
 		}
 		return null;
 	}
