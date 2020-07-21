@@ -291,11 +291,11 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 		
 		switch(theme) {
 			case "Battleships":
-				ImageIcon tilesetIcon = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("tileset_battleships.png").getPath()).getImage());
+				ImageIcon tilesetIcon = new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("tileset_battleships.png").getPath()).getImage());
 				tileset = tilesetIcon.getImage();
 				break;
 			case "Battlecars":
-				tilesetIcon = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("tileset_battlecars.png").getPath()).getImage());
+				tilesetIcon = new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("tileset_battlecars.png").getPath()).getImage());
 				tileset = tilesetIcon.getImage();
 				break;
 		}

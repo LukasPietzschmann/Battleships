@@ -44,14 +44,14 @@ public class MainWindow {
 		
 		menu.setUpMenu();
 		
-		music = new Music(getClass().getClassLoader().getResource("sound.wav").getPath());
+		music = new Music(ClassLoader.getSystemClassLoader().getResource("sound.wav").getPath());
 		if (Launcher.soundPlaying) {
 			music.restartMusic();
 		}
 		
 		try {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(getClass().getClassLoader().getResource("Krungthep.ttf").getPath())));
+			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(ClassLoader.getSystemClassLoader().getResource("Krungthep.ttf").getPath())));
 		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 		}

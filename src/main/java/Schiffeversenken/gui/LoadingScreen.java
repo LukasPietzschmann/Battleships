@@ -27,7 +27,7 @@ public class LoadingScreen extends JFrame {
         background = loadBackground();
         loadText(mode);
         loadFont();
-        loadingAnimation = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("spinner.gif").getPath()).getImage().getScaledInstance(130, 130, Image.SCALE_DEFAULT));
+        loadingAnimation = new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("spinner.gif").getPath()).getImage().getScaledInstance(130, 130, Image.SCALE_DEFAULT));
         loadScreen();
     }
 
@@ -50,19 +50,19 @@ public class LoadingScreen extends JFrame {
         switch (Launcher.theme){
             case "Battleships":
                 ArrayList<ImageIcon> battleshipsImages= new ArrayList<>();
-                battleshipsImages.add(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("LS_Battleships_1.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
-                battleshipsImages.add(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("LS_Battleships_2.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
-                battleshipsImages.add(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("LS_Battleships_3.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
-                battleshipsImages.add(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("LS_Battleships_4.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
-                battleshipsImages.add(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("LS_Battleships_5.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
-                battleshipsImages.add(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("LS_Battleships_6.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
+                battleshipsImages.add(new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("LS_Battleships_1.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
+                battleshipsImages.add(new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("LS_Battleships_2.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
+                battleshipsImages.add(new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("LS_Battleships_3.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
+                battleshipsImages.add(new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("LS_Battleships_4.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
+                battleshipsImages.add(new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("LS_Battleships_5.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
+                battleshipsImages.add(new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("LS_Battleships_6.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
                 list = battleshipsImages;
                 break;
             case "Battlecars":
                 ArrayList<ImageIcon> battlecarsImages= new ArrayList<>();
-                battlecarsImages.add(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("LS_Battlecars_1.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
-                battlecarsImages.add(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("LS_Battlecars_2.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
-                battlecarsImages.add(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("LS_BattleCars_3.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
+                battlecarsImages.add(new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("LS_Battlecars_1.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
+                battlecarsImages.add(new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("LS_Battlecars_2.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
+                battlecarsImages.add(new ImageIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("LS_BattleCars_3.jpg").getPath()).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH)));
                 list = battlecarsImages;
                 break;
             default:
@@ -76,7 +76,7 @@ public class LoadingScreen extends JFrame {
     private void loadFont(){
         try {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(getClass().getClassLoader().getResource("Krungthep.ttf").getPath())));
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(ClassLoader.getSystemClassLoader().getResource("Krungthep.ttf").getPath())));
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
