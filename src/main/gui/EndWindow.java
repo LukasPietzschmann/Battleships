@@ -6,6 +6,7 @@ import java.awt.*;
 public class EndWindow {
     public static final int WIN = 0;
     public static final int LOSE = 1;
+    public static final int OPP_LEFT = 2;
     JFrame frame;
     GameWindow gw;
     JDialog dialog = new JDialog();
@@ -26,6 +27,10 @@ public class EndWindow {
             case (LOSE):
                 icon = new ImageIcon(new ImageIcon("src/res/lose.png").getImage().getScaledInstance(190, 180, Image.SCALE_SMOOTH));
                 message.setText("<html>Schade! <p/>Du hast verloren!</html>");
+                break;
+            case (OPP_LEFT):
+                icon = new ImageIcon(new ImageIcon("src/res/win.png").getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH));
+                message.setText("<html>Dein Gegner hat aufgegeben! <p/>Du hast gewonnen!</html>");
                 break;
         }
     }

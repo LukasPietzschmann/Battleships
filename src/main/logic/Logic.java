@@ -276,6 +276,12 @@ public class Logic extends Thread {
 		}
 	}
 	
+	public void notifyOppLeftListener(){
+		for(GameEndsListener listener : gameEndsListeners) {
+			listener.OnOpponentLeft();
+		}
+	}
+	
 	private void notifyPlayersTurnListener(Player player){
 		for(GameEventListener listener : gameEventListeners) {
 			listener.OnPlayersTurn(player);

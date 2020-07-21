@@ -1,6 +1,7 @@
 package network;
 
 import logic.GameEndsListener;
+import logic.Logic;
 import logic.Player;
 
 import java.io.BufferedReader;
@@ -11,9 +12,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class NetworkThread implements GameEndsListener {
+	private Logic logic;
 	private enum Type {
 		Server,
 		Client
@@ -25,7 +28,8 @@ public class NetworkThread implements GameEndsListener {
 	private final BlockingQueue<String> sendQueue;
 	private final Type type;
 	
-	public NetworkThread(ServerSocket serverSocket) {
+	public NetworkThread(ServerSocket serverSocket, Logic logic) {
+		this.logic = logic;
 		this.serverSocket = serverSocket;
 		type = Type.Server;
 		recieveQueue = new LinkedBlockingQueue<>();
@@ -59,7 +63,10 @@ public class NetworkThread implements GameEndsListener {
 				while(!serverSocket.isClosed()) {
 					try {
 						String msg = in.readLine();
-						if(msg == null) break;
+						if(msg == null){
+							logic.notifyOppLeftListener();
+							break;
+						}
 						recieveQueue.offer(msg);
 						System.out.println("Server recieved " + msg);
 					}catch(SocketException e) {
@@ -87,7 +94,8 @@ public class NetworkThread implements GameEndsListener {
 		acceptT.start();
 	}
 	
-	public NetworkThread(Socket clientSocket) {
+	public NetworkThread(Socket clientSocket, Logic logic) {
+		this.logic = logic;
 		this.clientSocket = clientSocket;
 		type = Type.Client;
 		recieveQueue = new LinkedBlockingQueue<>();
@@ -121,7 +129,10 @@ public class NetworkThread implements GameEndsListener {
 				while(!clientSocket.isClosed()) {
 					try {
 						String msg = in.readLine();
-						if(msg == null) break;
+						if(msg == null){
+							logic.notifyOppLeftListener();
+							break;
+						}
 						recieveQueue.offer(msg);
 						System.out.println("Client recieved " + msg);
 					}catch(SocketException e) {
@@ -164,6 +175,6 @@ public class NetworkThread implements GameEndsListener {
 	
 	@Override
 	public void OnOpponentLeft() {
-		//TODO
+		OnGameEnds(null);
 	}
 }
