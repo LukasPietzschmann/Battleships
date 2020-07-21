@@ -393,7 +393,7 @@ public class Map {
 
 		switch(ship.getDirection()) {
 			case north:
-				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y + i)|| map[y][x].stat == SHIP) return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y + i)|| map[y + i][x].stat == SHIP) return false;
 				for(int i = 0; i < shipSize; i++) {
 					//links
 					try {
@@ -428,7 +428,7 @@ public class Map {
 				}
 				break;
 			case south:
-				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y - i)|| map[y][x].stat == SHIP) return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y - i)|| map[y - i][x].stat == SHIP) return false;
 				for(int i = 0; i < shipSize; i++) {
 					//links
 					try {
@@ -463,7 +463,7 @@ public class Map {
 				}
 				break;
 			case west:
-				for(int i = 0; i < shipSize; i++) if(!isInMap(x + i, y)|| map[y][x].stat == SHIP) return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x + i, y)|| map[y][x + i].stat == SHIP) return false;
 				for(int i = 0; i < shipSize; i++) {
 					//oben
 					try {
@@ -498,7 +498,7 @@ public class Map {
 				}
 				break;
 			case east:
-				for(int i = 0; i < shipSize; i++) if(!isInMap(x - i, y) || map[y][x].stat == SHIP) return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x - i, y) || map[y][x - i].stat == SHIP) return false;
 				for(int i = 0; i < shipSize; i++) {
 					//oben
 					try {
