@@ -237,9 +237,9 @@ public class GameWindow implements GameEndsListener {
     @Override
     public void OnGameEnds(Player winningPlayer) {
         if (winningPlayer == ownPlayer){
-            new EndWindow(0, frame, this).setUpMainWindow();
+            new EndWindow(EndWindow.WIN, frame, this).setUpMainWindow();
         } else {
-            new EndWindow(1, frame, this).setUpMainWindow();
+            new EndWindow(EndWindow.LOSE, frame, this).setUpMainWindow();
         }
     }
     
