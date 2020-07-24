@@ -33,11 +33,11 @@ public class LoadingScreen extends JFrame {
 
     private void loadText(int mode){
         switch (mode){
-            case WAIT_FOR_CONNECT:
+            case 0:
                 line1.setText("Einen Moment noch!");
                 line2.setText("Es wird auf den Client gewartet");
                 break;
-            case WAIT_FOR_SHIP_PLACEMENT:
+            case 1:
                 line1.setText("Einen Augenblick noch!");
                 line2.setText("Der Gegner platziert seine");
                 line3.setText(Launcher.themeIdentifierPlural + ".");
@@ -134,7 +134,7 @@ public class LoadingScreen extends JFrame {
         layeredPane.add(panel, JLayeredPane.POPUP_LAYER);
 
         frame.add(layeredPane);
-//        frame.setLocationRelativeTo(frame);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setResizable(false);
     }
@@ -142,7 +142,7 @@ public class LoadingScreen extends JFrame {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1130, 700);
+        frame.setSize(400, 300);
         new LoadingScreen(frame, WAIT_FOR_CONNECT);
     }
 }
