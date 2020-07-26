@@ -1,46 +1,43 @@
 package gui;
 
-import logic.GameEndsListener;
-import logic.GameEventListener;
-import logic.Launcher;
-import logic.LocalPlayer;
-import logic.Logic;
-import logic.Player;
+import logic.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
  */
-public class GameWindow implements GameEndsListener, GameEventListener {
+public class GameWindow implements GameEndsListener {
     private final JFrame frame;
     private final String mode;
-    private final Logic logic;
-    private final LocalPlayer ownPlayer;
-    private final Player oppPlayer;
+    private Logic logic;
+    private LocalPlayer ownPlayer;
+    private Player oppPlayer;
 
     JGameCanvas grid1;
     JGameCanvas grid2;
-    JPanel gridHolder = new JPanel();
     private final JPanel grid1Holder = new JPanel(new GridBagLayout());
     private final JPanel grid2Holder = new JPanel(new GridBagLayout());
-    private final JPanel textbarHolder = new JPanel();
-    private final JLabel eventLine = new JLabel();
-    private final JLabel playersTurnLine = new JLabel();
-    private final JPanel statsOptions = new JPanel();
-    private final JPanel stats = new JPanel();
-    private final JPanel options = new JPanel();
+    private JPanel textbarHolder = new JPanel();
+    private JLabel textbar = new JLabel();
+    private JPanel statsOptions = new JPanel();
+    private JPanel stats = new JPanel();
+    private JPanel options = new JPanel();
 
     JPanel mainPanel = new JPanel();
 
     static Color backgroundColor = MainMenu.backgroundColor;
     static Color textColor = MainMenu.textColor;
-    public static Font font = new Font("Krungthep", Font.PLAIN, 20);
-    EmptyBorder emptyBorder = new EmptyBorder(3, 3, 3, 3);
-    Border activeBorder = BorderFactory.createLineBorder(Color.GREEN, 3);
+    Font font = new Font("Krungthep", Font.PLAIN, 20);
 
     /**
      * Konstruktor, erstellt ein GameWindow-Objekt.
@@ -58,11 +55,10 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         grid1 = new JGameCanvas(logic.getSize());
         grid2 = new JGameCanvas(logic.getSize());
         ownPlayer.registerGameListener(grid1);
-        oppPlayer.registerEnemyGameListener(grid2);
+        oppPlayer.registerGameListener(grid2);
         ownPlayer.registerMakeMove(grid2, grid2.getClickQueue());
         logic.registerGameEndListener(grid2);
         logic.registerGameEndListener(this);
-        logic.registerGameEventListener(this);
     }
 
     /**
@@ -75,6 +71,9 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         mainPanel.setOpaque(true);
         mainPanel.setBackground(backgroundColor);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30 , 30, 30, 30));
+
+        EmptyBorder emptyBorder = new EmptyBorder(3, 3, 3, 3);
+        Border activeBorder = BorderFactory.createLineBorder(Color.GREEN, 3);
 
         // grid1
         grid1.setOpaque(false);
@@ -91,6 +90,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         grid2Holder.add(grid2);
 
         // gridHolder
+        JPanel gridHolder = new JPanel();
         gridHolder.setLayout(new BoxLayout(gridHolder, BoxLayout.X_AXIS));
         gridHolder.setOpaque(false);
 
@@ -105,26 +105,13 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         mainPanel.add(gridHolder, BorderLayout.CENTER);
         mainPanel.add(statsOptions, BorderLayout.SOUTH);
 
-        // textlines
-        eventLine.setText(" ");
-        eventLine.setForeground(textColor);
-        eventLine.setFont(font);
-        eventLine.setOpaque(false);
-        eventLine.setSize(new Dimension(200, 200));
-        eventLine.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        playersTurnLine.setText("Aktueller Spieler: Spieler X ist an der Reihe.");
-        playersTurnLine.setForeground(textColor);
-        playersTurnLine.setFont(font);
-        playersTurnLine.setOpaque(false);
-        playersTurnLine.setSize(new Dimension(200, 200));
-        playersTurnLine.setAlignmentX(Component.CENTER_ALIGNMENT);
-        playersTurnLine.setBorder(new EmptyBorder(0, 0, 20, 0));
-
-        textbarHolder.setLayout(new BoxLayout(textbarHolder, BoxLayout.PAGE_AXIS));
-
-        textbarHolder.add(eventLine);
-        textbarHolder.add(playersTurnLine);
+        // textbar
+        textbar.setText("Test Test Spielanweisung Test Test");
+        textbar.setForeground(textColor);
+        textbar.setFont(font);
+        textbar.setOpaque(false);
+        textbar.setSize(new Dimension(200, 200));
+        textbarHolder.add(textbar);
         textbarHolder.setOpaque(false);
 
         // stats Elements
@@ -158,11 +145,29 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         saveButton.setMinimumSize(new Dimension(50, 50));
         saveButton.setMaximumSize(new Dimension(50, 50));
         saveButton.setPreferredSize(new Dimension(50, 50));
-        saveButton.addActionListener(arg0 -> {
-            int saveGameId = 12345; // TODO delete
+       saveButton.addActionListener(arg0 -> {
+            Scanner scan = new Scanner(System.in);
+            String saveGameId;
+            saveGameId = scan.nextLine();
+            //int saveGameId = 12345; // TODO delete
             JOptionPane.showMessageDialog(mainPanel, "Aktuelle Spielstand-ID: " + saveGameId,
                     "Spielstand-ID", JOptionPane.PLAIN_MESSAGE);
-        });
+
+           FileWriter file = null;
+           try {
+               file = new FileWriter(saveGameId + ".txt");
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+           BufferedWriter bw = new BufferedWriter(file);
+           saveGame test = new saveGame();
+           String cache = String.valueOf(test.saveGame(ownPlayer.getMap()));
+           try {
+               bw.write(cache);
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       });
 
         // soundButton Button Settings
         JButton soundButton = new JButton();
@@ -224,58 +229,20 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         options.add(buttonsHolder);
 
         // frame Settings
-        frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
+        frame.getContentPane().add(mainPanel);
         frame.setVisible(true);
-        frame.setResizable(true);
-    }
+        frame.pack();
 
-    public void backToMenu(){
-        mainPanel.remove(gridHolder);
-        frame.remove(mainPanel);
-        MainMenu menu = new MainMenu(frame);
-        menu.setUpMenu();
-    }
 
+    }
+    
     @Override
     public void OnGameEnds(Player winningPlayer) {
-        if (winningPlayer == ownPlayer){
-            new EndWindow(EndWindow.WIN, frame, this).setUpMainWindow();
-        } else {
-            new EndWindow(EndWindow.LOSE, frame, this).setUpMainWindow();
-        }
+        JOptionPane.showMessageDialog(null, String.format("%s hat gewonnen", winningPlayer.getName()), "End", JOptionPane.PLAIN_MESSAGE);
     }
-    
+
     @Override
     public void OnOpponentLeft() {
-        new EndWindow(EndWindow.OPP_LEFT, frame, this).setUpMainWindow();
-    }
-    
-    @Override
-    public void OnEventFired(int event) {
-        switch(event){
-            case HIT:
-                eventLine.setText("Treffer!");
-                break;
-            case HIT_DEAD:
-                eventLine.setText(Launcher.themeIdentifierSingular + " zerstört!");
-                break;
-            case MISS:
-                eventLine.setText("Daneben!");
-                break;
-        }
-    }
-    
-    @Override
-    public void OnPlayersTurn(Player player) {
-        if (player == ownPlayer){
-            playersTurnLine.setText("Du bist an der Reihe.");
-            grid1.setBorder(emptyBorder);
-            grid2.setBorder(activeBorder);
-        } else {
-            playersTurnLine.setText("Gegner ist der an der Reihe");
-            grid1.setBorder(activeBorder);
-            grid2.setBorder(emptyBorder);
-        }
 
     }
 }

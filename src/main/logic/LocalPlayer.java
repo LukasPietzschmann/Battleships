@@ -167,4 +167,8 @@ public abstract class LocalPlayer extends Player {
 		map.placeShip(ship);
 		notifyOnShipPlacedListeners(ship);
 	}
+
+	public Map getMap(){
+		return map;
+	}
 }
