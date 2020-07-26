@@ -272,7 +272,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
             grid1.setBorder(emptyBorder);
             grid2.setBorder(activeBorder);
         } else {
-            playersTurnLine.setText("Gegner ist der an der Reihe");
+            playersTurnLine.setText("Gegner ist an der Reihe");
             grid1.setBorder(activeBorder);
             grid2.setBorder(emptyBorder);
         }
