@@ -33,6 +33,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
     private final JPanel statsOptions = new JPanel();
     private final JPanel stats = new JPanel();
     private final JPanel options = new JPanel();
+    private JButton saveButton;
 
     JPanel mainPanel = new JPanel();
 
@@ -147,7 +148,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         buttonsHolder.setBorder(null);
 
         // saveButton
-        JButton saveButton = new JButton("Spiel speichern");
+        saveButton = new JButton("Spiel speichern");
         ImageIcon loadIcon = new ImageIcon(new ImageIcon("src/res/loadSaveIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
         saveButton.setIcon(loadIcon);
         saveButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -271,10 +272,12 @@ public class GameWindow implements GameEndsListener, GameEventListener {
             playersTurnLine.setText("Du bist an der Reihe.");
             grid1.setBorder(emptyBorder);
             grid2.setBorder(activeBorder);
+            saveButton.setEnabled(true);
         } else {
             playersTurnLine.setText("Gegner ist an der Reihe");
             grid1.setBorder(activeBorder);
             grid2.setBorder(emptyBorder);
+            saveButton.setEnabled(false);
         }
 
     }
