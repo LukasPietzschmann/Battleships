@@ -143,7 +143,7 @@ public class Network extends Player {
 	}
 	
 	@Override
-	public Ship doWhatYouHaveToDo() {
+	public Ship yourTurn() {
 		// warte bis gegner geschossen hat
 		
 		Message m = new Message(networkThread.recieveMessage());

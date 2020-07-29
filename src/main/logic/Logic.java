@@ -5,8 +5,6 @@ import ai.Difficulty;
 import network.Network;
 
 import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -211,7 +209,7 @@ public class Logic extends Thread {
 						return;
 					}
 					
-					hit = currPlayer.doWhatYouHaveToDo();
+					hit = currPlayer.yourTurn();
 					if(hit == null) notifyGameEventListener(GameEventListener.MISS);
 					else if(hit.isAlive()) notifyGameEventListener(GameEventListener.HIT);
 					else notifyGameEventListener(GameEventListener.HIT_DEAD);

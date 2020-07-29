@@ -55,7 +55,7 @@ public abstract class Player {
 	 *
 	 * @return {@code true}, falls der Spieler erfolgreich getroffen hat. Sonst {@code false}.
 	 */
-	public abstract Ship doWhatYouHaveToDo();
+	public abstract Ship yourTurn();
 	
 	/**
 	 * Wird von der Klasse {@link Logic} aufgerufen, um auf den Spieler zu schießen.
