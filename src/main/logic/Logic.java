@@ -74,9 +74,9 @@ public class Logic extends Thread {
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param IP Die IP Adresse des Servers.
 	 */
-	public Logic(String nameAI, String nameNW, Difficulty difficulty, String IP) {
+	public Logic(String nameAI, String nameNW, Difficulty difficulty, String IP, int port) {
 		this(Launcher.NW_CL_AI);
-		oppPlayer = new Network(this, nameNW, IP);
+		oppPlayer = new Network(this, nameNW, IP, port);
 		ships = ((Network) oppPlayer).getShips();
 		size = ((Network) oppPlayer).getSize();
 		ownPlayer = new AI(this, ((Network) oppPlayer).getSize(), nameNW, difficulty);
@@ -119,9 +119,9 @@ public class Logic extends Thread {
 	 * @param nameNW Der Name des Gegners.
 	 * @param IP Die IP Adresse des Servers.
 	 */
-	public Logic(String namePl, String nameNW, String IP) {
+	public Logic(String namePl, String nameNW, String IP, int port) {
 		this(Launcher.PL_NW_CL);
-		oppPlayer = new Network(this, nameNW, IP);
+		oppPlayer = new Network(this, nameNW, IP, port);
 		ships = ((Network) oppPlayer).getShips();
 		size = ((Network) oppPlayer).getSize();
 		ownPlayer = new Human(this, ((Network) oppPlayer).getSize(), namePl);

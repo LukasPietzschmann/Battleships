@@ -143,11 +143,11 @@ public class JOptionPaneConnectAI {
 		return null;
 	}
 
-	public String getPort(){
+	public int getPort(){
 		if (role.equals("client")){
-			return portTextField.getText();
+			return Integer.parseInt(portTextField.getText());
 		}
-		return null;
+		return -1;
 	}
 	
 	public String getRole() {
