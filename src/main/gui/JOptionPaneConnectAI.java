@@ -1,6 +1,7 @@
 package gui;
 
 import ai.Difficulty;
+import network.Network;
 
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
@@ -46,7 +47,7 @@ public class JOptionPaneConnectAI {
 			ipTextField.setText("127.0.0.1");
 			portTextField.setEnabled(false);
 			port.setEnabled(false);
-			portTextField.setText("4444");
+			portTextField.setText(String.valueOf(Network.PORT));
 			panel.validate();
 			panel.repaint();
 		});
@@ -70,7 +71,7 @@ public class JOptionPaneConnectAI {
 		myIp = new JFormattedTextField();
 		myIp.setEditable(false);
 		try {
-			myIp.setText(InetAddress.getLocalHost().getHostAddress());
+			myIp.setText(String.format("%s:%d",InetAddress.getLocalHost().getHostAddress(), Network.PORT));
 		}catch(UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -89,7 +90,7 @@ public class JOptionPaneConnectAI {
 	
 		
 		port = new JLabel("Port");
-		portTextField = new JTextField("4444");
+		portTextField = new JTextField(String.valueOf(Network.PORT));
 		portTextField.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (portTextField.isEnabled()) portTextField.setText("");

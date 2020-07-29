@@ -19,7 +19,7 @@ public class Network extends Player {
 	/**
 	 * Der über den man sich verbindet.
 	 */
-	private static final int PORT = 1234;
+	public static final int PORT = 4444;
 	/**
 	 * Das Keyword für eine Schuss.
 	 */
