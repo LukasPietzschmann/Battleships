@@ -5,23 +5,21 @@ import ai.Difficulty;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class JOptionPaneConnectAI {
 	private Component parentComponent;
 	private Object[] options = {"Bestätigen", "Abbrechen"};
 	private JTextField ipTextField;
+	private JTextField myIp;
 	private JTextField portTextField;
 	private JLabel ip;
 	private JLabel port;
+	private JLabel myIpLable;
 	private String role = "server";
 	private Difficulty difficulty = Difficulty.medium;
 	
@@ -42,6 +40,8 @@ public class JOptionPaneConnectAI {
 		serverButton.addActionListener(arg0 -> {
 			role = "server";
 			ipTextField.setEnabled(false);
+			myIp.setEnabled(true);
+			myIpLable.setEnabled(true);
 			ip.setEnabled(false);
 			ipTextField.setText("127.0.0.1");
 			portTextField.setEnabled(false);
@@ -54,6 +54,8 @@ public class JOptionPaneConnectAI {
 		clientButton.addActionListener(arg0 -> {
 			role = "client";
 			ipTextField.setEnabled(true);
+			myIp.setEnabled(false);
+			myIpLable.setEnabled(false);
 			ip.setEnabled(true);
 			portTextField.setEnabled(true);
 			port.setEnabled(true);
@@ -65,6 +67,14 @@ public class JOptionPaneConnectAI {
 		connectGroup.add(serverButton);
 		connectGroup.add(clientButton);
 		
+		myIp = new JFormattedTextField();
+		myIp.setEditable(false);
+		try {
+			myIp.setText(InetAddress.getLocalHost().getHostAddress());
+		}catch(UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
 		ip = new JLabel("IP-Adresse");
 		ipTextField = new JTextField("127.0.0.1");
 		ipTextField.addMouseListener(new MouseAdapter() {
@@ -72,10 +82,12 @@ public class JOptionPaneConnectAI {
 				if (ipTextField.isEnabled()) ipTextField.setText("");
 			}
 		});
-
+		myIpLable = new JLabel("Eigene IP Adresse");
+		
 		ipTextField.setEnabled(false);
 		ip.setEnabled(false);
-
+	
+		
 		port = new JLabel("Port");
 		portTextField = new JTextField("4444");
 		portTextField.addMouseListener(new MouseAdapter() {
@@ -112,6 +124,8 @@ public class JOptionPaneConnectAI {
 		panel.add(ipTextField);
 		panel.add(port);
 		panel.add(portTextField);
+		panel.add(myIpLable);
+		panel.add(myIp);
 		panel.add(Box.createVerticalStrut(15));
 		panel.add(aiDifficulty);
 		panel.add(easyButton);

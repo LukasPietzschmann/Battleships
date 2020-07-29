@@ -4,23 +4,20 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class JOptionPaneConnect {
 	private Component parentComponent;
 	private Object[] options = {"Bestätigen", "Abbrechen"};
 	private JTextField ipTextField;
 	private JTextField portTextField;
+	private JTextField myIp;
 	private JLabel ip;
 	private JLabel port;
+	private JLabel myIpLable;
 	private String role = "server";
 	
 	public JOptionPaneConnect(Component parentComponent) {
@@ -40,6 +37,8 @@ public class JOptionPaneConnect {
 		serverButton.setSelected(true);
 		serverButton.addActionListener(arg0 -> {
 			role = "server";
+			myIp.setEnabled(true);
+			myIpLable.setEnabled(true);
 			ipTextField.setEnabled(false);
 			ip.setEnabled(false);
 			ipTextField.setText("127.0.0.1");
@@ -53,6 +52,8 @@ public class JOptionPaneConnect {
 		clientButton.setPreferredSize(new Dimension(210, 30));
 		clientButton.addActionListener(arg0 -> {
 			role = "client";
+			myIp.setEnabled(false);
+			myIpLable.setEnabled(false);
 			ipTextField.setEnabled(true);
 			portTextField.setEnabled(true);
 			ip.setEnabled(true);
@@ -60,6 +61,15 @@ public class JOptionPaneConnect {
 			panel.validate();
 			panel.repaint();
 		});
+		
+		myIp = new JFormattedTextField();
+		myIp.setEditable(false);
+		try {
+			myIp.setText(InetAddress.getLocalHost().getHostAddress());
+		}catch(UnknownHostException e) {
+			e.printStackTrace();
+		}
+		myIpLable = new JLabel("Eigene IP Adresse");
 		
 		ButtonGroup connectGroup = new ButtonGroup();
 		connectGroup.add(serverButton);
@@ -93,6 +103,8 @@ public class JOptionPaneConnect {
 		panel.add(ipTextField);
 		panel.add(port);
 		panel.add(portTextField);
+		panel.add(myIpLable);
+		panel.add(myIp);
 		panel.add(Box.createVerticalGlue());
 		return panel;
 	}
