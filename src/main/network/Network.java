@@ -19,7 +19,7 @@ public class Network extends Player {
 	/**
 	 * Der über den man sich verbindet.
 	 */
-	private static final int PORT = 1234;
+	public static final int PORT = 4444;
 	/**
 	 * Das Keyword für eine Schuss.
 	 */
@@ -106,10 +106,10 @@ public class Network extends Player {
 	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
 	 * @param ip Die IP-Adresse des Servers.
 	 */
-	public Network(Logic logic, String name, String ip) {
+	public Network(Logic logic, String name, String ip, int port) {
 		super(logic, name);
 		try {
-			networkThread = new NetworkThread(new Socket(ip, PORT), logic);
+			networkThread = new NetworkThread(new Socket(ip, port), logic);
 			logic.registerGameEndListener(networkThread);
 		}catch(IOException e) {
 			e.printStackTrace();
@@ -143,7 +143,7 @@ public class Network extends Player {
 	}
 	
 	@Override
-	public Ship doWhatYouHaveToDo() {
+	public Ship yourTurn() {
 		// warte bis gegner geschossen hat
 		
 		Message m = new Message(networkThread.recieveMessage());

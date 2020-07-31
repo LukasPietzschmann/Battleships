@@ -20,7 +20,7 @@ public class Human extends LocalPlayer {
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public Ship doWhatYouHaveToDo() {
+	public Ship yourTurn() {
 		notifyMakeMove();
 		int x = 0;
 		int y = 0;

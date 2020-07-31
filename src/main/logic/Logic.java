@@ -5,8 +5,6 @@ import ai.Difficulty;
 import network.Network;
 
 import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -76,9 +74,9 @@ public class Logic extends Thread {
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param IP Die IP Adresse des Servers.
 	 */
-	public Logic(String nameAI, String nameNW, Difficulty difficulty, String IP) {
+	public Logic(String nameAI, String nameNW, Difficulty difficulty, String IP, int port) {
 		this(Launcher.NW_CL_AI);
-		oppPlayer = new Network(this, nameNW, IP);
+		oppPlayer = new Network(this, nameNW, IP, port);
 		ships = ((Network) oppPlayer).getShips();
 		size = ((Network) oppPlayer).getSize();
 		ownPlayer = new AI(this, ((Network) oppPlayer).getSize(), nameNW, difficulty);
@@ -121,9 +119,9 @@ public class Logic extends Thread {
 	 * @param nameNW Der Name des Gegners.
 	 * @param IP Die IP Adresse des Servers.
 	 */
-	public Logic(String namePl, String nameNW, String IP) {
+	public Logic(String namePl, String nameNW, String IP, int port) {
 		this(Launcher.PL_NW_CL);
-		oppPlayer = new Network(this, nameNW, IP);
+		oppPlayer = new Network(this, nameNW, IP, port);
 		ships = ((Network) oppPlayer).getShips();
 		size = ((Network) oppPlayer).getSize();
 		ownPlayer = new Human(this, ((Network) oppPlayer).getSize(), namePl);
@@ -211,7 +209,7 @@ public class Logic extends Thread {
 						return;
 					}
 					
-					hit = currPlayer.doWhatYouHaveToDo();
+					hit = currPlayer.yourTurn();
 					if(hit == null) notifyGameEventListener(GameEventListener.MISS);
 					else if(hit.isAlive()) notifyGameEventListener(GameEventListener.HIT);
 					else notifyGameEventListener(GameEventListener.HIT_DEAD);
