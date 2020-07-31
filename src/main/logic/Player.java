@@ -11,10 +11,6 @@ public abstract class Player {
 	 * "Zurück-Referenz" auf das Logik Objekt.
 	 */
 	protected Logic logic;
-	/**
-	 * Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
-	 */
-	protected String name;
 	
 	protected ArrayList<GameListener> gameListeners;
 	protected ArrayList<GameListener> enemyGameListeners;
@@ -33,11 +29,9 @@ public abstract class Player {
 	
 	/**
 	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
-	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
 	 */
-	public Player(Logic logic, String name) {
+	public Player(Logic logic) {
 		this.logic = logic;
-		this.name = name;
 		gameListeners = new ArrayList<>();
 		enemyGameListeners = new ArrayList<>();
 	}
@@ -80,9 +74,5 @@ public abstract class Player {
 	
 	public void oppPlacedShips(){
 		return;
-	}
-	
-	public String getName(){
-		return name;
 	}
 }

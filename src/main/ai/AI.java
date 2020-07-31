@@ -14,11 +14,10 @@ public class AI extends LocalPlayer {
 	/**
 	 * @param l "Zurück-Referenz" auf das Logik Objekt.
 	 * @param size Die festgelegte Größe des Spielfelds.
-	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
 	 * @param difficulty Die Schwierigkeitsstufe des Computers
 	 */
-	public AI(Logic l, int size, String name, Difficulty difficulty) {
-		super(l, size, name);
+	public AI(Logic l, int size, Difficulty difficulty) {
+		super(l, size);
 		
 		switch(difficulty) {
 			case easy:

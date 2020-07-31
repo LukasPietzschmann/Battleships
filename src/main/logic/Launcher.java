@@ -37,24 +37,24 @@ public class Launcher {
 	public static String themeIdentifierPlural = "Schiffe";
 	public static String themeIdentifierSingular = "Schiff";
 	
-	public static Logic startGame(int mode, String name01, String name02, int ship2Count, int ship3Count, int ship4Count, int ship5Count, String ip, int port, Difficulty diff01, Difficulty diff02, long id) {
+	public static Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, String ip, int port, Difficulty diff01, Difficulty diff02, long id) {
 		try {
 			switch(mode) {
 				case SG:
 					//TODO id Parameter
 					return new Logic(id);
 				case AI_AI:
-					return new Logic(name01, name02, diff01, diff02, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
+					return new Logic(diff01, diff02, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
 				case PL_AI:
-					return new Logic(name01, name02, gridSize, diff01, ship2Count, ship3Count, ship4Count, ship5Count);
+					return new Logic(gridSize, diff01, ship2Count, ship3Count, ship4Count, ship5Count);
 				case NW_CL_AI:
-					return new Logic(name01, name02, diff01, ip, port);
+					return new Logic(diff01, ip, port);
 				case NW_SV_AI:
-					return new Logic(name01, name02, diff01, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
+					return new Logic(diff01, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
 				case PL_NW_SV:
-					return new Logic(name01, name02, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
+					return new Logic(gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
 				case PL_NW_CL:
-					return new Logic(name01, name02, ip, port);
+					return new Logic(ip, port);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

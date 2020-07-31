@@ -47,7 +47,7 @@ public class Logic extends Thread {
 		//TODO implement
 	}
 	
-	private Logic(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
+	private Logic(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, int z) {
 		this(mode);
 		ships = new ArrayList<>();
 		int[] ships = {ship2Count, ship3Count, ship4Count, ship5Count};
@@ -59,86 +59,76 @@ public class Logic extends Thread {
 		}
 	}
 	
-	public Logic(String nameAI1, String nameAI2, Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
-		this(Launcher.AI_AI, ship2Count, ship3Count, ship4Count, ship5Count);
+	public Logic(Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
+		this(Launcher.AI_AI, ship2Count, ship3Count, ship4Count, ship5Count, 0);
 		this.size = size;
-		ownPlayer = new AI(this, size, nameAI1, difficultyAI1);
-		oppPlayer = new AI(this, size, nameAI2, difficultyAI2);
+		ownPlayer = new AI(this, size, difficultyAI1);
+		oppPlayer = new AI(this, size, difficultyAI2);
 	}
 	
 	/**
 	 * Konstruktor, falls eine {@link AI} gegen einen Gegner übers Netzwerk spielt und man selbst der Client ist.
 	 *
-	 * @param nameAI Der Name der AI.
-	 * @param nameNW Der Name des Gegners.
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param IP Die IP Adresse des Servers.
 	 */
-	public Logic(String nameAI, String nameNW, Difficulty difficulty, String IP, int port) {
+	public Logic(Difficulty difficulty, String IP, int port) {
 		this(Launcher.NW_CL_AI);
-		oppPlayer = new Network(this, nameNW, IP, port);
+		oppPlayer = new Network(this, IP, port);
 		ships = ((Network) oppPlayer).getShips();
 		size = ((Network) oppPlayer).getSize();
-		ownPlayer = new AI(this, ((Network) oppPlayer).getSize(), nameNW, difficulty);
+		ownPlayer = new AI(this, ((Network) oppPlayer).getSize(), difficulty);
 	}
 	
 	/**
 	 * Konstruktor, falls eine {@link AI} gegen einen Gegner übers Netzwerk spielt und man selbst der Server ist.
 	 *
-	 * @param nameAI Der Name der AI.
-	 * @param nameNW Der Name des Gegners.
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param size Die Größe des Spielfelds.
 	 */
-	public Logic(String nameAI, String nameNW, Difficulty difficulty, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
-		this(Launcher.NW_SV_AI, ship2Count, ship3Count, ship4Count, ship5Count);
+	public Logic(Difficulty difficulty, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
+		this(Launcher.NW_SV_AI, ship2Count, ship3Count, ship4Count, ship5Count, 0);
 		this.size = size;
-		ownPlayer = new AI(this, size, nameAI, difficulty);
-		oppPlayer = new Network(this, nameNW, size);
+		ownPlayer = new AI(this, size, difficulty);
+		oppPlayer = new Network(this, size);
 	}
 	
 	/**
 	 * Konstruktor, falls eine {@link AI} gegen einen {@link Human} spielt.
 	 *
-	 * @param nameAI Der Name der AI.
-	 * @param namePL Der Name des Spielers.
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param size Die Größe des Spielfelds.
 	 */
-	public Logic(String nameAI, String namePL, int size, Difficulty difficulty, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
-		this(Launcher.PL_AI, ship2Count, ship3Count, ship4Count, ship5Count);
+	public Logic(int size, Difficulty difficulty, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
+		this(Launcher.PL_AI, ship2Count, ship3Count, ship4Count, ship5Count, 0);
 		this.size = size;
-		ownPlayer = new Human(this, size, namePL);
-		oppPlayer = new AI(this, size, nameAI, difficulty);
+		ownPlayer = new Human(this, size);
+		oppPlayer = new AI(this, size, difficulty);
 	}
 	
 	/**
 	 * Konstruktor, falls ein {@link Human} gegen einen Gegner übers Netzwerk spielt und man selbst der Client ist.
 	 *
-	 * @param namePl Der Name des Spielers.
-	 * @param nameNW Der Name des Gegners.
 	 * @param IP Die IP Adresse des Servers.
 	 */
-	public Logic(String namePl, String nameNW, String IP, int port) {
+	public Logic(String IP, int port) {
 		this(Launcher.PL_NW_CL);
-		oppPlayer = new Network(this, nameNW, IP, port);
+		oppPlayer = new Network(this, IP, port);
 		ships = ((Network) oppPlayer).getShips();
 		size = ((Network) oppPlayer).getSize();
-		ownPlayer = new Human(this, ((Network) oppPlayer).getSize(), namePl);
+		ownPlayer = new Human(this, ((Network) oppPlayer).getSize());
 	}
 	
 	/**
 	 * Konstruktor, falls ein {@link Human} gegen einen Gegner übers Netzwerk spielt und man selbst der Server ist.
 	 *
-	 * @param namePl Der Name des Spielers.
-	 * @param nameNW Der Name des Gegners.
 	 * @param size Die Größe des Spielfelds
 	 */
-	public Logic(String namePl, String nameNW, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
-		this(Launcher.PL_NW_SV, ship2Count, ship3Count, ship4Count, ship5Count);
+	public Logic(int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
+		this(Launcher.PL_NW_SV, ship2Count, ship3Count, ship4Count, ship5Count, 0);
 		this.size = size;
-		ownPlayer = new Human(this, size, namePl);
-		oppPlayer = new Network(this, nameNW, size);
+		ownPlayer = new Human(this, size);
+		oppPlayer = new Network(this, size);
 	}
 	
 	/**
@@ -204,7 +194,6 @@ public class Logic extends Thread {
 				hit = Ship.defaultShip(0,0);
 				while(hit != null) {
 					if(!otherPlayer.isAlive()) {
-						System.out.println(String.format("%s hat gewonnen!!", currPlayer.name));
 						notifyGameEndsListener(currPlayer);
 						return;
 					}

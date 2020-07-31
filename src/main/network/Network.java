@@ -68,8 +68,8 @@ public class Network extends Player {
 	
 	private Map map;
 	
-	public Network(Logic logic, String name, long id) throws IOException {
-		super(logic, name);
+	public Network(Logic logic, long id) throws IOException {
+		super(logic);
 		networkThread = new NetworkThread(new ServerSocket(PORT), logic);
 		//networkThread.start();
 		logic.registerGameEndListener(networkThread);
@@ -82,12 +82,11 @@ public class Network extends Player {
 	 * Der Konstruktor, falls man selbst der Server ist.
 	 *
 	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
-	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
 	 * @param size Die Größe des Spielfelds.
 	 * @throws IOException Falls der Server nicht erstellt werden kann.
 	 */
-	public Network(Logic logic, String name, int size) throws IOException {
-		super(logic, name);
+	public Network(Logic logic, int size) throws IOException {
+		super(logic);
 		map = new Map(size);
 		networkThread = new NetworkThread(new ServerSocket(PORT), logic);
 		//networkThread.start();
@@ -103,11 +102,10 @@ public class Network extends Player {
 	 * Konstruktor, falls man selbst der Client ist.
 	 *
 	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
-	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
 	 * @param ip Die IP-Adresse des Servers.
 	 */
-	public Network(Logic logic, String name, String ip, int port) {
-		super(logic, name);
+	public Network(Logic logic, String ip, int port) {
+		super(logic);
 		try {
 			networkThread = new NetworkThread(new Socket(ip, port), logic);
 			logic.registerGameEndListener(networkThread);
