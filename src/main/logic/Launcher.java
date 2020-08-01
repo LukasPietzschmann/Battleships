@@ -41,8 +41,7 @@ public class Launcher {
 		try {
 			switch(mode) {
 				case SG:
-					//TODO id Parameter
-					return new Logic(id);
+					return Logic.fromSaveGame(id);
 				case AI_AI:
 					return new Logic(name01, name02, diff01, diff02, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
 				case PL_AI:

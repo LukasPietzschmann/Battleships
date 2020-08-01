@@ -37,16 +37,6 @@ public class Logic extends Thread {
 		gameEventListeners = new CopyOnWriteArrayList<>();
 	}
 	
-	/**
-	 * Konstruktor, falls ein Save-Game geladen wird.
-	 *
-	 * @param id Die ID des Save-Games.
-	 */
-	public Logic(long id) {
-		this(Launcher.SG);
-		//TODO implement
-	}
-	
 	private Logic(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		this(mode);
 		ships = new ArrayList<>();
@@ -139,6 +129,16 @@ public class Logic extends Thread {
 		this.size = size;
 		ownPlayer = new Human(this, size, namePl);
 		oppPlayer = new Network(this, nameNW, size);
+	}
+	
+	public static Logic fromSaveGame(long id){
+		SaveGame saveGame = SaveGame.fromId(id);
+		//Hier den Modus setzen
+		Logic logic = new Logic(saveGame.getMode());
+		logic.ownPlayer = saveGame.getOwnPlayer();
+		logic.oppPlayer = saveGame.getOppPlayer();
+		
+		return logic;
 	}
 	
 	/**

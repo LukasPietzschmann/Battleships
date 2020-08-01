@@ -1,11 +1,6 @@
 package gui;
 
-import logic.GameEndsListener;
-import logic.GameEventListener;
-import logic.Launcher;
-import logic.LocalPlayer;
-import logic.Logic;
-import logic.Player;
+import logic.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,8 +10,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
@@ -180,7 +173,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
                e.printStackTrace();
            }
            BufferedWriter bw = new BufferedWriter(file);
-           saveGame test = new saveGame();
+           SaveGame test = new SaveGame();
            String cache = String.valueOf(test.saveGame(ownPlayer.getMap()));
            try {
                bw.write(cache);
