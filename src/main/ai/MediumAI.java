@@ -7,14 +7,23 @@ import logic.Player;
 import logic.Ship;
 import java.util.Random;
 
+/**
+ * Die Klasse MediumAI modelliert die mittelschwere AI.
+ */
 public class MediumAI extends PlayableAI {
+	/**
+	 * Initialisiert die MediumAI
+	 * @param player Referenz auf die von {@link Player} erbende Klasse. In diesem Fall meistens {@link AI}.
+	 * @param logic "zurück-Referenz" auf die {@link Logic}.
+	 * @param map Das eigene Spielfeld.
+	 */
 	public MediumAI(Player player, Logic logic, Map map) {
 		super(player, logic, map);
 	}
 	
 	/**
-	 * {@inheritDoc} Die MediumAI schießt zufällig, bis sie ein Schiff getroffen hat. Dann wird sie um die getroffenen
-	 * Koordinaten herum schießen.
+	 * {@inheritDoc} Die MediumAI schießt zufällig, bis sie ein Schiff getroffen hat. Dann wird sie geziehlt versuchen
+	 * das Schiff zu versenken.
 	 *
 	 * @return {@inheritDoc}
 	 */

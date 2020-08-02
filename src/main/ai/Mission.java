@@ -5,7 +5,11 @@ import logic.Map;
 
 import java.util.Random;
 
-public class Mission {
+/**
+ * Die Klasse Mission wird ausschließlich von der {@link MediumAI} und der {@link HardAI}
+ * Klasse verwendet um ein bereits gefundenes Schiff zu versenken.
+ */
+class Mission {
 	private enum State {
 		firstHit,
 		someHits
@@ -22,6 +26,13 @@ public class Mission {
 	private Direction unsureDir;
 	private Map map;
 	
+	/**
+	 * Konstruktor zum initialisieren einer Mission.
+	 * @param startX Die x Koordinate an der ein Schiff gefunden wurde.
+	 * @param startY Die y Koordinate an der ein Schiff gefunden wurde.
+	 * @param map Das eigene Spielfeld, um die Größe zu bestimmen.
+	 * @param enemyMap Das Spielfeld des Gegners.
+	 */
 	public Mission(int startX, int startY, Map map, int[][] enemyMap) {
 		this.startX = startX;
 		this.startY = startY;
@@ -34,7 +45,12 @@ public class Mission {
 		getNextPoint(true, enemyMap);
 	}
 	
-	private boolean getNextPoint(boolean hit, int[][] enemyMap) {
+	/**
+	 * Berechnet den Punkt, auf den als nächstes geschossen werden soll.
+	 * @param hit Gibt an, ob der letzte Schuss ein Treffer war.
+	 * @param enemyMap Das Spielfeld des Gegners.
+	 */
+	private void getNextPoint(boolean hit, int[][] enemyMap) {
 		if(state == State.firstHit) {
 			Random rnd = new Random();
 			do {
@@ -44,7 +60,7 @@ public class Mission {
 			nextY = getYInDirection(unsureDir, startY);
 			lastXHit = nextX;
 			lastYHit = nextY;
-			return true;
+			return;
 		}
 		if(state == State.someHits) {
 			if(hit) {
@@ -53,7 +69,7 @@ public class Mission {
 					nextY = getYInDirection(lastHitDir, lastYHit);
 					lastXHit = nextX;
 					lastYHit = nextY;
-					return true;
+					return;
 				}else {
 					unsureDir = mirrorDirection(lastHitDir);
 					if(isValidDirection(unsureDir, startX, startY, enemyMap)) {
@@ -61,8 +77,8 @@ public class Mission {
 						nextY = getYInDirection(unsureDir, startY);
 						lastXHit = nextX;
 						lastYHit = nextY;
-						return true;
-					}else return false;
+						return;
+					}
 				}
 			}else {
 				unsureDir = mirrorDirection(lastHitDir);
@@ -71,20 +87,28 @@ public class Mission {
 					nextY = getYInDirection(unsureDir, startY);
 					lastXHit = nextX;
 					lastYHit = nextY;
-					return true;
-				}else return false;
+					return;
+				}
 			}
 		}
-		
-		return false;
 	}
 	
+	/**
+	 * Gibt zurück, ob es logisch sinnvoll ist, in diese Richtung zu schießen.
+	 * @return {@code true}, falls es logisch Sinn macht, sonst {@code false}.
+	 */
 	private boolean isValidDirection(Direction dir, int x, int y, int[][] enemyMap) {
 		int newX = getXInDirection(dir, x);
 		int newY = getYInDirection(dir, y);
 		return map.isInMap(newX, newY) && enemyMap[newY][newX] == PlayableAI.NOT_SHOT;
 	}
 	
+	/**
+	 * Gibt die nächste x Koordiante in der Richtung an.
+	 * @param dir Die Rcihtung in die gegangen werden soll.
+	 * @param x Die x Koordinate von der aus gegangen werden soll.
+	 * @return Die nächste x Koordinate in der gegebenen Richtung.
+	 */
 	private int getXInDirection(Direction dir, int x) {
 		switch(dir) {
 			case west:
@@ -96,6 +120,12 @@ public class Mission {
 		}
 	}
 	
+	/**
+	 * Gibt die nächste y Koordiante in der Richtung an.
+	 * @param dir Die Rcihtung in die gegangen werden soll.
+	 * @param y Die y Koordinate von der aus gegangen werden soll.
+	 * @return Die nächste y Koordinate in der gegebenen Richtung.
+	 */
 	private int getYInDirection(Direction dir, int y) {
 		switch(dir) {
 			case north:
@@ -107,6 +137,11 @@ public class Mission {
 		}
 	}
 	
+	/**
+	 * Spiegelt die Richtung.
+	 * @param dir Die zu spiegelnde Richtung.
+	 * @return Die gespiegelte Richtung.
+	 */
 	private Direction mirrorDirection(Direction dir) {
 		switch(dir) {
 			case north:
@@ -122,14 +157,28 @@ public class Mission {
 		return null;
 	}
 	
+	/**
+	 * Gibt die x Koordinate des nächsten Schusses zurück.
+	 * @return Die x Koordinate des nächsten Schusses.
+	 */
 	public int getNextX() {
 		return nextX;
 	}
 	
+	/**
+	 * Gibt die y Koordinate des nächsten Schusses zurück.
+	 * @return Die y Koordinate des nächsten Schusses.
+	 */
 	public int getNextY() {
 		return nextY;
 	}
 	
+	/**
+	 * Bestimmt, ob der letzte Schuss ein treffer war. Muss, falls eine aktuelle Mission besteht,
+	 * nach jedem Schuss aufgerufen werden.
+	 * @param hit {@code true}, falls der Schuss ein Treffer war, sonst {@code false}.
+	 * @param enemyMap Das Spielfeld des Gegners.
+	 */
 	public void wasHit(boolean hit, int[][] enemyMap) {
 		if(hit && unsureDir != null) {
 			lastHitDir = unsureDir;
