@@ -4,6 +4,9 @@ import java.util.Locale;
 
 import static network.Network.*;
 
+/**
+ * Die Klasse Message modelliert eine übers Netzwerk gesendete Nachricht.
+ */
 public class Message {
 	public static final int SIZE_POS = 0;
 	public static final int SHIPS5_POS = 1;
@@ -17,6 +20,11 @@ public class Message {
 	private final String type;
 	private int[] args;
 	
+	/**
+	 * Initialisiert die Message
+	 * @param message Der Reine String der übers Netzwerk geschickt wurde.
+	 * @throws UnknownMessageException Falls die ankommende Nachricht nicht erkannt wurde.
+	 */
 	public Message(String message) throws UnknownMessageException {
 		String[] splitted = message.split(" ");
 		String msgType = splitted[0];
@@ -46,14 +54,26 @@ public class Message {
 		}else throw new UnknownMessageException(message);
 	}
 	
+	/**
+	 * Gibt die Art der Nachricht zurück.
+	 * @return
+	 */
 	public String getMessageType() {
 		return type;
 	}
 	
+	/**
+	 * Gibt die Argumente der Nachricht zurück.
+	 * @return Ein Array an Argumenten.
+	 */
 	public int[] getArgs() {
 		return args;
 	}
 	
+	/**
+	 * Gibt die String Repräsentation der Nachricht zurück.
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		return type;

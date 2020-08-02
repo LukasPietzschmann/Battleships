@@ -15,23 +15,25 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * Der NetworkThread empfängt und sendet durchgehend Nachrichten.
+ */
 public class NetworkThread implements GameEndsListener {
 	private Logic logic;
-	private enum Type {
-		Server,
-		Client
-	}
 	
 	private Socket clientSocket;
 	private ServerSocket serverSocket;
 	private final BlockingQueue<String> recieveQueue;
 	private final BlockingQueue<String> sendQueue;
-	private final Type type;
 	
+	/**
+	 * Konstruktor, falls man selbst der Server ist.
+	 * @param serverSocket Der Server Socket.
+	 * @param logic "Zurück-Referenz" auf das Logic Objekt.
+	 */
 	public NetworkThread(ServerSocket serverSocket, Logic logic) {
 		this.logic = logic;
 		this.serverSocket = serverSocket;
-		type = Type.Server;
 		recieveQueue = new LinkedBlockingQueue<>();
 		sendQueue = new LinkedBlockingQueue<>();
 		
@@ -94,10 +96,14 @@ public class NetworkThread implements GameEndsListener {
 		acceptT.start();
 	}
 	
+	/**
+	 * Konstruktor, falls man selbst der Client ist.
+	 * @param clientSocket Der Socket.
+	 * @param logic "Zurück-Referenz" auf das Logic Objekt.
+	 */
 	public NetworkThread(Socket clientSocket, Logic logic) {
 		this.logic = logic;
 		this.clientSocket = clientSocket;
-		type = Type.Client;
 		recieveQueue = new LinkedBlockingQueue<>();
 		sendQueue = new LinkedBlockingQueue<>();
 		
@@ -150,10 +156,19 @@ public class NetworkThread implements GameEndsListener {
 		clientRecieveThread.start();
 	}
 	
+	/**
+	 * Sendet eine Nachricht. Es ist nicht gewährleistet, dass die Nachricht direkt gesendet wird.
+	 * @param message Die zu sendende Nachricht.
+	 * @return {@code true}, falls gesendet werden kann, sonst {@code false}.
+	 */
 	public synchronized boolean sendMessage(String message) {
 		return sendQueue.offer(message);
 	}
 	
+	/**
+	 * Empfängt eine Nachricht. Es ist nicht gewährleistet, dass beim Aufruf schon eine NAchricht zur verfügung steht.
+	 * @return Die empfangene Nachricht.
+	 */
 	public synchronized String recieveMessage() {
 		try {
 			return recieveQueue.take();
@@ -163,6 +178,10 @@ public class NetworkThread implements GameEndsListener {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @param winningPlayer {@inheritDoc}
+	 */
 	@Override
 	public void OnGameEnds(Player winningPlayer) {
 		try {
@@ -173,6 +192,9 @@ public class NetworkThread implements GameEndsListener {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void OnOpponentLeft() {
 		OnGameEnds(null);

@@ -1,5 +1,8 @@
 package network;
 
+/**
+ * Diese Ausnahme wird ausgelöst, falls die Art der Nachricht unbekannt ist.
+ */
 public class UnknownMessageException extends RuntimeException {
 	private final String message;
 	

@@ -16,54 +16,18 @@ import java.util.ArrayList;
  * Die Klasse Network modelliert einen Spieler an einem anderen Computer.
  */
 public class Network extends Player {
-	/**
-	 * Der über den man sich verbindet.
-	 */
 	public static final int PORT = 4444;
-	/**
-	 * Das Keyword für eine Schuss.
-	 */
 	public static final String SHOOT = "SHOT";
-	/**
-	 * Das Keyword für das Setup.
-	 */
 	public static final String SETUP = "SETUP";
-	/**
-	 * Das Keyword für die Bestätigung von {@value SETUP}.
-	 */
 	public static final String CONFIRM = "CONFIRMED";
-	/**
-	 * Das Keyword zum zurückgeben, ob getroffen wurde, oder nicht.
-	 */
 	public static final String ANSWER = "ANSWER";
-	/**
-	 * Das Keyword, ob man seinen Zug überspringt.
-	 */
 	public static final String PASS = "PASS";
-	/**
-	 * Das Keyword zum speichern des Spielstands.
-	 */
 	public static final String SAVE = "SAVE";
-	/**
-	 * Das Keyword zum laden des Spielspands.
-	 */
 	public static final String LOAD = "LOAD";
-	/**
-	 * Die Verbindung zum anderen Spieler.
-	 */
 	private NetworkThread networkThread;
-	/**
-	 * Die Größe des Spielfelds. Wird nur gesetzt, falls man selbst der Client ist.
-	 */
 	private int size;
-	/**
-	 * Alle zu platzierenden Shiffe. Werden nur gesetzt, falls man selbst der Client ist.
-	 */
 	private ArrayList<Ship> ships;
 	
-	/**
-	 * Die Anzahl aller noch lebender Schiffe.
-	 */
 	private int shipCount;
 	
 	private Map map;
@@ -132,14 +96,26 @@ public class Network extends Player {
 		}else throw new UnexpectedMessageException(m);
 	}
 	
+	/**
+	 * Gibt die Größe des Spielfelds zurück. Wird nur verwendet falls man selbst der Client ist.
+	 * @return Die größe des Spielfelds.
+	 */
 	public int getSize() {
 		return size;
 	}
 	
+	/**
+	 * Gibt alle zu platzierenden Schiffe zurück. Wird nur verwendet falls man selbst der Client ist.
+	 * @return Alle zu platzierenden Schiffe.
+	 */
 	public ArrayList<Ship> getShips() {
 		return ships;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @return
+	 */
 	@Override
 	public Ship yourTurn() {
 		// warte bis gegner geschossen hat
@@ -165,6 +141,12 @@ public class Network extends Player {
 		return ship;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @param x Die x-Koordinate des Schusses
+	 * @param y Die y-Koordinate des Schusses
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Ship hit(int x, int y) {
 		networkThread.sendMessage(String.format("%s %d %d\n", SHOOT, y, x));
@@ -198,6 +180,9 @@ public class Network extends Player {
 		return Ship.defaultSunkenShip(x, y);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void placeShips() {
 		Message m = new Message(networkThread.recieveMessage());
@@ -206,11 +191,17 @@ public class Network extends Player {
 		logic.setShipsPlaced(this);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isAlive() {
 		return shipCount > 0;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void oppPlacedShips() {
 		networkThread.sendMessage(String.format("%s\n", CONFIRM));

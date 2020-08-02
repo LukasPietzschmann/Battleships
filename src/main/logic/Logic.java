@@ -163,7 +163,7 @@ public class Logic extends Thread {
 					currPlayer = ownPlayer;
 					otherPlayer = oppPlayer;
 			}
-			if(!(MODE == Launcher.AI_AI || MODE == Launcher.NW_SV_AI || MODE == Launcher.NW_CL_AI)) notifyPlaceShips();
+			if(!(MODE == Launcher.NW_SV_AI || MODE == Launcher.NW_CL_AI)) notifyPlaceShips();
 			currPlayer.placeShips();
 			if(currPlayer == oppPlayer) {
 				while(!oppPlayerShipsPlaced) {
