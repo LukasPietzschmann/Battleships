@@ -14,13 +14,7 @@ public class Logic extends Thread {
 	private volatile boolean ownPlayerShipsPlaced = false;
 	private volatile boolean oppPlayerShipsPlaced = false;
 	private final int MODE;
-	/**
-	 * Referenz auf einen der beiden Spieler.
-	 */
 	public Player ownPlayer;
-	/**
-	 * Referenz auf einen der beiden Spieler.
-	 */
 	public Player oppPlayer;
 	private ArrayList<Ship> ships;
 	private int size;
@@ -29,6 +23,9 @@ public class Logic extends Thread {
 	private CopyOnWriteArrayList<GameEndsListener> gameEndsListeners;
 	private CopyOnWriteArrayList<GameEventListener> gameEventListeners;
 	
+	/**
+	 * @param MODE Der Modus in dem gespielt wird.
+	 */
 	private Logic(int MODE) {
 		this.MODE = MODE;
 		setUpShipsListeners = new CopyOnWriteArrayList<>();
@@ -47,6 +44,14 @@ public class Logic extends Thread {
 		//TODO implement
 	}
 	
+	/**
+	 * @param mode Der Modus in dem gespielt wird.
+	 * @param ship2Count Die Anzahl der 2er Schiffe.
+	 * @param ship3Count Die Anzahl der 3er Schiffe.
+	 * @param ship4Count Die Anzahl der 4er Schiffe.
+	 * @param ship5Count Die Anzahl der 5er Schiffe.
+	 * @param z Unnötige Variable. Dient zur Unterscheidung von einem Anderen konstruktor mit den seben Datentypen.
+	 */
 	private Logic(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, int z) {
 		this(mode);
 		ships = new ArrayList<>();
@@ -57,13 +62,6 @@ public class Logic extends Thread {
 				this.ships.add(new Ship(0, 0, Direction.north, i + 2));
 			}
 		}
-	}
-	
-	public Logic(Difficulty difficultyAI1, Difficulty difficultyAI2, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
-		this(Launcher.AI_AI, ship2Count, ship3Count, ship4Count, ship5Count, 0);
-		this.size = size;
-		ownPlayer = new AI(this, size, difficultyAI1);
-		oppPlayer = new AI(this, size, difficultyAI2);
 	}
 	
 	/**
@@ -166,9 +164,6 @@ public class Logic extends Thread {
 					otherPlayer = oppPlayer;
 			}
 			if(!(MODE == Launcher.AI_AI || MODE == Launcher.NW_SV_AI || MODE == Launcher.NW_CL_AI)) notifyPlaceShips();
-			//oppPlayerShipsPlaced = true;
-			//ownPlayerShipsPlaced = true;
-			//TODO netwokr listener
 			currPlayer.placeShips();
 			if(currPlayer == oppPlayer) {
 				while(!oppPlayerShipsPlaced) {
@@ -221,76 +216,137 @@ public class Logic extends Thread {
 		return ships;
 	}
 	
+	/**
+	 * Gibt die Größe des Spielfelds zurück.
+	 * @return Die Größe des Spielfelds.
+	 */
 	public int getSize() {
 		return size;
 	}
 	
+	/**
+	 * Gibt den eigenen Spieler zurück.
+	 * @return Der eigene Spieler.
+	 */
 	public LocalPlayer getOwnPlayer() {
 		return (LocalPlayer) ownPlayer;
 	}
 	
+	/**
+	 * Gibt den Gegenspieler zurück.
+	 * @return Der Gegenspieler.
+	 */
 	public Player getOppPlayer() {
 		return oppPlayer;
 	}
 	
+	/**
+	 * Registriert einen {@link SetUpShipsListener}.
+	 * @param listener Der zu registrierende Listener.
+	 */
 	public void registerSetupShipsListener(SetUpShipsListener listener) {
 		setUpShipsListeners.add(listener);
 	}
 	
+	/**
+	 * Hebt die Registrierung für einen {@link SetUpShipsListener} wierder auf.
+	 * @param listener Der zu entferndende Listener.
+	 */
 	public void unregisterSetupShipsListener(SetUpShipsListener listener) {
 		setUpShipsListeners.remove(listener);
 	}
 	
+	/**
+	 * Registriert einen {@link GameStartsListener}.
+	 * @param listener Der zu registrierende Listener.
+	 */
 	public void registerGameStartsListener(GameStartsListener listener) {
 		gameStartsListeners.add(listener);
 	}
 	
+	/**
+	 * Hebt die Registrierung für einen {@link GameStartsListener} wierder auf.
+	 * @param listener Der zu entferndende Listener.
+	 */
 	public void unregisterGameStartsListener(GameStartsListener listener) {
 		gameStartsListeners.remove(listener);
 	}
 	
+	/**
+	 * Registriert einen {@link GameEndsListener}.
+	 * @param listener Der zu registrierende Listener.
+	 */
 	public void registerGameEndListener(GameEndsListener listener) {
 		gameEndsListeners.add(listener);
 	}
 	
+	/**
+	 * Registriert einen {@link GameEventListener}.
+	 * @param listener Der zu registrierende Listener.
+	 */
 	public void registerGameEventListener(GameEventListener listener){
 		gameEventListeners.add(listener);
 	}
 	
+	/**
+	 * Beachrichtigt alle registrierten {@link GameEventListener}, dass ein Event ausgelöst wurde.
+	 * @param event Das ausgelöste Event.
+	 */
 	private void notifyGameEventListener(int event){
 		for(GameEventListener listener : gameEventListeners) {
 			listener.OnEventFired(event);
 		}
 	}
 	
+	/**
+	 * Benachrichtigt alle registrierten {@link GameEndsListener}, dass der Gegner das Spiel verlassen hat.
+	 */
 	public void notifyOppLeftListener(){
 		for(GameEndsListener listener : gameEndsListeners) {
 			listener.OnOpponentLeft();
 		}
 	}
 	
+	/**
+	 * Benachrichtigt alle registrierten {@link GameEventListener}, welcher Spieler nun dran ist.
+	 * @param player Der SPieler, der nun am Zug ist.
+	 */
 	private void notifyPlayersTurnListener(Player player){
 		for(GameEventListener listener : gameEventListeners) {
 			listener.OnPlayersTurn(player);
 		}
 	}
 	
+	/**
+	 * Benachrichtigt alle registrierten {@link SetUpShipsListener}, dass ein Schiff platziert wurde.
+	 */
 	private void notifyPlaceShips() {
 		for(SetUpShipsListener listener : setUpShipsListeners) listener.onPlaceShips();
 	}
 	
+	/**
+	 * Benachrichtigt alle registrierten {@link GameStartsListener}, dass das Spiel gestartet wurde.
+	 */
 	private void notifyGameStarts() {
 		for(GameStartsListener listener : gameStartsListeners) {
 			listener.OnStartGame();
 		}
 	}
 	
+	/**
+	 * Benachrichtigt alle registrierten {@link GameEndsListener}, dass das Spiel zuende ist.
+	 * @param winningPlayer Der Spieler der gewonnen hat.
+	 */
 	private void notifyGameEndsListener(Player winningPlayer) {
 		for(GameEndsListener listener : gameEndsListeners) {
 			listener.OnGameEnds(winningPlayer);
 		}
 	}
 	
+	/**
+	 * Muss von einem {@link Player} aufgerufen werden, falls all seine Schiffe platziert hat.
+	 * @param player
+	 */
 	public synchronized void setShipsPlaced(Player player) {
 		if(player instanceof LocalPlayer && ((LocalPlayer) player).map.getShipsNr() != getAvailableShips().size()) {
 			//nicht alle wurden platziert

@@ -14,6 +14,7 @@ public abstract class LocalPlayer extends Player {
 	protected BlockingQueue<int[]> clickQueue;
 	
 	/**
+	 * Initialisiet den LocalPlayer
 	 * @param l "Zurück-Referenz" auf das Logik Objekt.
 	 * @param size Die festgelegte Größe des Spielfelds.
 	 */
@@ -107,14 +108,18 @@ public abstract class LocalPlayer extends Player {
 		return map.shipsNr() > 0;
 	}
 	
-	public void dumpMap() {
-		map.dump();
-	}
-	
+	/**
+	 * Registriert einen {@link MapListener}.
+	 * @param listener Der zu registrierende Listener.
+	 */
 	public void registerOnMapChangedListener(MapListener listener) {
 		mapListeners.add(listener);
 	}
 	
+	/**
+	 * Registriert einen {@link GameListener}.
+	 * @param listener Der zu registrierende Listener.
+	 */
 	@Override
 	public void registerGameListener(GameListener listener) {
 		super.registerGameListener(listener);
@@ -122,45 +127,80 @@ public abstract class LocalPlayer extends Player {
 		notifyOnMapChangedListeners();
 	}
 	
+	/**
+	 * Registriert einen {@link MakeMoveListener}.
+	 * @param listener Der zu registrierende Listener.
+	 * @param clickQueue Die Queue, in der Die Koordinaten von Maus Klicks gespeichert werden.
+	 */
 	public void registerMakeMove(MakeMoveListener listener, BlockingQueue<int[]> clickQueue) {
 		if(clickQueue != null) this.clickQueue = clickQueue;
 		makeMoveListeners.add(listener);
 	}
 	
+	/**
+	 * Benachrichtigt einen registrierten {@link MapListener}, dass sich das Spielfeld geändert hat.
+	 */
 	private void notifyOnMapChangedListeners() {
 		for(MapListener listener : mapListeners) listener.OnMapChanged(map);
 	}
 	
+	/**
+	 * Benachrichtigt einen registrierten {@link MapListener}, dass sich das Spielfeld des Gegners geändert hat.
+	 */
 	private void notifyOnEnemyMapChangedListener(){
 		for(GameListener listener : enemyGameListeners) {
 			listener.OnMapChanged(map.getEnemyPerspective());
 		}
 	}
 	
+	/**
+	 * Benachrichtigt einen registrierten {@link MapListener}, dass ein Schiff platziert wurde.
+	 */
 	private void notifyOnShipPlacedListeners(Ship ship) {
 		for(MapListener listener : mapListeners) listener.OnShipPlaced(ship);
 	}
 	
+	/**
+	 * Benachrichtigt einen registrierten {@link MapListener}, dass alle Schiffe platziert wurden.
+	 */
 	private void notifyOnAllShipsPlacedListeners() {
 		for(MapListener listener : mapListeners) listener.OnAllShipsPlaced();
 	}
 	
+	/**
+	 * Benachrichtigt einen registrierten {@link MapListener}, dass noch nicht alle Schiffe platziert worden
+	 * sind und das Spiel ergo noch nicht begonnen werden kann.
+	 */
 	protected void notifyOnNotAllShipsPlaced(){
 		for(MapListener listener : mapListeners) {
 			listener.OnNotAllShipsPlaced();
 		}
 	}
 	
+	/**
+	 * Benachrichtigt einen registrierten {@link MakeMoveListener}, dass er mit seinem Zug an der Reihe ist.
+	 */
 	protected void notifyMakeMove() {
 		for(MakeMoveListener makeMoveListener : makeMoveListeners) {
 			makeMoveListener.makeMove();
 		}
 	}
 	
+	/**
+	 * Gibt an, ob ein Schiff dort platziert werden kann. Koordinaten müssen nicht extra angegeben werden,
+	 * da das {@link Ship} diese enthält.
+	 * @param ship Das zu platzierende Schiff.
+	 * @return {@code true}, falls das Shiff platziert werden darf. Sonst {@code false}.
+	 */
 	public boolean canShipBePlaced(Ship ship) {
 		return map.canShipBePlaced(ship);
 	}
 	
+	/**
+	 * Platziert ein Schiff. Es wird nicht überprüft, ob das Schiff platziert werden darf.
+	 * Das vorherige Aufrufen von {@link #canShipBePlaced(Ship)} wird vorrausgesetzt.
+	 * @param ship Das zu platzierende Shiff.
+	 */
 	public void placeShip(Ship ship) {
 		if(!canShipBePlaced(ship)) return;
 		map.placeShip(ship);

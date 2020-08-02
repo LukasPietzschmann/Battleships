@@ -6,34 +6,12 @@ import java.util.ArrayList;
  * Die Klasse Map modelliert das Spielfeld eines {@link LocalPlayer}.
  */
 public class Map {
-	/**
-	 * Konstante zum Anzeigen von Wasser.
-	 */
 	public static final int WATER = 0;
-	/**
-	 * Konstante zum Anzeigen eines Schiffs.
-	 */
 	public static final int SHIP = 1;
-	/**
-	 * Konstante zum Anzeigen eines erfolgreichen Treffers.
-	 */
 	public static final int SUCC_HIT = 2;
-	/**
-	 * Konstante zum Anzeigen eines nicht erfolgreichen Treffers.
-	 */
 	public static final int UNSUCC_HIT = 3;
-	/**
-	 * Konstante zum Anzeigen des Bereichs um ein bereits versenktes Schiff. Dort kann auf Grund der Regeln devinitiv kein
-	 * Schiff liegen.
-	 */
 	public static final int DEFINITELY_NO_SHIP = 4;
-	/**
-	 * Die Datenstruktur zur modellierung des Spielfelds.
-	 */
 	private MapTile[][] map;
-	/**
-	 * Die Anzahl an noch nicht zerstörten Schiffen.
-	 */
 	private int shipsNr;
 
 	/**
@@ -50,6 +28,10 @@ public class Map {
 		}
 	}
 	
+	/**
+	 * Copy-Constructor
+	 * @param map Die zu kopierende Map.
+	 */
 	public Map(Map map){
 		this.shipsNr = map.shipsNr;
 		this.map = new MapTile[map.getSize()][map.getSize()];
@@ -129,6 +111,10 @@ public class Map {
 		return null;
 	}
 	
+	/**
+	 * Umrandet ein versenktes Schiff mit Markierungen.
+	 * @param ship Das zu umrandende Schiff.
+	 */
 	private void setDefinitelyNoShip(Ship ship){
 		int sx, sy, start, end;
 		sx = ship.getXPos();
@@ -234,6 +220,12 @@ public class Map {
 		}
 	}
 	
+	/**
+	 * Markiert die Zelle auf die geschossen wurde,
+	 * @param x Die x Korrdinate der Zelle.
+	 * @param y Die y Korrdinate der Zelle.
+	 * @param succ {@code true}, falls getroffen wurde. Sonst {@code false}.
+	 */
 	public void setHit(int x, int y, boolean succ){
 		//map[y][x].stat = succ ? SUCC_HIT : UNSUCC_HIT;
 		if(succ) {
@@ -242,6 +234,11 @@ public class Map {
 		}else map[y][x].stat = UNSUCC_HIT;
 	}
 	
+	/**
+	 * Umrandet ein Schiff.
+	 * @param x Eine x Koordinate des versenkten Schiffs.
+	 * @param y Eine y Koordinate des versenkten Schiffs.
+	 */
 	public void surroundShip(int x, int y){
 		ArrayList<int[]> points = new ArrayList<>();
 		recFindShip(x,y, null, points);
@@ -261,6 +258,13 @@ public class Map {
 		setDefinitelyNoShip(ship);
 	}
 	
+	/**
+	 * Hilfsmethode für {@link #surroundShip(int, int)} zum finden aller Koordinaten eines Schiffs.
+	 * @param x Aktuelle x Koordinate.
+	 * @param y Aktuelle y Koordinate.
+	 * @param from Die Richtung aus der man kommt.
+	 * @param result Liste aller gefundenen Koordinaten.
+	 */
 	private void recFindShip(int x, int y, Direction from, ArrayList<int[]> result){
 		result.add(new int[]{x, y});
 		//oben kucken
@@ -303,7 +307,13 @@ public class Map {
 	public Ship getShip(int x, int y) {
 		return map[y][x].ship;
 	}
-
+	
+	/**
+	 * Gibt den Zustand der Zelle zurück.
+	 * @param x x Koordinate der Zelle.
+	 * @param y y Koordinate der Zelle.
+	 * @return Der Zustand der Zelle.
+	 */
 	public int getStat(int x, int y) {
 		return map[y][x].stat;
 	}
@@ -551,11 +561,21 @@ public class Map {
 			}
 		}
 	}
-
+	
+	/**
+	 * Gibt an ob sich Koordinaten innerhalb des Spielfelds befinden.
+	 * @param x Die zu untersuchende x Koordinate.
+	 * @param y Die zu untersuchende y Koordinate.
+	 * @return {@code true}, falls die Koordinate innerhalb des Spielfelds ist. Sonst {@code false}.
+	 */
 	public boolean isInMap(int x, int y) {
 		return x >= 0 && x < map.length && y >= 0 && y < map.length;
 	}
 	
+	/**
+	 * Gibt das Spielfelds des Gegners zurück, ohne die Position der Schiffe preiszugeben.
+	 * @return Das Spielfeld des Gegners.
+	 */
 	public Map getEnemyPerspective(){
 		Map enemyMap = new Map(this);
 		for(int i = 0; i < enemyMap.map.length; i++) {
@@ -569,6 +589,10 @@ public class Map {
 		return enemyMap;
 	}
 	
+	/**
+	 * Gibt die aktuelle Anzahl der noch nicht versenkten Schiffe zurück.
+	 * @return Die aktuelle Anzahl der noch nicht versenkten Schiffe.
+	 */
 	public int getShipsNr() {
 		return shipsNr;
 	}
@@ -577,15 +601,7 @@ public class Map {
 	 * Nach Außen nicht sichtbare Hilfsklasse zur modellierung des Spielfelds.
 	 */
 	static class MapTile {
-		/**
-		 * Zeigt an was sich auf dem Feld befindet. Entweder {@value WATER}, {@value SHIP}, {@value SUCC_HIT},{@value
-		 * UNSUCC_HIT}, oder {@value DEFINITELY_NO_SHIP}.
-		 */
 		private int stat;
-		/**
-		 * Falls {@link #stat} {@value SHIP}, oder {@value SUCC_HIT} ist, wird das konkrete {@link Ship} auf diesem Platz
-		 * referenziert.
-		 */
 		private Ship ship;
 
 		/**
@@ -596,6 +612,10 @@ public class Map {
 			ship = null;
 		}
 		
+		/**
+		 * Copy-Constructor
+		 * @param tile Das zu kopierende MapTile.
+		 */
 		private MapTile(MapTile tile){
 			this.stat = tile.stat;
 			this.ship = tile.ship;
