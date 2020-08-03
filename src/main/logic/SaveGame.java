@@ -1,6 +1,6 @@
 package logic;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,12 +13,12 @@ public class SaveGame {
     private Player oppPlayer;
     private int mode;
     
-    public String saveGame(Map map){
-        String cache;
-        Gson mapSave = new Gson();
-        cache = String.valueOf(mapSave.toJson(map));
-        return cache;
-    }
+//    public String saveGame(Map map){
+//        String cache;
+//        Gson mapSave = new Gson();
+//        cache = String.valueOf(mapSave.toJson(map));
+//        return cache;
+//    }
     
     public static SaveGame fromId(long id){
         File file = new File(System.getProperty("user.home") + "\\Documents\\saveGames\\" + id);

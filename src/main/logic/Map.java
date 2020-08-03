@@ -1,11 +1,12 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Die Klasse Map modelliert das Spielfeld eines {@link LocalPlayer}.
  */
-public class Map {
+public class Map implements Serializable {
 	/**
 	 * Konstante zum Anzeigen von Wasser.
 	 */
@@ -576,7 +577,7 @@ public class Map {
 	/**
 	 * Nach Außen nicht sichtbare Hilfsklasse zur modellierung des Spielfelds.
 	 */
-	static class MapTile {
+	static class MapTile implements Serializable{
 		/**
 		 * Zeigt an was sich auf dem Feld befindet. Entweder {@value WATER}, {@value SHIP}, {@value SUCC_HIT},{@value
 		 * UNSUCC_HIT}, oder {@value DEFINITELY_NO_SHIP}.

@@ -4,6 +4,8 @@ import ai.Difficulty;
 import ai.AI;
 import gui.MainWindow;
 
+import java.io.File;
+
 /**
  * Die Klasse Launcher startet das Spiel und frägt Anfangseinstellungen ab
  */
@@ -40,8 +42,8 @@ public class Launcher {
 	public static Logic startGame(int mode, String name01, String name02, int ship2Count, int ship3Count, int ship4Count, int ship5Count, String ip, int port, Difficulty diff01, Difficulty diff02, long id) {
 		try {
 			switch(mode) {
-				case SG:
-					return Logic.fromSaveGame(id);
+//				case SG:
+//					return Logic.fromSaveGame(id);
 				case AI_AI:
 					return new Logic(name01, name02, diff01, diff02, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
 				case PL_AI:
@@ -81,5 +83,11 @@ public class Launcher {
 	public static void main(String[] args) {
 		MainWindow mainWindow = new MainWindow();
 		mainWindow.setUpMainWindow();
+		createSaveDirectory();
+	}
+
+	public static void createSaveDirectory(){
+		File dir = new File(System.getProperty("user.home") + "\\Documents\\saveGames");
+		dir.mkdir();
 	}
 }

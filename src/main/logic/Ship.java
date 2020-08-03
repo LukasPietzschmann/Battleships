@@ -1,11 +1,12 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * Modelliert ein Schiff.
  */
-public class Ship {
+public class Ship implements Serializable {
 	/**
 	 * Mögliche Namen des Schiffs. Wird durch die Größe des Schiffs terminiert.
 	 */

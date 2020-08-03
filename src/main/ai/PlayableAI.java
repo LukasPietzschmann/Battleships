@@ -6,7 +6,9 @@ import logic.Map;
 import logic.Player;
 import logic.Ship;
 
-public abstract class PlayableAI {
+import java.io.Serializable;
+
+public abstract class PlayableAI implements Serializable {
 	protected static final int WAIT_TIME = 500;
 	protected static final int ALREADY_SHOT = 1;
 	protected static final int NOT_SHOT = 0;

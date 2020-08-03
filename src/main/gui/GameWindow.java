@@ -6,15 +6,14 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
  */
-public class GameWindow implements GameEndsListener, GameEventListener {
+public class GameWindow implements GameEndsListener, GameEventListener, Serializable {
     private final JFrame frame;
     private final String mode;
     private final Logic logic;
@@ -159,27 +158,45 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         saveButton.setMaximumSize(new Dimension(50, 50));
         saveButton.setPreferredSize(new Dimension(50, 50));
        saveButton.addActionListener(arg0 -> {
-            Scanner scan = new Scanner(System.in);
-            String saveGameId;
-            saveGameId = scan.nextLine();
-            //int saveGameId = 12345; // TODO delete
-            JOptionPane.showMessageDialog(mainPanel, "Aktuelle Spielstand-ID: " + saveGameId,
-                    "Spielstand-ID", JOptionPane.PLAIN_MESSAGE);
+           String filename = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+           SaveData data = new SaveData();
+           data.setMode(logic.getMODE());
+           data.setGridSize(logic.getSize());
+           data.setMap1(ownPlayer.getMap());
+//           data.setOwnPlayer(ownPlayer);
+//           data.setOppPlayer(oppPlayer);
 
-           FileWriter file = null;
+           if (logic.getMODE() == 3) data.setMap2(((LocalPlayer)oppPlayer).getMap());
            try {
-               file = new FileWriter(saveGameId + ".txt");
-           } catch (IOException e) {
-               e.printStackTrace();
+               ResourceManager.save(data, filename);
            }
-           BufferedWriter bw = new BufferedWriter(file);
-           SaveGame test = new SaveGame();
-           String cache = String.valueOf(test.saveGame(ownPlayer.getMap()));
-           try {
-               bw.write(cache);
-           } catch (IOException e) {
-               e.printStackTrace();
+           catch (Exception e){
+               System.out.println("Speichern fehlgeschlagen: " + e.getMessage());
            }
+
+//            Scanner scan = new Scanner(System.in);
+//            String saveGameId;
+//            saveGameId = scan.nextLine();
+//            //int saveGameId = 12345; // TODO delete
+            JOptionPane.showMessageDialog(mainPanel, "Spiel wurde erfolgreich gespeichert unter:\n" +
+                            System.getProperty("user.home") + "\\Documents\\saveGames\\" + filename + ".savegame\n\n" +
+                            "Das Spiel kann nun im Hauptmenü wieder geladen werden.",
+                    "Spiel wurde gespeichert", JOptionPane.PLAIN_MESSAGE);
+//
+//           FileWriter file = null;
+//           try {
+//               file = new FileWriter(saveGameId + ".txt");
+//           } catch (IOException e) {
+//               e.printStackTrace();
+//           }
+//           BufferedWriter bw = new BufferedWriter(file);
+//           SaveGame test = new SaveGame();
+//           String cache = String.valueOf(test.saveGame(ownPlayer.getMap()));
+//           try {
+//               bw.write(cache);
+//           } catch (IOException e) {
+//               e.printStackTrace();
+//           }
        });
 
         // soundButton Button Settings
