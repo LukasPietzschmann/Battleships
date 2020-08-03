@@ -27,7 +27,7 @@ public class LoadingScreen extends JFrame {
         background = loadBackground();
         loadText(mode);
         loadFont();
-        loadingAnimation = new ImageIcon(new ImageIcon("src/res/spinner.gif").getImage().getScaledInstance(130, 130, Image.SCALE_DEFAULT));
+        loadingAnimation = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("spinner.gif")).getImage().getScaledInstance(130, 130, Image.SCALE_DEFAULT));
         loadScreen();
     }
 

@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -291,11 +292,11 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 		
 		switch(theme) {
 			case "Battleships":
-				ImageIcon tilesetIcon = new ImageIcon(new ImageIcon("src/res/tileset_battleships.png").getImage());
+				ImageIcon tilesetIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("tileset_battleships.png"))).getImage());
 				tileset = tilesetIcon.getImage();
 				break;
 			case "Battlecars":
-				tilesetIcon = new ImageIcon(new ImageIcon("src/res/tileset_battlecars.png").getImage());
+				tilesetIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("tileset_battlecars.png"))).getImage());
 				tileset = tilesetIcon.getImage();
 				break;
 		}

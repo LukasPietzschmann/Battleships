@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 /**
  * Die Klasse SetUpMenu bildet die Nutzeroberfläche, auf dem der lokale Spieler seine eigenen Schiffe platzieren kann.
@@ -316,8 +317,8 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 		
 		// directionButton
 		directionButton.setText("Platzierungsrichtung");
-		Icon directionRight = new ImageIcon(new ImageIcon("src/res/direction_right.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		Icon directionDown = new ImageIcon(new ImageIcon("src/res/direction_down.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		Icon directionRight = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("direction_right.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		Icon directionDown = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("direction_down.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		directionButton.setIcon(directionRight);
 		directionButton.setBorder(null);
 		directionButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -355,7 +356,7 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 		
 		// randomButton Button Settings
 		randomButton.setText("Zufällig");
-		ImageIcon randomPutIcon = new ImageIcon(new ImageIcon("src/res/random.png").getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
+		ImageIcon randomPutIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("random.png"))).getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
 		randomButton.setIcon(randomPutIcon);
 		randomButton.setHorizontalAlignment(SwingConstants.LEFT);
 		randomButton.setBorder(null);
@@ -369,7 +370,7 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 		
 		// startButton Button Settings
 		startButton.setText("Start");
-		ImageIcon startIcon = new ImageIcon(new ImageIcon("src/res/start.png").getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
+		ImageIcon startIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("start.png"))).getImage().getScaledInstance(130, 60, Image.SCALE_SMOOTH));
 		startButton.setIcon(startIcon);
 		startButton.setHorizontalAlignment(SwingConstants.LEFT);
 		startButton.setBorder(null);
@@ -382,8 +383,8 @@ public class SetUpMenu implements GameStartsListener, MapListener {
 		startButton.addActionListener(arg0 -> logic.setShipsPlaced(player));
 		
 		// soundButton Button Settings
-		Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		Icon soundOnIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("soundOnIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		Icon soundOffIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("soundOffIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		if(Launcher.soundPlaying) {
 			soundButton.setIcon(soundOnIcon);
 		}else {

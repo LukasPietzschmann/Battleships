@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
+import java.util.Objects;
 
 public class EndWindow {
     public static final int WIN = 0;
@@ -21,15 +23,15 @@ public class EndWindow {
         this.gw = gw;
         switch (result) {
             case (WIN):
-                icon = new ImageIcon(new ImageIcon("src/res/win.png").getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH));
+                icon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("win.png"))).getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH));
                 message.setText("<html>Glückwunsch! <p/>Du hast gewonnen!</html>");
                 break;
             case (LOSE):
-                icon = new ImageIcon(new ImageIcon("src/res/lose.png").getImage().getScaledInstance(190, 180, Image.SCALE_SMOOTH));
+                icon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("lose.png"))).getImage().getScaledInstance(190, 180, Image.SCALE_SMOOTH));
                 message.setText("<html>Schade! <p/>Du hast verloren!</html>");
                 break;
             case (OPP_LEFT):
-                icon = new ImageIcon(new ImageIcon("src/res/win.png").getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH));
+                icon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("win.png"))).getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH));
                 message.setText("<html>Dein Gegner hat aufgegeben! <p/>Du hast gewonnen!</html>");
                 break;
         }
@@ -65,7 +67,7 @@ public class EndWindow {
         message.setForeground(MainMenu.textColor);
         message.setFont(MainWindow.font);
 
-        ImageIcon menu = new ImageIcon(new ImageIcon("src/res/hauptmenue.png").getImage().getScaledInstance(160, 60, Image.SCALE_SMOOTH));
+        ImageIcon menu = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("hauptmenue.png"))).getImage().getScaledInstance(160, 60, Image.SCALE_SMOOTH));
         JButton button = new JButton();
         button.setIcon(menu);
         button.setBorder(null);

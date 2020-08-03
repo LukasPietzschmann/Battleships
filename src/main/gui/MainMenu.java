@@ -4,7 +4,9 @@ import ai.Difficulty;
 import logic.*;
 
 import java.awt.*;
+import java.util.Objects;
 
+import javax.management.MBeanAttributeInfo;
 import javax.swing.*;
 
 /**
@@ -155,7 +157,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		// Modes Elements
 		// Player vs. Computer Button
 		JButton pvcButton = new JButton("Spieler vs. Computer");
-		ImageIcon pvcIcon = new ImageIcon(new ImageIcon("src/res/playerVsComputer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+		ImageIcon pvcIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("PlayerVsComputer.png"))).getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		pvcButton.setIcon(pvcIcon);
 		pvcButton.setHorizontalAlignment(SwingConstants.LEFT);
 		pvcButton.setBorder(null);
@@ -192,7 +194,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		
 		// Player vs. Player Button
 		JButton pvpButton = new JButton("Spieler vs. Netzwerk");
-		ImageIcon pvpIcon = new ImageIcon(new ImageIcon("src/res/playerVsComputerOrPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+		ImageIcon pvpIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("PlayerVsComputerOrPlayer.png"))).getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		pvpButton.setIcon(pvpIcon);
 		pvpButton.setHorizontalAlignment(SwingConstants.LEFT);
 		pvpButton.setBorder(null);
@@ -230,7 +232,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		
 		// Computer vs. Computer Button
 		JButton cvcButton = new JButton("Computer vs. Netzwerk");
-		ImageIcon cvcIcon = new ImageIcon(new ImageIcon("src/res/computerVsComputerOrPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+		ImageIcon cvcIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("ComputerVsComputerOrPlayer.png"))).getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		cvcButton.setIcon(cvcIcon);
 		cvcButton.setHorizontalAlignment(SwingConstants.LEFT);
 		cvcButton.setBorder(null);
@@ -269,7 +271,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		
 		// Information Button
 		JButton infoButton = new JButton("Information");
-		ImageIcon infoIcon = new ImageIcon(new ImageIcon("src/res/info.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		ImageIcon infoIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("info.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		infoButton.setIcon(infoIcon);
 		infoButton.setHorizontalAlignment(SwingConstants.LEFT);
 		infoButton.setBorder(null);
@@ -283,7 +285,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		
 		// LoadFile Button
 		JButton loadButton = new JButton("Spiel laden");
-		ImageIcon loadIcon = new ImageIcon(new ImageIcon("src/res/loadSaveIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		ImageIcon loadIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("loadSaveIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		loadButton.setIcon(loadIcon);
 		loadButton.setHorizontalAlignment(SwingConstants.LEFT);
 		loadButton.setBorder(null);
@@ -313,7 +315,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		
 		// Themes Button
 		JButton themesButton = new JButton("Spielstil wählen");
-		ImageIcon themesIcon = new ImageIcon(new ImageIcon("src/res/themeIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		ImageIcon themesIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("themeIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		themesButton.setIcon(themesIcon);
 		themesButton.setHorizontalAlignment(SwingConstants.LEFT);
 		themesButton.setBorder(null);
@@ -340,8 +342,8 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		
 		// Sound Button
 		JButton soundButton = new JButton("Lautstärke anpassen");
-		Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		Icon soundOnIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("soundOnIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		Icon soundOffIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("soundOffIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		if(Launcher.soundPlaying) {
 			soundButton.setIcon(soundOnIcon);
 		}else {
@@ -429,7 +431,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		twoFieldElementIcon.setBorder(null);
 		
 		// gridIcon Label
-		ImageIcon gridSymbol = new ImageIcon(new ImageIcon("src/res/gridIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		ImageIcon gridSymbol = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("gridIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		gridIcon.setIcon(gridSymbol);
 		gridIcon.setMinimumSize(new Dimension(50, 50));
 		gridIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -861,7 +863,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 	 * Anzeigen einer Information über die Urheber des Spiels.
 	 */
 	public void showInfo() {
-		ImageIcon hsaalenIcon = new ImageIcon(new ImageIcon("src/res/hsaalen.png").getImage().getScaledInstance(100, 70, Image.SCALE_SMOOTH));
+		ImageIcon hsaalenIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("hsaalen.png"))).getImage().getScaledInstance(100, 70, Image.SCALE_SMOOTH));
 		JOptionPane.showOptionDialog(panel, "Dieses Spiel wurde als "
 										+ "Teil eines Programmierpraktikums\n"
 										+ "an der Hochschule Aalen geschrieben von:\n\n"
@@ -888,12 +890,12 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 			threeFieldElementName = "Zerstörer";
 			twoFieldElementName = "U-Boot";
 			
-			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/carrier.png").getImage().getScaledInstance(250, 50, Image.SCALE_SMOOTH));
-			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/battleship.png").getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH));
-			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/destroyer.png").getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
-			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/submarine.png").getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
+			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("carrier.png"))).getImage().getScaledInstance(250, 50, Image.SCALE_SMOOTH));
+			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("battleship.png"))).getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH));
+			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("destroyer.png"))).getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
+			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("submarine.png"))).getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
 			
-			themeBackground = new ImageIcon(new ImageIcon("src/res/MB_Battleships.jpg").getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH));
+			themeBackground = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("MB_Battleships.jpg"))).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH));
 			
 		}
 		
@@ -909,12 +911,12 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 			threeFieldElementName = "Sportwagen";
 			twoFieldElementName = "Kombi";
 			
-			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/bus.png").getImage().getScaledInstance(250, 50, Image.SCALE_SMOOTH));
-			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/truck.png").getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH));
-			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/sportscar.png").getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
-			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/kombi.png").getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
+			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("bus.png"))).getImage().getScaledInstance(250, 50, Image.SCALE_SMOOTH));
+			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("truck.png"))).getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH));
+			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("sportscar.png"))).getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
+			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("kombi.png"))).getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
 			
-			themeBackground = new ImageIcon(new ImageIcon("src/res/MB_Battlecars.jpg").getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH));
+			themeBackground = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("MB_Battlecars.jpg"))).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH));
 		}
 	}
 

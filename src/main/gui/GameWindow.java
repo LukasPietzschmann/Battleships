@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
@@ -149,7 +150,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
 
         // saveButton
         saveButton = new JButton("Spiel speichern");
-        ImageIcon loadIcon = new ImageIcon(new ImageIcon("src/res/loadSaveIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        ImageIcon loadIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("loadSaveIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
         saveButton.setIcon(loadIcon);
         saveButton.setHorizontalAlignment(SwingConstants.LEFT);
         saveButton.setBorder(null);
@@ -168,8 +169,8 @@ public class GameWindow implements GameEndsListener, GameEventListener {
         // soundButton Button Settings
         JButton soundButton = new JButton();
         soundButton.setText("Lautstärke anpassen");
-        Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-        Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        Icon soundOnIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("soundOnIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        Icon soundOffIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("soundOffIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
         if(Launcher.soundPlaying) {
             soundButton.setIcon(soundOnIcon);
         }else {
@@ -253,16 +254,10 @@ public class GameWindow implements GameEndsListener, GameEventListener {
     
     @Override
     public void OnEventFired(int event) {
-        switch(event){
-            case HIT:
-                eventLine.setText("Treffer!");
-                break;
-            case HIT_DEAD:
-                eventLine.setText(Launcher.themeIdentifierSingular + " zerstört!");
-                break;
-            case MISS:
-                eventLine.setText("Daneben!");
-                break;
+        switch (event) {
+            case HIT -> eventLine.setText("Treffer!");
+            case HIT_DEAD -> eventLine.setText(Launcher.themeIdentifierSingular + " zerstört!");
+            case MISS -> eventLine.setText("Daneben!");
         }
     }
     
