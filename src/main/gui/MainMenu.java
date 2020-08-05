@@ -6,7 +6,6 @@ import logic.*;
 import java.awt.*;
 import java.util.Objects;
 
-import javax.management.MBeanAttributeInfo;
 import javax.swing.*;
 
 /**
@@ -457,8 +456,8 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		
 		// Counters Elements
 		// countersFont Font
-		Font countersFont = new Font("Arial", Font.PLAIN, 20);
-		Font plusMinusCountersFont = new Font("Arial", Font.BOLD, 20);
+		Font countersFont = new Font("Krungthep", Font.PLAIN, 19);
+		Font plusMinusCountersFont = new Font("Krungthep", Font.BOLD, 20);
 		
 		// fiveFieldElementText Label
 		fiveFieldElementText.setText(fiveFieldElementCount +
@@ -763,7 +762,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		themes.setVisible(false);
 		
 		// Themes Elements
-		Font themesFont = new Font("Arial", Font.PLAIN, 20);
+		Font themesFont = new Font("Krungthep", Font.PLAIN, 20);
 		
 		themesHeading.setFont(themesFont);
 		themesHeading.setForeground(textColor);
@@ -847,8 +846,8 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 	public void throwErrorMessage(int i) {
 		// Too many ships for the specific grid
 		if(i == 1) {
-			JOptionPane.showMessageDialog(panel, "Zu viele " + Launcher.themeIdentifierPlural + " für das gewählte Spielfeld.\nBelegungsfaktor beträgt " +
-							Launcher.getFillFactor(fiveFieldElementCount, fourFieldElementCount, threeFieldElementCount, twoFieldElementCount) + "%, darf aber höchstens" +
+			JOptionPane.showMessageDialog(panel, "Zu viele " + Launcher.themeIdentifierPlural + " für das gewählte Spielfeld.\nBelegungsfaktor beträgt über " +
+							Launcher.getFillFactor(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount) + "%, darf aber höchstens" +
 							" 25% betragen.\nAnzahl der " + Launcher.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
 							"Fehlermeldung: Zu viele " + Launcher.themeIdentifierPlural + "für das Spielfeld", JOptionPane.ERROR_MESSAGE);
 			return;

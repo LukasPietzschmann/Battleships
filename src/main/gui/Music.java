@@ -2,6 +2,7 @@
 package gui;
 
 import java.io.File;
+import java.net.URL;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -16,18 +17,13 @@ public class Music {
 
 	/**
 	 * Konstruktor, erstellt ein MainMenu-Objekt.
-	 * @param musicLocation Verzeichnis der Musik-Datei.
+	 * @param musicURL URL der Musik-Datei.
 	 */
-	public Music(String musicLocation) {
+	public Music(URL musicURL) {
 		try {
-			File musicPath = new File(musicLocation);
-			if (musicPath.exists()) {
-				AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+				AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicURL);
 				clip = AudioSystem.getClip();
 				clip.open(audioInput);
-			} else {
-				System.out.println("Can't find file");
-			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

@@ -11,6 +11,7 @@ import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.swing.JFrame;
 
@@ -40,24 +41,25 @@ public class MainWindow {
 	 * Laden der Musikdatei.
 	 */
 	public void createMenu() {
-		
-		MainMenu menu = new MainMenu(frame);
-		
-		menu.setUpMenu();
-		
-		String filepath = "src/res/sound.wav";
-		music = new Music(filepath);
+
+		URL musicURL = getClass().getClassLoader().getResource("sound.wav");
+		music = new Music(musicURL);
 		if (Launcher.soundPlaying) {
 			music.restartMusic();
 		}
 		
 		try {
+			URL fontURL = getClass().getClassLoader().getResource("Krungthep.ttf");
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/res/Krungthep.ttf")));
+			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, fontURL.openStream()));
 		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 		}
 
 		font = new Font("Krungthep", Font.PLAIN, 20);
+
+		MainMenu menu = new MainMenu(frame);
+
+		menu.setUpMenu();
 	}
 }
