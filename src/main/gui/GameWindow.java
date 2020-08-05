@@ -35,6 +35,7 @@ public class GameWindow implements GameEndsListener, GameEventListener {
     private final JPanel stats = new JPanel();
     private final JPanel options = new JPanel();
     private JButton saveButton;
+    boolean left = false;
 
     JPanel mainPanel = new JPanel();
 
@@ -249,15 +250,18 @@ public class GameWindow implements GameEndsListener, GameEventListener {
     
     @Override
     public void OnOpponentLeft() {
-        new EndWindow(EndWindow.OPP_LEFT, frame, this).setUpMainWindow();
+        if (left == false){
+            new EndWindow(EndWindow.OPP_LEFT, frame, this).setUpMainWindow();
+        }
+        left = true;
     }
     
     @Override
     public void OnEventFired(int event) {
         switch (event) {
-            case HIT -> eventLine.setText("Treffer!");
-            case HIT_DEAD -> eventLine.setText(Launcher.themeIdentifierSingular + " zerstört!");
-            case MISS -> eventLine.setText("Daneben!");
+            case HIT: eventLine.setText("Treffer!"); break;
+            case HIT_DEAD: eventLine.setText(Launcher.themeIdentifierSingular + " zerstört!"); break;
+            case MISS: eventLine.setText("Daneben!"); break;
         }
     }
     

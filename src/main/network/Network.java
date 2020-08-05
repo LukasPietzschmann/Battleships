@@ -67,6 +67,7 @@ public class Network extends Player {
 	 *
 	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
 	 * @param ip Die IP-Adresse des Servers.
+	 * @param port Der Port des Servers.
 	 */
 	public Network(Logic logic, String ip, int port) {
 		super(logic);
@@ -114,7 +115,7 @@ public class Network extends Player {
 	
 	/**
 	 * {@inheritDoc}
-	 * @return
+	 * @return Rückgabe des Schiffs.
 	 */
 	@Override
 	public Ship yourTurn() {

@@ -46,6 +46,8 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	
 	/**
 	 * Konstruktor, erstellt ein Spielfeld-Objekt
+	 *
+	 * @param size Größe des Spielfelds.
 	 */
 	public JGameCanvas(int size) {
 		clickQueue = new LinkedBlockingQueue<>();
@@ -136,7 +138,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	/**
 	 * Zeichnet das Spielfeld
 	 *
-	 * @param g
+	 * @param g Graphic_Objekt
 	 */
 	protected void paintComponent(Graphics g) {
 		int w = getWidth();
@@ -151,10 +153,10 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	/**
 	 * Zeichnet die einzelnen Tiles des Spielfelds
 	 *
-	 * @param g
-	 * @param t
-	 * @param x
-	 * @param y
+	 * @param g Graphics-Objekt.
+	 * @param t zu zeichnender Tile.
+	 * @param x x-Koordinate an der gezeichnet werden soll.
+	 * @param y y-Koordinate an der gezeichnet werden soll.
 	 */
 	protected void drawTile(Graphics g, Tile t, int x, int y) {
 		// map Tile from the tileset
@@ -187,7 +189,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	/**
 	 * Platziert ein Schiff
 	 *
-	 * @param ship
+	 * @param ship Zu platzierendes Schiff.
 	 */
 	public void placeShip(Ship ship) {
 		int length = ship.getSize();

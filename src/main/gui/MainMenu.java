@@ -258,13 +258,15 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 					clientIP = connect.getIP();
 					role = connect.getRole();
 					difficulty = connect.getDifficulty();
-					panel.setVisible(false);
-					layeredPane.setVisible(false);
+//					panel.setVisible(false);
+//					layeredPane.setVisible(false);
 					int mode = role.equals("server") ? Launcher.NW_SV_AI : Launcher.NW_CL_AI;
 					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), difficulty, 0);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startGame();
+					panel.setVisible(false);
+					layeredPane.setVisible(false);
 				}
 			}
 		});

@@ -155,6 +155,7 @@ public abstract class LocalPlayer extends Player {
 	
 	/**
 	 * Benachrichtigt einen registrierten {@link MapListener}, dass ein Schiff platziert wurde.
+	 * @param ship Das zu platziernde Schiff
 	 */
 	private void notifyOnShipPlacedListeners(Ship ship) {
 		for(MapListener listener : mapListeners) listener.OnShipPlaced(ship);

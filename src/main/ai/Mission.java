@@ -96,6 +96,10 @@ class Mission {
 	/**
 	 * Gibt zurück, ob es logisch sinnvoll ist, in diese Richtung zu schießen.
 	 * @return {@code true}, falls es logisch Sinn macht, sonst {@code false}.
+	 * @param dir Die Richtung in die geschossen werden soll.
+	 * @param x Die x Koordinate auf die geschossen werden soll.
+	 * @param y Die y Koordninate auf die geschossen werden soll.
+	 * @param enemyMap Die Karte des Gegners.
 	 */
 	private boolean isValidDirection(Direction dir, int x, int y, int[][] enemyMap) {
 		int newX = getXInDirection(dir, x);
@@ -105,7 +109,7 @@ class Mission {
 	
 	/**
 	 * Gibt die nächste x Koordiante in der Richtung an.
-	 * @param dir Die Rcihtung in die gegangen werden soll.
+	 * @param dir Die Richtung in die gegangen werden soll.
 	 * @param x Die x Koordinate von der aus gegangen werden soll.
 	 * @return Die nächste x Koordinate in der gegebenen Richtung.
 	 */

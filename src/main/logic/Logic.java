@@ -69,6 +69,7 @@ public class Logic extends Thread {
 	 *
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param IP Die IP Adresse des Servers.
+	 * @param port Der Port des Servers.
 	 */
 	public Logic(Difficulty difficulty, String IP, int port) {
 		this(Launcher.NW_CL_AI);
@@ -83,6 +84,11 @@ public class Logic extends Thread {
 	 *
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param size Die Größe des Spielfelds.
+	 * @param ship2Count Anzahl der Schiffe mit Länge 2.
+	 * @param ship3Count Anzahl der Schiffe mit Länge 3.
+	 * @param ship4Count Anzahl der Schiffe mit Länge 4.
+	 * @param ship5Count Anzahl der Schiffe mit Länge 5.
+	 * @throws Exception Fehlermeldung bei Erzeugung der Logik.
 	 */
 	public Logic(Difficulty difficulty, int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
 		this(Launcher.NW_SV_AI, ship2Count, ship3Count, ship4Count, ship5Count, 0);
@@ -96,6 +102,10 @@ public class Logic extends Thread {
 	 *
 	 * @param difficulty Die Schwierigkeit der AI.
 	 * @param size Die Größe des Spielfelds.
+	 * @param ship2Count Die Anzahl der Schiffe mit Größe 2.
+	 * @param ship3Count Die Anzahl der Schiffe mit Größe 3.
+	 * @param ship4Count Die Anzahl der Schiffe mit Größe 4.
+	 * @param ship5Count Die Anzahl der Schiffe mit Größe 5.
 	 */
 	public Logic(int size, Difficulty difficulty, int ship2Count, int ship3Count, int ship4Count, int ship5Count) {
 		this(Launcher.PL_AI, ship2Count, ship3Count, ship4Count, ship5Count, 0);
@@ -108,6 +118,7 @@ public class Logic extends Thread {
 	 * Konstruktor, falls ein {@link Human} gegen einen Gegner übers Netzwerk spielt und man selbst der Client ist.
 	 *
 	 * @param IP Die IP Adresse des Servers.
+	 * @param port Der Port des Servers.
 	 */
 	public Logic(String IP, int port) {
 		this(Launcher.PL_NW_CL);
@@ -121,6 +132,11 @@ public class Logic extends Thread {
 	 * Konstruktor, falls ein {@link Human} gegen einen Gegner übers Netzwerk spielt und man selbst der Server ist.
 	 *
 	 * @param size Die Größe des Spielfelds
+	 * @param ship2Count Die Anzahl der Schiffe mit Größe 2.
+	 * @param ship3Count Die Anzahl der Schiffe mit Größe 3.
+	 * @param ship4Count Die Anzahl der Schiffe mit Größe 4.
+	 * @param ship5Count Die Anzahl der Schiffe mit Größe 5.
+	 * @throws Exception Fehlermeldung bei Erzeugung der Logik.
 	 */
 	public Logic(int size, int ship2Count, int ship3Count, int ship4Count, int ship5Count) throws Exception {
 		this(Launcher.PL_NW_SV, ship2Count, ship3Count, ship4Count, ship5Count, 0);
@@ -345,7 +361,7 @@ public class Logic extends Thread {
 	
 	/**
 	 * Muss von einem {@link Player} aufgerufen werden, falls all seine Schiffe platziert hat.
-	 * @param player
+	 * @param player Spieler, der alle seine Schiffe platziert hat.
 	 */
 	public synchronized void setShipsPlaced(Player player) {
 		if(player instanceof LocalPlayer && ((LocalPlayer) player).map.getShipsNr() != getAvailableShips().size()) {

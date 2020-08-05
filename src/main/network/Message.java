@@ -56,7 +56,7 @@ public class Message {
 	
 	/**
 	 * Gibt die Art der Nachricht zurück.
-	 * @return
+	 * @return Art der Nachricht
 	 */
 	public String getMessageType() {
 		return type;
@@ -72,7 +72,7 @@ public class Message {
 	
 	/**
 	 * Gibt die String Repräsentation der Nachricht zurück.
-	 * @return
+	 * @return String-Repräsentation der Nachricht.
 	 */
 	@Override
 	public String toString() {
