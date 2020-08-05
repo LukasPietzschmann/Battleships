@@ -163,8 +163,9 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
            data.setMode(logic.getMODE());
            data.setGridSize(logic.getSize());
            data.setMap1(ownPlayer.getMap());
-//           data.setOwnPlayer(ownPlayer);
-//           data.setOppPlayer(oppPlayer);
+           data.setOwnPlayer(ownPlayer);
+           data.setOppPlayer(oppPlayer);
+           data.setID(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
 
            if (logic.getMODE() == 3) data.setMap2(((LocalPlayer)oppPlayer).getMap());
            try {
@@ -179,7 +180,7 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 //            saveGameId = scan.nextLine();
 //            //int saveGameId = 12345; // TODO delete
             JOptionPane.showMessageDialog(mainPanel, "Spiel wurde erfolgreich gespeichert unter:\n" +
-                            System.getProperty("user.home") + "\\Documents\\saveGames\\" + filename + ".savegame\n\n" +
+                            System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\" + filename + ".savegame\n\n" +
                             "Das Spiel kann nun im Hauptmenü wieder geladen werden.",
                     "Spiel wurde gespeichert", JOptionPane.PLAIN_MESSAGE);
 //

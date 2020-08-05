@@ -39,11 +39,11 @@ public class Launcher {
 	public static String themeIdentifierPlural = "Schiffe";
 	public static String themeIdentifierSingular = "Schiff";
 	
-	public static Logic startGame(int mode, String name01, String name02, int ship2Count, int ship3Count, int ship4Count, int ship5Count, String ip, int port, Difficulty diff01, Difficulty diff02, long id) {
+	public static Logic startGame(int mode, String name01, String name02, int ship2Count, int ship3Count, int ship4Count, int ship5Count, String ip, int port, Difficulty diff01, Difficulty diff02, SaveData data) {
 		try {
 			switch(mode) {
-//				case SG:
-//					return Logic.fromSaveGame(id);
+				case SG:
+					return Logic.fromSaveGame(data);
 				case AI_AI:
 					return new Logic(name01, name02, diff01, diff02, gridSize, ship2Count, ship3Count, ship4Count, ship5Count);
 				case PL_AI:
@@ -87,7 +87,7 @@ public class Launcher {
 	}
 
 	public static void createSaveDirectory(){
-		File dir = new File(System.getProperty("user.home") + "\\Documents\\saveGames");
+		File dir = new File(System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände");
 		dir.mkdir();
 	}
 }

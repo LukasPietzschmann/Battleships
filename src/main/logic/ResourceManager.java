@@ -4,12 +4,12 @@ import java.io.*;
 
 public class ResourceManager {
     public static void save (Serializable data, String filename) throws Exception{
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(System.getProperty("user.home") + "\\Documents\\saveGames\\" + filename + ".savegame"))){
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\" + filename + ".savegame"))){
             oos.writeObject(data);
         }
     }
     public static Object load (String filename) throws Exception{
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(System.getProperty("user.home") + "\\Documents\\saveGames\\" + filename))){
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\" + filename))){
             return ois.readObject();
         }
     }
