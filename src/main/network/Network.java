@@ -1,11 +1,6 @@
 package network;
 
-import logic.Direction;
-import logic.GameListener;
-import logic.Logic;
-import logic.Map;
-import logic.Player;
-import logic.Ship;
+import logic.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,15 +10,15 @@ import java.util.ArrayList;
 /**
  * Die Klasse Network modelliert einen Spieler an einem anderen Computer.
  */
-public class Network extends Player {
+public class Network extends Player implements SaveListener {
 	public static final int PORT = 4444;
-	public static final String SHOOT = "SHOT";
-	public static final String SETUP = "SETUP";
-	public static final String CONFIRM = "CONFIRMED";
-	public static final String ANSWER = "ANSWER";
-	public static final String PASS = "PASS";
-	public static final String SAVE = "SAVE";
-	public static final String LOAD = "LOAD";
+	public static final String SHOOT = "shot";
+	public static final String SETUP = "setup";
+	public static final String CONFIRM = "confirmed";
+	public static final String ANSWER = "answer";
+	public static final String PASS = "pass";
+	public static final String SAVE = "save";
+	public static final String LOAD = "load";
 	private NetworkThread networkThread;
 	private int size;
 	private ArrayList<Ship> ships;
@@ -55,6 +50,7 @@ public class Network extends Player {
 		networkThread = new NetworkThread(new ServerSocket(PORT), logic);
 		//networkThread.start();
 		logic.registerGameEndListener(networkThread);
+		ResourceManager.getInstance().registerSaveListener(this);
 		shipCount = logic.getAvailableShips().size();
 		int[] shipCount = new int[4];
 		for(int i = 0; i < logic.getAvailableShips().size(); i++)
@@ -74,6 +70,7 @@ public class Network extends Player {
 		try {
 			networkThread = new NetworkThread(new Socket(ip, port), logic);
 			logic.registerGameEndListener(networkThread);
+			ResourceManager.getInstance().registerSaveListener(this);
 		}catch(IOException e) {
 			e.printStackTrace();
 			System.err.println("NW Error");
@@ -206,5 +203,11 @@ public class Network extends Player {
 	@Override
 	public void oppPlacedShips() {
 		networkThread.sendMessage(String.format("%s\n", CONFIRM));
+	}
+	
+	@Override
+	public void OnGameSaved(int id) {
+		System.out.println("Ja man");
+		networkThread.sendMessage(String.format("%s\n",SAVE));
 	}
 }

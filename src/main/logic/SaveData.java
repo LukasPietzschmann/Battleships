@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class SaveData implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    private int id;
     private int mode;
     private int gridSize;
     private Map map1;
@@ -61,11 +61,11 @@ public class SaveData implements Serializable {
         this.oppPlayer = oppPlayer;
     }
 
-    public String getID() {
+    public int getID() {
         return id;
     }
 
-    public void setID(String id) {
+    public void setID(int id) {
         this.id = id;
     }
 }

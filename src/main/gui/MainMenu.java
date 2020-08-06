@@ -308,7 +308,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				String filename = chooser.getName(chooser.getSelectedFile());
 				try {
-					SaveData save = (SaveData)ResourceManager.load(filename);
+					SaveData save = (SaveData)ResourceManager.getInstance().load(filename);
 					System.out.println("Modus: " + save.getMode());
 					System.out.println("Spielfeldgröße: " + save.getGridSize());
 					save.getMap1().dump();

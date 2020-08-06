@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * Die Klasse GameWindow bildet die Nutzeroberfläche für das eigentliche Spielfenster ab, in welchem gespielt wird.
@@ -159,18 +160,20 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
         saveButton.setMaximumSize(new Dimension(50, 50));
         saveButton.setPreferredSize(new Dimension(50, 50));
        saveButton.addActionListener(arg0 -> {
-           String filename = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+           Random rnd = new Random();
+           int id = rnd.nextInt();
+           String filename = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + " " + id;
            SaveData data = new SaveData();
            data.setMode(logic.getMODE());
            data.setGridSize(logic.getSize());
            data.setMap1(ownPlayer.getMap());
            data.setOwnPlayer(ownPlayer);
            data.setOppPlayer(oppPlayer);
-           data.setID(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+           data.setID(id);
 
            if (logic.getMODE() == 3) data.setMap2(((LocalPlayer)oppPlayer).getMap());
            try {
-               ResourceManager.save(data, filename);
+               ResourceManager.getInstance().save(data, filename);
            }
            catch (Exception e){
                System.out.println("Speichern fehlgeschlagen: " + e.getMessage());
@@ -180,6 +183,7 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
                             System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\" + filename + ".savegame\n\n" +
                             "Das Spiel kann nun im Hauptmenü wieder geladen werden.",
                     "Spiel wurde gespeichert", JOptionPane.PLAIN_MESSAGE);
+           
            backToMenu();
        });
 
