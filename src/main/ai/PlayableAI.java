@@ -6,11 +6,13 @@ import logic.Map;
 import logic.Player;
 import logic.Ship;
 
+import java.io.Serializable;
+
 /**
  * Die Klasse PlayableAI modelliert eine AI. Diese Klasse dient als "zwischen-Klasse", da die
  * AI Klassen nicht von {@link Player} erben können.
  */
-public abstract class PlayableAI {
+public abstract class PlayableAI implements Serializable{
 	protected static final int WAIT_TIME = 500;
 	protected static final int ALREADY_SHOT = 1;
 	protected static final int NOT_SHOT = 0;

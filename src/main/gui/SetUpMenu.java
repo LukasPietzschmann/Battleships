@@ -10,12 +10,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Die Klasse SetUpMenu bildet die Nutzeroberfläche, auf dem der lokale Spieler seine eigenen Schiffe platzieren kann.
  */
-public class SetUpMenu implements GameStartsListener, MapListener {
+public class SetUpMenu implements GameStartsListener, MapListener, Serializable {
 	private final JFrame frame;
 	private final String mode;
 	private final JPanel mainPanel = new JPanel();

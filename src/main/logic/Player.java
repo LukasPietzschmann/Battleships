@@ -1,11 +1,12 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Die Klasse Player modelliert einen Spieler auf der höchsten Abstraktionsebene.
  */
-public abstract class Player {
+public abstract class Player implements Serializable {
 	protected Logic logic;
 	protected ArrayList<GameListener> gameListeners;
 	protected ArrayList<GameListener> enemyGameListeners;

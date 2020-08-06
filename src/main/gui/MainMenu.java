@@ -4,16 +4,20 @@ import ai.Difficulty;
 import logic.*;
 
 import java.awt.*;
+import java.io.File;
+import java.io.Serializable;
 import java.util.Objects;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Die Klasse MainMenu bildet die Nutzeroberfläche für das Hauptmenü, in welchem der Spieler das Spielthema,
  * die Anzahl der Schiffe und die Größe des Spielfelds auswählen kann.
  * Hier kann der Spieler auch auswählen, welchen Spielmodus er spielen möchte.
  */
-public class MainMenu implements SetUpShipsListener, GameStartsListener {
+public class MainMenu implements SetUpShipsListener, GameStartsListener, Serializable {
 	
 	private final JFrame frame;
 	JLayeredPane layeredPane = new JLayeredPane();
@@ -183,7 +187,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 					panel.setVisible(false);
 					layeredPane.setVisible(false);
 					//logic = Launcher.startGame(Launcher.AI_AI, "AI1", "AI2", twoFieldElementCount,threeFieldElementCount,fourFieldElementCount, fiveFieldElementCount, "", difficulty, Difficulty.medium, 0);
-					logic = Launcher.startGame(Launcher.PL_AI, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", 0, difficulty, 0);
+					logic = Launcher.startGame(Launcher.PL_AI, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", 0, difficulty, null);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startGame();
@@ -221,7 +225,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 					panel.setVisible(false);
 					layeredPane.setVisible(false);
 					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
-					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), null, 0);
+					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), null, null);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startGame();
@@ -257,15 +261,13 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 					clientIP = connect.getIP();
 					role = connect.getRole();
 					difficulty = connect.getDifficulty();
-//					panel.setVisible(false);
-//					layeredPane.setVisible(false);
+					panel.setVisible(false);
+					layeredPane.setVisible(false);
 					int mode = role.equals("server") ? Launcher.NW_SV_AI : Launcher.NW_CL_AI;
-					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), difficulty, 0);
+					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), difficulty, null);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startGame();
-					panel.setVisible(false);
-					layeredPane.setVisible(false);
 				}
 			}
 		});
@@ -297,20 +299,31 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener {
 		loadButton.setMaximumSize(new Dimension(50, 50));
 		loadButton.setPreferredSize(new Dimension(50, 50));
 		loadButton.addActionListener(arg0 -> {
-			//					FileFilter filter = new FileNameExtensionFilter("Textdatei", "txt");
-			//					JFileChooser chooser = new JFileChooser();
-			//					chooser.setDialogTitle("Spielstand laden");
-			//					chooser.addChoosableFileFilter(filter);
-			//					int returnValue = chooser.showOpenDialog(frame);
-			//					if (returnValue == JFileChooser.APPROVE_OPTION) {
-			//						// Logic.verarbeiteDatei(chooser.getSelectedFile());
-			//					}
-			
-			JOptionPaneLoadSavegame connect = new JOptionPaneLoadSavegame(frame);
-			int n = connect.displayGui();
-			if(n == 0) {
-				String saveGameId = connect.getSavegameId();
-				// TODO Laden eines SaveGames implementieren
+			FileFilter filter = new FileNameExtensionFilter("SAVEGAME-Datei", "savegame");
+			JFileChooser chooser = new JFileChooser();
+			chooser.setDialogTitle("Spielstand laden");
+			chooser.setCurrentDirectory(new File(System.getProperty("user.home") +  "\\Documents\\Battleships_Spielstände\\"));
+			chooser.addChoosableFileFilter(filter);
+			int returnValue = chooser.showOpenDialog(frame);
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				String filename = chooser.getName(chooser.getSelectedFile());
+				try {
+					SaveData save = (SaveData)ResourceManager.load(filename);
+					System.out.println("Modus: " + save.getMode());
+					System.out.println("Spielfeldgröße: " + save.getGridSize());
+					save.getMap1().dump();
+					System.out.println("");
+					save.getMap2().dump();
+//					logic = Logic.fromSaveGame(save);
+					logic = Launcher.startGame(Launcher.SG, null, null, 0, 0, 0, 0, null, 0, null, null, save);
+					logic.registerSetupShipsListener(this);
+					logic.registerGameStartsListener(this);
+					logic.startLoadedGame();
+
+				}
+				catch (Exception e){
+					System.out.println("Laden fehlgeschlagen: " + e.getMessage());
+				}
 			}
 		});
 		

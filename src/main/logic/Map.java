@@ -1,11 +1,12 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Die Klasse Map modelliert das Spielfeld eines {@link LocalPlayer}.
  */
-public class Map {
+public class Map implements Serializable {
 	public static final int WATER = 0;
 	public static final int SHIP = 1;
 	public static final int SUCC_HIT = 2;
@@ -600,7 +601,7 @@ public class Map {
 	/**
 	 * Nach Außen nicht sichtbare Hilfsklasse zur modellierung des Spielfelds.
 	 */
-	static class MapTile {
+	static class MapTile implements Serializable{
 		private int stat;
 		private Ship ship;
 

@@ -4,6 +4,8 @@ import ai.Difficulty;
 import ai.AI;
 import gui.MainWindow;
 
+import java.io.File;
+
 /**
  * Die Klasse Launcher startet das Spiel und frägt Anfangseinstellungen ab
  */
@@ -31,15 +33,13 @@ public class Launcher {
 	 * @param ip Die IP des Servers.
 	 * @param port Der Port des Servers.
 	 * @param diff Die Schwierigkeit der AI.
-	 * @param id Die ID des Save Games.
 	 * @return Die Logic, die das Spiel ab sofort steuert.
 	 */
-	public static Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, String ip, int port, Difficulty diff, long id) {
+	public static Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, String ip, int port, Difficulty diff, SaveData data) {
 		try {
 			switch(mode) {
 				case SG:
-					//TODO id Parameter
-					return new Logic(id);
+					return Logic.fromSaveGame(data);
 				case PL_AI:
 					return new Logic(gridSize, diff, ship2Count, ship3Count, ship4Count, ship5Count);
 				case NW_CL_AI:
@@ -92,5 +92,11 @@ public class Launcher {
 	public static void main(String[] args) {
 		MainWindow mainWindow = new MainWindow();
 		mainWindow.setUpMainWindow();
+		createSaveDirectory();
+	}
+
+	public static void createSaveDirectory(){
+		File dir = new File(System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände");
+		dir.mkdir();
 	}
 }

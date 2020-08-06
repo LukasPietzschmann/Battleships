@@ -4,13 +4,14 @@ import ai.AI;
 import ai.Difficulty;
 import network.Network;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Die Klasse Logik steuert den kompletten Spielablauf.
  */
-public class Logic extends Thread {
+public class Logic extends Thread implements Serializable {
 	private volatile boolean ownPlayerShipsPlaced = false;
 	private volatile boolean oppPlayerShipsPlaced = false;
 	private final int MODE;
@@ -32,16 +33,6 @@ public class Logic extends Thread {
 		gameStartsListeners = new CopyOnWriteArrayList<>();
 		gameEndsListeners = new CopyOnWriteArrayList<>();
 		gameEventListeners = new CopyOnWriteArrayList<>();
-	}
-	
-	/**
-	 * Konstruktor, falls ein Save-Game geladen wird.
-	 *
-	 * @param id Die ID des Save-Games.
-	 */
-	public Logic(long id) {
-		this(Launcher.SG);
-		//TODO implement
 	}
 	
 	/**
@@ -145,6 +136,16 @@ public class Logic extends Thread {
 		oppPlayer = new Network(this, size);
 	}
 	
+	public static Logic fromSaveGame(SaveData save){
+//		SaveGame saveGame = SaveGame.fromId(id);
+		//Hier den Modus setzen
+		Logic logic = new Logic(save.getMode());
+		logic.ownPlayer = save.getOwnPlayer();
+		logic.oppPlayer = save.getOppPlayer();
+		
+		return logic;
+	}
+	
 	/**
 	 * Schießt auf einen Spieler.
 	 *
@@ -215,6 +216,40 @@ public class Logic extends Thread {
 					else notifyGameEventListener(GameEventListener.HIT_DEAD);
 				}
 				
+				Player temp = currPlayer;
+				currPlayer = otherPlayer;
+				otherPlayer = temp;
+			}
+		});
+		t.start();
+	}
+
+	/**
+	 * Startet geladenes Spiel.
+	 */
+	public void startLoadedGame() {
+		Thread t = new Thread(() -> {
+			Ship hit;
+
+			Player currPlayer = ownPlayer, otherPlayer = oppPlayer;
+
+			notifyGameStarts();
+
+			while(true) {
+				notifyPlayersTurnListener(currPlayer);
+				hit = Ship.defaultShip(0,0);
+				while(hit != null) {
+					if(!otherPlayer.isAlive()) {
+						notifyGameEndsListener(currPlayer);
+						return;
+					}
+
+					hit = currPlayer.yourTurn();
+					if(hit == null) notifyGameEventListener(GameEventListener.MISS);
+					else if(hit.isAlive()) notifyGameEventListener(GameEventListener.HIT);
+					else notifyGameEventListener(GameEventListener.HIT_DEAD);
+				}
+
 				Player temp = currPlayer;
 				currPlayer = otherPlayer;
 				otherPlayer = temp;
@@ -371,5 +406,9 @@ public class Logic extends Thread {
 		}
 		if(player == ownPlayer) ownPlayerShipsPlaced = true;
 		else oppPlayerShipsPlaced = true;
+	}
+
+	public int getMODE(){
+		return MODE;
 	}
 }
