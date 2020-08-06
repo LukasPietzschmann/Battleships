@@ -315,7 +315,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 					System.out.println("");
 					save.getMap2().dump();
 //					logic = Logic.fromSaveGame(save);
-					logic = Launcher.startGame(Launcher.SG, null, null, 0, 0, 0, 0, null, 0, null, null, save);
+					logic = Launcher.startGame(Launcher.SG, 0, 0, 0, 0, "", 0, null, save);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startLoadedGame();
