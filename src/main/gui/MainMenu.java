@@ -190,7 +190,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 					logic = Launcher.startGame(Launcher.PL_AI, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", 0, difficulty, null);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
-					logic.startGame();
+					logic.startGame(false);
 				}
 			}
 		});
@@ -228,7 +228,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), null, null);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
-					logic.startGame();
+					logic.startGame(false);
 				}
 			}
 		});
@@ -267,7 +267,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), difficulty, null);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
-					logic.startGame();
+					logic.startGame(false);
 				}
 			}
 		});
@@ -318,7 +318,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 					logic = Launcher.startGame(Launcher.SG, 0, 0, 0, 0, "", 0, null, save);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
-					logic.startLoadedGame();
+					logic.startGame(true);
 
 				}
 				catch (Exception e){

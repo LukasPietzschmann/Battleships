@@ -76,7 +76,6 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 		grid = new JGameCanvas(logic.getSize());
 		player = logic.getOwnPlayer();
 		player.registerOnMapChangedListener(grid);
-		//TODO unregister schreoben
 		player.registerOnMapChangedListener(this);
 		logic.registerGameStartsListener(this);
 	}

@@ -165,40 +165,39 @@ public class Logic extends Thread implements Serializable {
 	/**
 	 * Startet das Spiel.
 	 */
-	public void startGame() {
+	public void startGame(boolean loaded) {
 		Thread t = new Thread(() -> {
 			Ship hit;
 			
-			Player currPlayer, otherPlayer;
-			switch(MODE) {
-				case Launcher.NW_CL_AI:
-				case Launcher.PL_NW_CL:
-					currPlayer = oppPlayer;
-					otherPlayer = ownPlayer;
-					break;
-				default: //PL_AI, NW_SV_AI, PL_NW_SV
-					currPlayer = ownPlayer;
-					otherPlayer = oppPlayer;
+			Player currPlayer = ownPlayer, otherPlayer = oppPlayer;
+			if(!loaded) {
+				switch(MODE) {
+					case Launcher.NW_CL_AI:
+					case Launcher.PL_NW_CL:
+						currPlayer = oppPlayer;
+						otherPlayer = ownPlayer;
+						break;
+				}
+				if(!(MODE == Launcher.NW_SV_AI || MODE == Launcher.NW_CL_AI)) notifyPlaceShips();
+				currPlayer.placeShips();
+				if(currPlayer == oppPlayer) {
+					while(!oppPlayerShipsPlaced) {
+					}
+				}else {
+					while(!ownPlayerShipsPlaced) {
+					}
+				}
+				otherPlayer.oppPlacedShips();
+				otherPlayer.placeShips();
+				if(otherPlayer == oppPlayer) {
+					while(!oppPlayerShipsPlaced) {
+					}
+				}else {
+					while(!ownPlayerShipsPlaced) {
+					}
+				}
+				currPlayer.oppPlacedShips();
 			}
-			if(!(MODE == Launcher.NW_SV_AI || MODE == Launcher.NW_CL_AI)) notifyPlaceShips();
-			currPlayer.placeShips();
-			if(currPlayer == oppPlayer) {
-				while(!oppPlayerShipsPlaced) {
-				}
-			}else {
-				while(!ownPlayerShipsPlaced) {
-				}
-			}
-			otherPlayer.oppPlacedShips();
-			otherPlayer.placeShips();
-			if(otherPlayer == oppPlayer) {
-				while(!oppPlayerShipsPlaced) {
-				}
-			}else {
-				while(!ownPlayerShipsPlaced) {
-				}
-			}
-			currPlayer.oppPlacedShips();
 			notifyGameStarts();
 			
 			while(true) {
@@ -216,40 +215,6 @@ public class Logic extends Thread implements Serializable {
 					else notifyGameEventListener(GameEventListener.HIT_DEAD);
 				}
 				
-				Player temp = currPlayer;
-				currPlayer = otherPlayer;
-				otherPlayer = temp;
-			}
-		});
-		t.start();
-	}
-
-	/**
-	 * Startet geladenes Spiel.
-	 */
-	public void startLoadedGame() {
-		Thread t = new Thread(() -> {
-			Ship hit;
-
-			Player currPlayer = ownPlayer, otherPlayer = oppPlayer;
-
-			notifyGameStarts();
-
-			while(true) {
-				notifyPlayersTurnListener(currPlayer);
-				hit = Ship.defaultShip(0,0);
-				while(hit != null) {
-					if(!otherPlayer.isAlive()) {
-						notifyGameEndsListener(currPlayer);
-						return;
-					}
-
-					hit = currPlayer.yourTurn();
-					if(hit == null) notifyGameEventListener(GameEventListener.MISS);
-					else if(hit.isAlive()) notifyGameEventListener(GameEventListener.HIT);
-					else notifyGameEventListener(GameEventListener.HIT_DEAD);
-				}
-
 				Player temp = currPlayer;
 				currPlayer = otherPlayer;
 				otherPlayer = temp;

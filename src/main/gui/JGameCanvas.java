@@ -330,6 +330,6 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	
 	@Override
 	public void OnOpponentLeft() {
-		//TODO
+		myTurn = false;
 	}
 }

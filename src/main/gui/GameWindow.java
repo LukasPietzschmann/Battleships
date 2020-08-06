@@ -21,9 +21,9 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
     private final LocalPlayer ownPlayer;
     private final Player oppPlayer;
 
-    JGameCanvas grid1;
-    JGameCanvas grid2;
-    JPanel gridHolder = new JPanel();
+    private JGameCanvas grid1;
+    private JGameCanvas grid2;
+    private JPanel gridHolder = new JPanel();
     private final JPanel grid1Holder = new JPanel(new GridBagLayout());
     private final JPanel grid2Holder = new JPanel(new GridBagLayout());
     private final JPanel textbarHolder = new JPanel();
@@ -34,7 +34,7 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
     private final JPanel options = new JPanel();
     private JButton saveButton;
 
-    JPanel mainPanel = new JPanel();
+    private JPanel mainPanel = new JPanel();
 
     static Color backgroundColor = MainMenu.backgroundColor;
     static Color textColor = MainMenu.textColor;
@@ -175,30 +175,12 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
            catch (Exception e){
                System.out.println("Speichern fehlgeschlagen: " + e.getMessage());
            }
-
-//            Scanner scan = new Scanner(System.in);
-//            String saveGameId;
-//            saveGameId = scan.nextLine();
-//            //int saveGameId = 12345; // TODO delete
+           
             JOptionPane.showMessageDialog(mainPanel, "Spiel wurde erfolgreich gespeichert unter:\n" +
                             System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\" + filename + ".savegame\n\n" +
                             "Das Spiel kann nun im Hauptmenü wieder geladen werden.",
                     "Spiel wurde gespeichert", JOptionPane.PLAIN_MESSAGE);
-//
-//           FileWriter file = null;
-//           try {
-//               file = new FileWriter(saveGameId + ".txt");
-//           } catch (IOException e) {
-//               e.printStackTrace();
-//           }
-//           BufferedWriter bw = new BufferedWriter(file);
-//           SaveGame test = new SaveGame();
-//           String cache = String.valueOf(test.saveGame(ownPlayer.getMap()));
-//           try {
-//               bw.write(cache);
-//           } catch (IOException e) {
-//               e.printStackTrace();
-//           }
+           backToMenu();
        });
 
         // soundButton Button Settings
@@ -211,7 +193,6 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
         }else {
             soundButton.setIcon(soundOffIcon);
         }
-        //		soundButton.setHorizontalAlignment(SwingConstants.LEFT);
         soundButton.setBorder(null);
         soundButton.setContentAreaFilled(false);
         soundButton.setToolTipText("Lautstärke anpassen");
