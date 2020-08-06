@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="" externalSystemModuleType="sourceSet" externalSystemModuleVersion="unspecified" linkedProjectId="Schiffeversenken:main" linkedProjectPath="$MODULE_DIR$/../.." rootProjectPath="$MODULE_DIR$/../.." />
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="true">
+    <exclude-output />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

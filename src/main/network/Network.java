@@ -1,7 +1,9 @@
 package network;
 
 import logic.Direction;
+import logic.GameListener;
 import logic.Logic;
+import logic.Map;
 import logic.Player;
 import logic.Ship;
 
@@ -14,61 +16,28 @@ import java.util.ArrayList;
  * Die Klasse Network modelliert einen Spieler an einem anderen Computer.
  */
 public class Network extends Player {
-	/**
-	 * Der über den man sich verbindet.
-	 */
-	private static final int PORT = 1234;
-	/**
-	 * Das Keyword für eine Schuss.
-	 */
+	public static final int PORT = 4444;
 	public static final String SHOOT = "SHOT";
-	/**
-	 * Das Keyword für das Setup.
-	 */
 	public static final String SETUP = "SETUP";
-	/**
-	 * Das Keyword für die Bestätigung von {@value SETUP}.
-	 */
 	public static final String CONFIRM = "CONFIRMED";
-	/**
-	 * Das Keyword zum zurückgeben, ob getroffen wurde, oder nicht.
-	 */
 	public static final String ANSWER = "ANSWER";
-	/**
-	 * Das Keyword, ob man seinen Zug überspringt.
-	 */
 	public static final String PASS = "PASS";
-	/**
-	 * Das Keyword zum speichern des Spielstands.
-	 */
 	public static final String SAVE = "SAVE";
-	/**
-	 * Das Keyword zum laden des Spielspands.
-	 */
 	public static final String LOAD = "LOAD";
-	/**
-	 * Die Verbindung zum anderen Spieler.
-	 */
 	private NetworkThread networkThread;
-	/**
-	 * Die Größe des Spielfelds. Wird nur gesetzt, falls man selbst der Client ist.
-	 */
 	private int size;
-	/**
-	 * Alle zu platzierenden Shiffe. Werden nur gesetzt, falls man selbst der Client ist.
-	 */
 	private ArrayList<Ship> ships;
 	
-	/**
-	 * Die Anzahl aller noch lebender Schiffe.
-	 */
 	private int shipCount;
 	
-	public Network(Logic logic, String name, long id) throws IOException {
-		super(logic, name);
-		networkThread = new NetworkThread(new ServerSocket(PORT));
-		networkThread.start();
-		networkThread.sendMessage(String.format("%s %d", LOAD, id));
+	private Map map;
+	
+	public Network(Logic logic, long id) throws IOException {
+		super(logic);
+		networkThread = new NetworkThread(new ServerSocket(PORT), logic);
+		//networkThread.start();
+		logic.registerGameEndListener(networkThread);
+		networkThread.sendMessage(String.format("%s %d\n", LOAD, id));
 		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(CONFIRM)) throw new UnexpectedMessageException(m);
 	}
@@ -77,44 +46,45 @@ public class Network extends Player {
 	 * Der Konstruktor, falls man selbst der Server ist.
 	 *
 	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
-	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
 	 * @param size Die Größe des Spielfelds.
 	 * @throws IOException Falls der Server nicht erstellt werden kann.
 	 */
-	public Network(Logic logic, String name, int size) throws IOException {
-		super(logic, name);
-		networkThread = new NetworkThread(new ServerSocket(PORT));
-		networkThread.start();
+	public Network(Logic logic, int size) throws IOException {
+		super(logic);
+		map = new Map(size);
+		networkThread = new NetworkThread(new ServerSocket(PORT), logic);
+		//networkThread.start();
+		logic.registerGameEndListener(networkThread);
 		shipCount = logic.getAvailableShips().size();
 		int[] shipCount = new int[4];
 		for(int i = 0; i < logic.getAvailableShips().size(); i++)
 			shipCount[logic.getAvailableShips().get(i).getSize() - 2] += 1;
-		networkThread.sendMessage(String.format("%s %d %d %d %d %d\n", SETUP, size, shipCount[0], shipCount[1], shipCount[2], shipCount[3]));
-		Message m = new Message(networkThread.recieveMessage());
-		if(!m.getMessageType().equals(CONFIRM)) throw new UnexpectedMessageException(m);
+		networkThread.sendMessage(String.format("%s %d %d %d %d %d\n", SETUP, size, shipCount[3], shipCount[2], shipCount[1], shipCount[0]));
 	}
 	
 	/**
 	 * Konstruktor, falls man selbst der Client ist.
 	 *
 	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
-	 * @param name Der vom Spieler festgelegte Name. Dient nur zur Anzeige in der GUI.
 	 * @param ip Die IP-Adresse des Servers.
+	 * @param port Der Port des Servers.
 	 */
-	public Network(Logic logic, String name, String ip) {
-		super(logic, name);
+	public Network(Logic logic, String ip, int port) {
+		super(logic);
 		try {
-			networkThread = new NetworkThread(new Socket(ip, PORT));
+			networkThread = new NetworkThread(new Socket(ip, port), logic);
+			logic.registerGameEndListener(networkThread);
 		}catch(IOException e) {
 			e.printStackTrace();
 			System.err.println("NW Error");
 			return;
 		}
-		networkThread.start();
+		//networkThread.start();
 		Message m = new Message(networkThread.recieveMessage());
 		
 		if(m.getMessageType().equals(SETUP)) {
 			size = m.getArgs()[Message.SIZE_POS];
+			map = new Map(size);
 			
 			ships = new ArrayList<>();
 			int[] posis = new int[] {Message.SHIPS2_POS, Message.SHIPS3_POS, Message.SHIPS4_POS, Message.SHIPS5_POS};
@@ -122,22 +92,33 @@ public class Network extends Player {
 				for(int j = 0; j < m.getArgs()[posis[i]]; j++) ships.add(new Ship(0, 0, Direction.north, i + 2));
 			}
 			shipCount = ships.size();
-			networkThread.sendMessage(String.format("%s\n", CONFIRM));
 		}else if(m.getMessageType().equals(LOAD)) {
 			//TODO implement
 		}else throw new UnexpectedMessageException(m);
 	}
 	
+	/**
+	 * Gibt die Größe des Spielfelds zurück. Wird nur verwendet falls man selbst der Client ist.
+	 * @return Die größe des Spielfelds.
+	 */
 	public int getSize() {
 		return size;
 	}
 	
+	/**
+	 * Gibt alle zu platzierenden Schiffe zurück. Wird nur verwendet falls man selbst der Client ist.
+	 * @return Alle zu platzierenden Schiffe.
+	 */
 	public ArrayList<Ship> getShips() {
 		return ships;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @return Rückgabe des Schiffs.
+	 */
 	@Override
-	public boolean doWhatYouHaveToDo() {
+	public Ship yourTurn() {
 		// warte bis gegner geschossen hat
 		
 		Message m = new Message(networkThread.recieveMessage());
@@ -147,7 +128,7 @@ public class Network extends Player {
 			if(ship.isAlive()) a = 1;
 			else {
 				a = 2;
-				shipCount -= 1;
+				//shipCount -= 1;
 			}
 		}else a = 0;
 		networkThread.sendMessage(String.format("%s %d\n", ANSWER, a));
@@ -158,9 +139,15 @@ public class Network extends Player {
 			if(!m.getMessageType().equals(PASS))
 				throw new UnexpectedMessageException(m);
 		}
-		return a != 0;
+		return ship;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @param x Die x-Koordinate des Schusses
+	 * @param y Die y-Koordinate des Schusses
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Ship hit(int x, int y) {
 		networkThread.sendMessage(String.format("%s %d %d\n", SHOOT, y, x));
@@ -171,22 +158,53 @@ public class Network extends Player {
 		// wenn hier false dann pass senden
 		int answ = m.getArgs()[Message.ANSWER_POS];
 		if(answ == 0) {
+			map.setHit(x,y,false);
+			notifyOnHit(x,y,false);
+			notifyOnEnemyHit(x,y,false);
 			networkThread.sendMessage(String.format("%s\n", PASS));
 			return null;
 		}
-		if(answ == 1) return Ship.defaultShip(x, y);
+		if(answ == 1) {
+			map.setHit(x,y,true);
+			notifyOnHit(x,y,true);
+			notifyOnEnemyHit(x,y,true);
+			return Ship.defaultShip(x, y);
+		}
+		map.setHit(x,y,true);
+		map.surroundShip(x,y);
+		notifyOnHit(x,y,true);
+		notifyOnEnemyHit(x,y,true);
+		for(GameListener listener : enemyGameListeners) {
+			listener.OnMapChanged(map);
+		}
+		shipCount -= 1;
 		return Ship.defaultSunkenShip(x, y);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void placeShips() {
 		Message m = new Message(networkThread.recieveMessage());
 		if(!m.getMessageType().equals(CONFIRM))
 			throw new UnexpectedMessageException(m);
+		logic.setShipsPlaced(this);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isAlive() {
 		return shipCount > 0;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void oppPlacedShips() {
+		networkThread.sendMessage(String.format("%s\n", CONFIRM));
 	}
 }

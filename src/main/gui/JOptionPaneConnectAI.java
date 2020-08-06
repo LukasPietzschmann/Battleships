@@ -1,25 +1,26 @@
 package gui;
 
 import ai.Difficulty;
+import network.Network;
 
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class JOptionPaneConnectAI {
 	private Component parentComponent;
 	private Object[] options = {"Bestätigen", "Abbrechen"};
-	private JTextField textfield;
+	private JTextField ipTextField;
+	private JTextField myIp;
+	private JTextField portTextField;
 	private JLabel ip;
+	private JLabel port;
+	private JLabel myIpLable;
 	private String role = "server";
 	private Difficulty difficulty = Difficulty.medium;
 	
@@ -39,17 +40,26 @@ public class JOptionPaneConnectAI {
 		serverButton.setSelected(true);
 		serverButton.addActionListener(arg0 -> {
 			role = "server";
-			textfield.setEnabled(false);
+			ipTextField.setEnabled(false);
+			myIp.setEnabled(true);
+			myIpLable.setEnabled(true);
 			ip.setEnabled(false);
-			textfield.setText("192.168.21.2");
+			ipTextField.setText("127.0.0.1");
+			portTextField.setEnabled(false);
+			port.setEnabled(false);
+			portTextField.setText(String.valueOf(Network.PORT));
 			panel.validate();
 			panel.repaint();
 		});
 		JRadioButton clientButton = new JRadioButton("Verbinden als Client");
 		clientButton.addActionListener(arg0 -> {
 			role = "client";
-			textfield.setEnabled(true);
+			ipTextField.setEnabled(true);
+			myIp.setEnabled(false);
+			myIpLable.setEnabled(false);
 			ip.setEnabled(true);
+			portTextField.setEnabled(true);
+			port.setEnabled(true);
 			panel.validate();
 			panel.repaint();
 		});
@@ -58,14 +68,38 @@ public class JOptionPaneConnectAI {
 		connectGroup.add(serverButton);
 		connectGroup.add(clientButton);
 		
+		myIp = new JFormattedTextField();
+		myIp.setEditable(false);
+		try {
+			myIp.setText(String.format("%s:%d",InetAddress.getLocalHost().getHostAddress(), Network.PORT));
+		}catch(UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
 		ip = new JLabel("IP-Adresse");
-		textfield = new JTextField("192.168.21.2");
-		textfield.addMouseListener(new MouseAdapter() {
+		ipTextField = new JTextField("127.0.0.1");
+		ipTextField.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (textfield.isEnabled()) textfield.setText("");
+				if (ipTextField.isEnabled()) ipTextField.setText("");
 			}
 		});
+		myIpLable = new JLabel("Eigene IP Adresse");
 		
+		ipTextField.setEnabled(false);
+		ip.setEnabled(false);
+	
+		
+		port = new JLabel("Port");
+		portTextField = new JTextField(String.valueOf(Network.PORT));
+		portTextField.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (portTextField.isEnabled()) portTextField.setText("");
+			}
+		});
+
+		portTextField.setEnabled(false);
+		port.setEnabled(false);
+
 		JLabel aiDifficulty = new JLabel("AI-Schwierigkeit: ");
 		
 		JRadioButton easyButton = new JRadioButton("Leicht");
@@ -82,15 +116,17 @@ public class JOptionPaneConnectAI {
 		difficultyGroup.add(easyButton);
 		difficultyGroup.add(mediumButton);
 		difficultyGroup.add(hardButton);
-		
-		textfield.setEnabled(false);
-		ip.setEnabled(false);
+
 		panel.add(Box.createVerticalGlue());
 		panel.add(serverButton);
 		panel.add(clientButton);
 		panel.add(Box.createVerticalStrut(15));
 		panel.add(ip);
-		panel.add(textfield);
+		panel.add(ipTextField);
+		panel.add(port);
+		panel.add(portTextField);
+		panel.add(myIpLable);
+		panel.add(myIp);
 		panel.add(Box.createVerticalStrut(15));
 		panel.add(aiDifficulty);
 		panel.add(easyButton);
@@ -101,13 +137,17 @@ public class JOptionPaneConnectAI {
 	}
 	
 	public String getIP() {
-		if (role.equals("string")) {
-			return null;
-		}
 		if (role.equals("client")) {
-			return textfield.getText();
+			return ipTextField.getText();
 		}
 		return null;
+	}
+
+	public int getPort(){
+		if (role.equals("client")){
+			return Integer.parseInt(portTextField.getText());
+		}
+		return -1;
 	}
 	
 	public String getRole() {
@@ -116,11 +156,6 @@ public class JOptionPaneConnectAI {
 	
 	public Difficulty getDifficulty() {
 		return difficulty;
-	}
-	
-	public static void main(String[] args) {
-		JOptionPaneConnectAI connect = new JOptionPaneConnectAI(null);
-		connect.displayGui();
 	}
 }
 

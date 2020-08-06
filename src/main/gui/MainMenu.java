@@ -1,26 +1,36 @@
 package gui;
 
 import ai.Difficulty;
-import logic.Launcher;
-import logic.Logic;
+import logic.*;
 
 import java.awt.*;
+import java.io.File;
+import java.io.Serializable;
+import java.util.Objects;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class MainMenu {
+/**
+ * Die Klasse MainMenu bildet die Nutzeroberfläche für das Hauptmenü, in welchem der Spieler das Spielthema,
+ * die Anzahl der Schiffe und die Größe des Spielfelds auswählen kann.
+ * Hier kann der Spieler auch auswählen, welchen Spielmodus er spielen möchte.
+ */
+public class MainMenu implements SetUpShipsListener, GameStartsListener, Serializable {
 	
-	private JFrame frame;
-	private JPanel panel = new JPanel();
-	private JPanel themeIconTitle = new JPanel();
-	private JPanel themeIconPanel = new JPanel();
-	private JPanel modes = new JPanel();
-	private JPanel title = new JPanel();
+	private final JFrame frame;
+	JLayeredPane layeredPane = new JLayeredPane();
+	JLabel backgroundPanel = new JLabel();
+	private final JPanel panel = new JPanel();
+	private final JPanel themeIconTitle = new JPanel();
+	private final JPanel modes = new JPanel();
+	private final JPanel title = new JPanel();
 	JLabel themeTitle = new JLabel();
 	
-	private JPanel settings = new JPanel();
+	private final JPanel settings = new JPanel();
 	
-	private JPanel icons = new JPanel();
+	private final JPanel icons = new JPanel();
 	public ImageIcon fiveFieldElementIconFromSide;
 	public ImageIcon fourFieldElementIconFromSide;
 	public ImageIcon threeFieldElementIconFromSide;
@@ -31,33 +41,33 @@ public class MainMenu {
 	public static JLabel twoFieldElementIcon = new JLabel();
 	public static JLabel gridIcon = new JLabel();
 	
-	private JPanel counters = new JPanel();
-	private JLabel fiveFieldElementText = new JLabel();
-	private JLabel fourFieldElementText = new JLabel();
-	private JLabel threeFieldElementText = new JLabel();
-	private JLabel twoFieldElementText = new JLabel();
-	private JButton fiveFieldElementCountIncrease = new JButton();
-	private JButton fiveFieldElementCountDecrease = new JButton();
-	private JButton fourFieldElementCountIncrease = new JButton();
-	private JButton fourFieldElementCountDecrease = new JButton();
-	private JButton threeFieldElementCountIncrease = new JButton();
-	private JButton threeFieldElementCountDecrease = new JButton();
-	private JButton twoFieldElementCountIncrease = new JButton();
-	private JButton twoFieldElementCountDecrease = new JButton();
-	private JPanel fiveFieldElementCountChange = new JPanel();
-	private JPanel fourFieldElementCountChange = new JPanel();
-	private JPanel threeFieldElementCountChange = new JPanel();
-	private JPanel twoFieldElementCountChange = new JPanel();
+	private final JPanel counters = new JPanel();
+	private final JLabel fiveFieldElementText = new JLabel();
+	private final JLabel fourFieldElementText = new JLabel();
+	private final JLabel threeFieldElementText = new JLabel();
+	private final JLabel twoFieldElementText = new JLabel();
+	private final JButton fiveFieldElementCountIncrease = new JButton();
+	private final JButton fiveFieldElementCountDecrease = new JButton();
+	private final JButton fourFieldElementCountIncrease = new JButton();
+	private final JButton fourFieldElementCountDecrease = new JButton();
+	private final JButton threeFieldElementCountIncrease = new JButton();
+	private final JButton threeFieldElementCountDecrease = new JButton();
+	private final JButton twoFieldElementCountIncrease = new JButton();
+	private final JButton twoFieldElementCountDecrease = new JButton();
+	private final JPanel fiveFieldElementCountChange = new JPanel();
+	private final JPanel fourFieldElementCountChange = new JPanel();
+	private final JPanel threeFieldElementCountChange = new JPanel();
+	private final JPanel twoFieldElementCountChange = new JPanel();
 	
-	private JPanel themes = new JPanel();
-	private JLabel themesHeading = new JLabel("Spielstil\nwählen:");
-	private JRadioButton battleshipsButton = new JRadioButton("Battleships");
-	private JRadioButton battlecarsButton = new JRadioButton("Battlecars");
+	private final JPanel themes = new JPanel();
+	private final JLabel themesHeading = new JLabel("Spielstil wählen:");
+	private final JRadioButton battleshipsButton = new JRadioButton("Battleships");
+	private final JRadioButton battlecarsButton = new JRadioButton("Battlecars");
 	
 	private int fiveFieldElementCount = 1;
 	private int fourFieldElementCount = 2;
-	private int threeFieldElementCount = 3;
-	private int twoFieldElementCount = 4;
+	private int threeFieldElementCount = 2;
+	private int twoFieldElementCount = 2;
 	
 	private final int fiveFieldElementMaxCount = 10;
 	private final int fourFieldElementMaxCount = 10;
@@ -76,26 +86,43 @@ public class MainMenu {
 	public static Color textColor = Color.LIGHT_GRAY;
 	public static Color backgroundColor = new Color(35, 35, 35);
 	
-	private ImageIcon themeIcon;
+	private ImageIcon themeBackground;
 	
+	private Logic logic;
+
+	/**
+	 * Konstruktor, erstellt ein MainMenu-Objekt.
+	 *
+	 * @param frame Der übergebene Frame des MainWindow.
+	 */
 	public MainMenu(JFrame frame) {
 		this.frame = frame;
 		loadThemeItems(Launcher.theme);
 	}
-	
+
+	/**
+	 * Konstruktor, erstellt ein MainMenu-Objekt.
+	 *
+	 * @param frame Der übergebene Frame des MainWindow.
+	 * @param theme Das Spielthema (Battleships, Battlecars).
+	 */
 	public MainMenu(JFrame frame, String theme) {
 		this.frame = frame;
 		Launcher.theme = theme;
 		loadThemeItems(Launcher.theme);
 	}
-	
+
+	/**
+	 * Erstellt die grafische Benutzeroberfläche für das Hauptmenü.
+	 */
 	public void setUpMenu() {
 		
 		// Panel Settings
 		panel.setLayout(new BorderLayout());
-		panel.setOpaque(true);
-		panel.setBackground(backgroundColor);
+		panel.setOpaque(false);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 10, 30, 60));
+		panel.setSize(1130, 700);
+		panel.setLocation(0,0);
 		
 		// Panel Layout
 		panel.add(modes, BorderLayout.SOUTH);
@@ -106,18 +133,6 @@ public class MainMenu {
 		themeIconTitle.setLayout(new BorderLayout());
 		themeIconTitle.setOpaque(false);
 		
-		// themeIcon JPanel
-		themeIconPanel = new JPanel() {
-			private static final long serialVersionUID = 1L;
-			
-			protected void paintComponent(Graphics g) {
-				Image themeImage = themeIcon.getImage();
-				super.paintComponent(g);
-				g.drawImage(themeImage, 0, 0, getWidth(), getHeight(), this);
-			}
-		};
-		themeIconPanel.setOpaque(false);
-		
 		// Title Settings
 		title.setOpaque(false);
 		
@@ -127,14 +142,14 @@ public class MainMenu {
 		themeTitle.setText(Launcher.theme);
 		themeTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 		themeTitle.setForeground(textColor);
+		themeTitle.setBackground(new Color(35,35,35,180));
+		themeTitle.setOpaque(true);
 		
 		// Title Layout
 		title.add(Box.createHorizontalGlue());
 		title.add(themeTitle);
 		title.add(Box.createHorizontalStrut(10));
 		title.add(Box.createHorizontalGlue());
-		
-		themeIconTitle.add(themeIconPanel, BorderLayout.CENTER);
 		themeIconTitle.add(title, BorderLayout.NORTH);
 		themeIconTitle.add(Box.createHorizontalStrut(2000), BorderLayout.SOUTH);
 		
@@ -145,7 +160,7 @@ public class MainMenu {
 		// Modes Elements
 		// Player vs. Computer Button
 		JButton pvcButton = new JButton("Spieler vs. Computer");
-		ImageIcon pvcIcon = new ImageIcon(new ImageIcon("src/res/playerVsComputer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+		ImageIcon pvcIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("PlayerVsComputer.png"))).getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		pvcButton.setIcon(pvcIcon);
 		pvcButton.setHorizontalAlignment(SwingConstants.LEFT);
 		pvcButton.setBorder(null);
@@ -170,20 +185,23 @@ public class MainMenu {
 				if(n == 0) {
 					difficulty = connect.getDifficulty();
 					panel.setVisible(false);
-					Logic logic = Launcher.startGame(Launcher.PL_AI, "PL", "AI", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", difficulty, null, 0);
-					GameWindow game = new GameWindow(frame, "pvc", logic);
-					game.setUpGameWindow();
+					layeredPane.setVisible(false);
+					//logic = Launcher.startGame(Launcher.AI_AI, "AI1", "AI2", twoFieldElementCount,threeFieldElementCount,fourFieldElementCount, fiveFieldElementCount, "", difficulty, Difficulty.medium, 0);
+					logic = Launcher.startGame(Launcher.PL_AI, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", 0, difficulty, null);
+					logic.registerSetupShipsListener(this);
+					logic.registerGameStartsListener(this);
+					logic.startGame();
 				}
 			}
 		});
 		
 		// Player vs. Player Button
-		JButton pvpButton = new JButton("Spieler vs. 'Netzwerk'");
-		ImageIcon pvpIcon = new ImageIcon(new ImageIcon("src/res/playerVsPlayer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+		JButton pvpButton = new JButton("Spieler vs. Netzwerk");
+		ImageIcon pvpIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("PlayerVsComputerOrPlayer.png"))).getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		pvpButton.setIcon(pvpIcon);
 		pvpButton.setHorizontalAlignment(SwingConstants.LEFT);
 		pvpButton.setBorder(null);
-		pvpButton.setToolTipText("Spieler vs. 'Netzwerk'");
+		pvpButton.setToolTipText("Spieler vs. Netzwerk");
 		pvpButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		pvpButton.setMinimumSize(new Dimension(225, 150));
 		pvpButton.setMaximumSize(new Dimension(225, 150));
@@ -205,21 +223,23 @@ public class MainMenu {
 					clientIP = connect.getIP();
 					role = connect.getRole();
 					panel.setVisible(false);
+					layeredPane.setVisible(false);
 					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
-					Logic logic = Launcher.startGame(mode, "PL", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, null, null, 0);
-					GameWindow game = new GameWindow(frame, "pvp", logic);
-					game.setUpGameWindow();
+					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), null, null);
+					logic.registerSetupShipsListener(this);
+					logic.registerGameStartsListener(this);
+					logic.startGame();
 				}
 			}
 		});
 		
 		// Computer vs. Computer Button
-		JButton cvcButton = new JButton("Computer vs. Computer");
-		ImageIcon cvcIcon = new ImageIcon(new ImageIcon("src/res/computerVsComputer.png").getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
+		JButton cvcButton = new JButton("Computer vs. Netzwerk");
+		ImageIcon cvcIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("ComputerVsComputerOrPlayer.png"))).getImage().getScaledInstance(225, 150, Image.SCALE_SMOOTH));
 		cvcButton.setIcon(cvcIcon);
 		cvcButton.setHorizontalAlignment(SwingConstants.LEFT);
 		cvcButton.setBorder(null);
-		cvcButton.setToolTipText("Computer vs. Computer");
+		cvcButton.setToolTipText("Computer vs. Netzwerk");
 		cvcButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		cvcButton.setMinimumSize(new Dimension(225, 150));
 		cvcButton.setMaximumSize(new Dimension(225, 150));
@@ -242,20 +262,23 @@ public class MainMenu {
 					role = connect.getRole();
 					difficulty = connect.getDifficulty();
 					panel.setVisible(false);
-					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
-					Logic logic = Launcher.startGame(mode, "AI", "NW", twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, difficulty, null, 0);
-					GameWindow game = new GameWindow(frame, "cvc", logic);
-					game.setUpGameWindow();
+					layeredPane.setVisible(false);
+					int mode = role.equals("server") ? Launcher.NW_SV_AI : Launcher.NW_CL_AI;
+					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), difficulty, null);
+					logic.registerSetupShipsListener(this);
+					logic.registerGameStartsListener(this);
+					logic.startGame();
 				}
 			}
 		});
 		
 		// Information Button
 		JButton infoButton = new JButton("Information");
-		ImageIcon infoIcon = new ImageIcon(new ImageIcon("src/res/info.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		ImageIcon infoIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("info.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		infoButton.setIcon(infoIcon);
 		infoButton.setHorizontalAlignment(SwingConstants.LEFT);
 		infoButton.setBorder(null);
+		infoButton.setContentAreaFilled(false);
 		infoButton.setToolTipText("Information");
 		infoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		infoButton.setMinimumSize(new Dimension(50, 50));
@@ -265,39 +288,52 @@ public class MainMenu {
 		
 		// LoadFile Button
 		JButton loadButton = new JButton("Spiel laden");
-		ImageIcon loadIcon = new ImageIcon(new ImageIcon("src/res/loadSaveIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		ImageIcon loadIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("loadSaveIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		loadButton.setIcon(loadIcon);
 		loadButton.setHorizontalAlignment(SwingConstants.LEFT);
 		loadButton.setBorder(null);
+		loadButton.setContentAreaFilled(false);
 		loadButton.setToolTipText("Spiel laden");
 		loadButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		loadButton.setMinimumSize(new Dimension(50, 50));
 		loadButton.setMaximumSize(new Dimension(50, 50));
 		loadButton.setPreferredSize(new Dimension(50, 50));
 		loadButton.addActionListener(arg0 -> {
-			//					FileFilter filter = new FileNameExtensionFilter("Textdatei", "txt");
-			//					JFileChooser chooser = new JFileChooser();
-			//					chooser.setDialogTitle("Spielstand laden");
-			//					chooser.addChoosableFileFilter(filter);
-			//					int returnValue = chooser.showOpenDialog(frame);
-			//					if (returnValue == JFileChooser.APPROVE_OPTION) {
-			//						// Logic.verarbeiteDatei(chooser.getSelectedFile());
-			//					}
-			
-			JOptionPaneLoadSavegame connect = new JOptionPaneLoadSavegame(frame);
-			int n = connect.displayGui();
-			if(n == 0) {
-				String saveGameId = connect.getSavegameId();
-				//...
+			FileFilter filter = new FileNameExtensionFilter("SAVEGAME-Datei", "savegame");
+			JFileChooser chooser = new JFileChooser();
+			chooser.setDialogTitle("Spielstand laden");
+			chooser.setCurrentDirectory(new File(System.getProperty("user.home") +  "\\Documents\\Battleships_Spielstände\\"));
+			chooser.addChoosableFileFilter(filter);
+			int returnValue = chooser.showOpenDialog(frame);
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				String filename = chooser.getName(chooser.getSelectedFile());
+				try {
+					SaveData save = (SaveData)ResourceManager.load(filename);
+					System.out.println("Modus: " + save.getMode());
+					System.out.println("Spielfeldgröße: " + save.getGridSize());
+					save.getMap1().dump();
+					System.out.println("");
+					save.getMap2().dump();
+//					logic = Logic.fromSaveGame(save);
+					logic = Launcher.startGame(Launcher.SG, 0, 0, 0, 0, "", 0, null, save);
+					logic.registerSetupShipsListener(this);
+					logic.registerGameStartsListener(this);
+					logic.startLoadedGame();
+
+				}
+				catch (Exception e){
+					System.out.println("Laden fehlgeschlagen: " + e.getMessage());
+				}
 			}
 		});
 		
 		// Themes Button
 		JButton themesButton = new JButton("Spielstil wählen");
-		ImageIcon themesIcon = new ImageIcon(new ImageIcon("src/res/themeIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		ImageIcon themesIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("themeIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		themesButton.setIcon(themesIcon);
 		themesButton.setHorizontalAlignment(SwingConstants.LEFT);
 		themesButton.setBorder(null);
+		themesButton.setContentAreaFilled(false);
 		themesButton.setToolTipText("Spielstil wählen");
 		themesButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		themesButton.setMinimumSize(new Dimension(50, 50));
@@ -320,8 +356,8 @@ public class MainMenu {
 		
 		// Sound Button
 		JButton soundButton = new JButton("Lautstärke anpassen");
-		Icon soundOnIcon = new ImageIcon(new ImageIcon("src/res/soundOnIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-		Icon soundOffIcon = new ImageIcon(new ImageIcon("src/res/soundOffIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		Icon soundOnIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("soundOnIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		Icon soundOffIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("soundOffIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		if(Launcher.soundPlaying) {
 			soundButton.setIcon(soundOnIcon);
 		}else {
@@ -329,6 +365,7 @@ public class MainMenu {
 		}
 		soundButton.setHorizontalAlignment(SwingConstants.LEFT);
 		soundButton.setBorder(null);
+		soundButton.setContentAreaFilled(false);
 		soundButton.setToolTipText("Lautstärke anpassen");
 		soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		soundButton.setMinimumSize(new Dimension(50, 50));
@@ -356,13 +393,13 @@ public class MainMenu {
 		modes.add(pvpButton);
 		modes.add(Box.createHorizontalStrut(20));
 		modes.add(cvcButton);
-		modes.add(Box.createHorizontalStrut(40));
+		modes.add(Box.createHorizontalStrut(30));
 		modes.add(infoButton);
-		modes.add(Box.createHorizontalStrut(20));
+		modes.add(Box.createHorizontalStrut(18));
 		modes.add(loadButton);
-		modes.add(Box.createHorizontalStrut(20));
+		modes.add(Box.createHorizontalStrut(18));
 		modes.add(themesButton);
-		modes.add(Box.createHorizontalStrut(20));
+		modes.add(Box.createHorizontalStrut(18));
 		modes.add(soundButton);
 		modes.add(Box.createHorizontalGlue());
 		
@@ -408,7 +445,7 @@ public class MainMenu {
 		twoFieldElementIcon.setBorder(null);
 		
 		// gridIcon Label
-		ImageIcon gridSymbol = new ImageIcon(new ImageIcon("src/res/gridIcon.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+		ImageIcon gridSymbol = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("gridIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		gridIcon.setIcon(gridSymbol);
 		gridIcon.setMinimumSize(new Dimension(50, 50));
 		gridIcon.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -432,7 +469,8 @@ public class MainMenu {
 		
 		// Counters Elements
 		// countersFont Font
-		Font countersFont = new Font("Krungthep", Font.PLAIN, 20);
+		Font countersFont = new Font("Krungthep", Font.PLAIN, 19);
+		Font plusMinusCountersFont = new Font("Krungthep", Font.BOLD, 20);
 		
 		// fiveFieldElementText Label
 		fiveFieldElementText.setText(fiveFieldElementCount +
@@ -450,6 +488,9 @@ public class MainMenu {
 		// fiveFieldElementCountChange Elements
 		// fiveFieldElementCountIncrease Button
 		fiveFieldElementCountIncrease.setText("+");
+		fiveFieldElementCountIncrease.setFont(plusMinusCountersFont);
+		fiveFieldElementCountIncrease.setBorder(null);
+		fiveFieldElementCountIncrease.setFocusPainted(false);
 		fiveFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 		fiveFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 		fiveFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -467,6 +508,9 @@ public class MainMenu {
 		
 		// fiveFieldElementCountDecrease Button
 		fiveFieldElementCountDecrease.setText("-");
+		fiveFieldElementCountDecrease.setFont(plusMinusCountersFont);
+		fiveFieldElementCountDecrease.setBorder(null);
+		fiveFieldElementCountDecrease.setFocusPainted(false);
 		fiveFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 		fiveFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 		fiveFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -505,6 +549,9 @@ public class MainMenu {
 		// fourFieldElementCountChange Elements
 		// fourFieldElementCountIncrease Button
 		fourFieldElementCountIncrease.setText("+");
+		fourFieldElementCountIncrease.setFont(plusMinusCountersFont);
+		fourFieldElementCountIncrease.setBorder(null);
+		fourFieldElementCountIncrease.setFocusPainted(false);
 		fourFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 		fourFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 		fourFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -522,6 +569,9 @@ public class MainMenu {
 		
 		// fourFieldElementCountDecrease Button
 		fourFieldElementCountDecrease.setText("-");
+		fourFieldElementCountDecrease.setFont(plusMinusCountersFont);
+		fourFieldElementCountDecrease.setBorder(null);
+		fourFieldElementCountDecrease.setFocusPainted(false);
 		fourFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 		fourFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 		fourFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -560,6 +610,9 @@ public class MainMenu {
 		// threeFieldElementCountChange Elements
 		// threeFieldElementCountIncrease Button
 		threeFieldElementCountIncrease.setText("+");
+		threeFieldElementCountIncrease.setFont(plusMinusCountersFont);
+		threeFieldElementCountIncrease.setBorder(null);
+		threeFieldElementCountIncrease.setFocusPainted(false);
 		threeFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 		threeFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 		threeFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -577,6 +630,9 @@ public class MainMenu {
 		
 		//threeFieldElementCountDecrease Button
 		threeFieldElementCountDecrease.setText("-");
+		threeFieldElementCountDecrease.setFont(plusMinusCountersFont);
+		threeFieldElementCountDecrease.setBorder(null);
+		threeFieldElementCountDecrease.setFocusPainted(false);
 		threeFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 		threeFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 		threeFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -615,6 +671,9 @@ public class MainMenu {
 		// twoFieldElementCountChange Elements
 		// twoFieldElementCountIncrease Button
 		twoFieldElementCountIncrease.setText("+");
+		twoFieldElementCountIncrease.setFont(plusMinusCountersFont);
+		twoFieldElementCountIncrease.setBorder(null);
+		twoFieldElementCountIncrease.setFocusPainted(false);
 		twoFieldElementCountIncrease.setMinimumSize(new Dimension(30, 30));
 		twoFieldElementCountIncrease.setMaximumSize(new Dimension(30, 30));
 		twoFieldElementCountIncrease.setPreferredSize(new Dimension(30, 30));
@@ -632,6 +691,9 @@ public class MainMenu {
 		
 		//twoFieldElementCountDecrease Button
 		twoFieldElementCountDecrease.setText("-");
+		twoFieldElementCountDecrease.setFont(plusMinusCountersFont);
+		twoFieldElementCountDecrease.setBorder(null);
+		twoFieldElementCountDecrease.setFocusPainted(false);
 		twoFieldElementCountDecrease.setMinimumSize(new Dimension(30, 30));
 		twoFieldElementCountDecrease.setMaximumSize(new Dimension(30, 30));
 		twoFieldElementCountDecrease.setPreferredSize(new Dimension(30, 30));
@@ -664,6 +726,7 @@ public class MainMenu {
 		// gridSlider Slider
 		JSlider gridSlider = new JSlider();
 		gridSlider.setForeground(textColor);
+		gridSlider.setOpaque(false);
 		gridSlider.setMinimum(5);
 		gridSlider.setMaximum(30);
 		gridSlider.setMajorTickSpacing(5);
@@ -680,6 +743,7 @@ public class MainMenu {
 		gridSlider.addChangeListener(event -> {
 			Launcher.gridSize = gridSlider.getValue();
 			gridText.setText("Feldgröße: " + gridSlider.getValue() + "*" + gridSlider.getValue());
+
 		});
 		
 		// Counters Layout
@@ -717,7 +781,9 @@ public class MainMenu {
 		themesHeading.setForeground(textColor);
 		
 		battleshipsButton.setPreferredSize(new Dimension(210, 30));
+		battleshipsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		battleshipsButton.setFont(themesFont);
+		battleshipsButton.setContentAreaFilled(false);
 		battleshipsButton.setForeground(textColor);
 		battleshipsButton.addActionListener(arg0 -> {
 			if(!Launcher.theme.equals("Battleships")) {
@@ -730,7 +796,9 @@ public class MainMenu {
 			counters.setVisible(true);
 		});
 		battlecarsButton.setPreferredSize(new Dimension(210, 30));
+		battlecarsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		battlecarsButton.setFont(themesFont);
+		battlecarsButton.setContentAreaFilled(false);
 		battlecarsButton.setForeground(textColor);
 		battlecarsButton.addActionListener(arg0 -> {
 			if(!Launcher.theme.equals("Battlecars")) {
@@ -747,18 +815,33 @@ public class MainMenu {
 		themesGroup.add(battlecarsButton);
 		
 		// Themes Layout
-		themes.add(Box.createVerticalGlue());
+		themes.add(Box.createVerticalStrut(30));
 		themes.add(themesHeading);
 		themes.add(Box.createVerticalStrut(10));
 		themes.add(battleshipsButton);
 		themes.add(battlecarsButton);
 		themes.add(Box.createVerticalGlue());
-		
+
+		// Background Panel
+//		JLabel backgroundPanel = new JLabel();
+		backgroundPanel.setSize(1130, 700);
+		backgroundPanel.setIcon(themeBackground);
+		backgroundPanel.setLocation(0, 0);
+
+		// LayeredPane Layout
+		layeredPane.add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);
+		layeredPane.add(panel, JLayeredPane.POPUP_LAYER);
+
 		// Frame Settings
-		frame.getContentPane().add(panel);
+		frame.getContentPane().add(layeredPane);
+		frame.setSize(1130, 728);
+		frame.setResizable(false);
 		frame.setVisible(true);
 	}
-	
+
+	/**
+	 * Wählt das aktuelle Spielthema aus.
+	 */
 	public void selectCurrentThemeButton() {
 		if(Launcher.theme.equals("Battleships")) {
 			battleshipsButton.setSelected(true);
@@ -767,13 +850,19 @@ public class MainMenu {
 			battlecarsButton.setSelected(true);
 		}
 	}
-	
+
+	/**
+	 * Wirft eine Fehlermeldung aus.
+	 *
+	 * @param i Nummer des Fehlers (1 = Zu viele Schiffe für das ausgewählte Spielfeld, 2 = Keine Schiffe ausgewählt).
+	 */
 	public void throwErrorMessage(int i) {
 		// Too many ships for the specific grid
 		if(i == 1) {
-			JOptionPane.showMessageDialog(panel, "Zu viele " + Launcher.themeIdentifierPlural + " für das gewählte Spielfeld!\nAnzahl der "
-											+ Launcher.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
-							"Fehlermeldung: Zu viele Schiffe für das Spielfeld", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(panel, "Zu viele " + Launcher.themeIdentifierPlural + " für das gewählte Spielfeld.\nBelegungsfaktor beträgt über " +
+							Launcher.getFillFactor(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount) + "%, darf aber höchstens" +
+							" 25% betragen.\nAnzahl der " + Launcher.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
+							"Fehlermeldung: Zu viele " + Launcher.themeIdentifierPlural + "für das Spielfeld", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		// No ships selected at all
@@ -783,16 +872,24 @@ public class MainMenu {
 							"Fehlermeldung: Keine Schiffe ausgewählt", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
+	/**
+	 * Anzeigen einer Information über die Urheber des Spiels.
+	 */
 	public void showInfo() {
-		ImageIcon hsaalenIcon = new ImageIcon(new ImageIcon("src/res/hsaalen.png").getImage().getScaledInstance(100, 70, Image.SCALE_SMOOTH));
+		ImageIcon hsaalenIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("hsaalen.png"))).getImage().getScaledInstance(100, 70, Image.SCALE_SMOOTH));
 		JOptionPane.showOptionDialog(panel, "Dieses Spiel wurde als "
 										+ "Teil eines Programmierpraktikums\n"
 										+ "an der Hochschule Aalen geschrieben von:\n\n"
 										+ "Fabian Schwarz, Lukas Pietzschmann und Vincent Ugrai",
-						"Super wichtige Information", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, hsaalenIcon, new String[] {"Wirklich toll", "Mega", "Ich bin begeistert"}, null);
+						"About", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, hsaalenIcon,new String[] {}, null);
 	}
-	
+
+	/**
+	 * Laden eines Spielthemas.
+	 *
+	 * @param theme Name des Spielthemas ("Battleships", "Battlecars").
+	 */
 	public void loadThemeItems(String theme) {
 		
 		if(theme.equals("Battleships")) {
@@ -807,13 +904,12 @@ public class MainMenu {
 			threeFieldElementName = "Zerstörer";
 			twoFieldElementName = "U-Boot";
 			
-			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/carrier.png").getImage().getScaledInstance(250, 50, Image.SCALE_SMOOTH));
-			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/battleship.png").getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH));
-			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/destroyer.png").getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
-			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/submarine.png").getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
+			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("carrier.png"))).getImage().getScaledInstance(250, 50, Image.SCALE_SMOOTH));
+			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("battleship.png"))).getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH));
+			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("destroyer.png"))).getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
+			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("submarine.png"))).getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
 			
-			themeIcon = new ImageIcon(new ImageIcon("src/res/battleshipsThemeIcon.png").getImage());
-			//			themeIcon = new ImageIcon(new ImageIcon("src/res/battleshipsThemeIcon2.png").getImage());
+			themeBackground = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("MB_Battleships.jpg"))).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH));
 			
 		}
 		
@@ -829,27 +925,34 @@ public class MainMenu {
 			threeFieldElementName = "Sportwagen";
 			twoFieldElementName = "Kombi";
 			
-			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/bus.png").getImage().getScaledInstance(250, 50, Image.SCALE_SMOOTH));
-			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/truck.png").getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH));
-			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/sportscar.png").getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
-			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon("src/res/kombi.png").getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
+			fiveFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("bus.png"))).getImage().getScaledInstance(250, 50, Image.SCALE_SMOOTH));
+			fourFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("truck.png"))).getImage().getScaledInstance(200, 50, Image.SCALE_SMOOTH));
+			threeFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("sportscar.png"))).getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH));
+			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("kombi.png"))).getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
 			
-			themeIcon = new ImageIcon(new ImageIcon("src/res/battlecarsThemeIcon2.png").getImage());
+			themeBackground = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("MB_Battlecars.jpg"))).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH));
 		}
 	}
-	
+
+	/**
+	 * Prüft, ob keine Schiffe ausgewählt sind.
+	 *
+	 *  @return {@code false}, falls Schiffe ausgewählt sind, {@code true},falls keine Schiffe ausgewählt sind.
+	 */
 	public boolean noElementsSelected() {
 		return fiveFieldElementCount + fourFieldElementCount + threeFieldElementCount + twoFieldElementCount == 0;
 	}
-	
+
+	/**
+	 * Aktualisiert die Variablen des neu ausgewählten Spielthemas.
+	 */
 	public void updateThemeItems() {
 		
 		// Update Title
 		themeTitle.setText(Launcher.theme);
 		
-		// Update ThemeIcon
-		themeIconPanel.repaint();
-		themeIconPanel.revalidate();
+		// Update ThemeBackground
+		backgroundPanel.setIcon(themeBackground);
 		
 		// Update Icons
 		fiveFieldElementIcon.setIcon(fiveFieldElementIconFromSide);
@@ -871,5 +974,22 @@ public class MainMenu {
 		threeFieldElementCountDecrease.setToolTipText("Anzahl senken: " + threeFieldElementName);
 		twoFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + twoFieldElementName);
 		twoFieldElementCountDecrease.setToolTipText("Anzahl senken: " + twoFieldElementName);
+
+	}
+	
+	@Override
+	public void onPlaceShips() {
+		logic.unregisterGameStartsListener(this);
+		frame.remove(panel);
+		SetUpMenu setUp = new SetUpMenu(frame, "pvc", logic);
+		setUp.setUpPlaceWindow();
+	}
+	
+	@Override
+	public void OnStartGame() {
+		logic.unregisterSetupShipsListener(this);
+		frame.remove(panel);
+		GameWindow game = new GameWindow(frame, "pvc", logic);
+		game.setUpGameWindow();
 	}
 }

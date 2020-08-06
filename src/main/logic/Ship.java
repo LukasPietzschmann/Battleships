@@ -1,35 +1,17 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * Modelliert ein Schiff.
  */
-public class Ship {
-	/**
-	 * Mögliche Namen des Schiffs. Wird durch die Größe des Schiffs terminiert.
-	 */
+public class Ship implements Serializable {
 	private final String[] names = {"U-Boot", "Zerstörer", "Kreuzer", "Schlachtschiff"};
-	
-	/**
-	 * x-Koordinate des Schiffs.
-	 */
 	private int xPos;
-	/**
-	 * y-Koordinate des Schiffs.
-	 */
 	private int yPos;
-	/**
-	 * Richtung in die das Schiff zeigt.
-	 */
 	private Direction direction;
-	/**
-	 * Größe des Schiffs.
-	 */
 	private final int size;
-	/**
-	 * Anzahl der bereits erlittenen Treffer.
-	 */
 	private int hits;
 	
 	/**

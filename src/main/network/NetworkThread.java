@@ -1,100 +1,174 @@
 package network;
 
+import logic.GameEndsListener;
+import logic.Logic;
+import logic.Player;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class NetworkThread extends Thread {
-	private enum Type {
-		Server,
-		Client
-	}
+/**
+ * Der NetworkThread empfängt und sendet durchgehend Nachrichten.
+ */
+public class NetworkThread implements GameEndsListener {
+	private Logic logic;
 	
 	private Socket clientSocket;
 	private ServerSocket serverSocket;
 	private final BlockingQueue<String> recieveQueue;
 	private final BlockingQueue<String> sendQueue;
-	private final Type type;
 	
-	public NetworkThread(ServerSocket serverSocket) {
+	/**
+	 * Konstruktor, falls man selbst der Server ist.
+	 * @param serverSocket Der Server Socket.
+	 * @param logic "Zurück-Referenz" auf das Logic Objekt.
+	 */
+	public NetworkThread(ServerSocket serverSocket, Logic logic) {
+		this.logic = logic;
 		this.serverSocket = serverSocket;
-		type = Type.Server;
-		recieveQueue = new ArrayBlockingQueue<>(1);
-		sendQueue = new ArrayBlockingQueue<>(1);
-	}
-	
-	public NetworkThread(Socket clientSocket) {
-		this.clientSocket = clientSocket;
-		type = Type.Client;
-		recieveQueue = new ArrayBlockingQueue<>(1);
-		sendQueue = new ArrayBlockingQueue<>(1);
-	}
-	
-	@Override
-	public void run() {
-		super.run();
+		recieveQueue = new LinkedBlockingQueue<>();
+		sendQueue = new LinkedBlockingQueue<>();
 		
-		try {
-			BufferedReader in;
-			OutputStreamWriter out;
-			if(type == Type.Server) {
-				Socket socket = serverSocket.accept();
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				out = new OutputStreamWriter(socket.getOutputStream());
-				while(true) {
-					//noinspection DuplicatedCode
-					while(true) {
+		Thread serverSendThread = new Thread(() -> {
+			try {
+				OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
+				
+				while(!serverSocket.isClosed()) {
+					try {
 						String msg = sendQueue.take();
-						if(msg == null) continue;
-						System.out.println("Server sent: Message " + msg.replace("\n", ""));
 						out.write(msg);
 						out.flush();
-						break;
-					}
-					while(true) {
-						String msg = in.readLine();
-						if(msg == null) continue;
-						System.out.println("Server recieved: Message " + msg.replace("\n", ""));
-						recieveQueue.offer(msg);
+						System.out.println("Server sent " + msg);
+					}catch(Exception e) {
 						break;
 					}
 				}
-			}else {
-				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				out = new OutputStreamWriter(clientSocket.getOutputStream());
-				while(true) {
-					while(true) {
-						String msg = in.readLine();
-						if(msg == null) continue;
-						System.out.println("Client recieved: " + msg.replace("\n", ""));
-						recieveQueue.offer(msg);
-						break;
-					}
-					//noinspection DuplicatedCode
-					while(true) {
-						String msg = sendQueue.take();
-						if(msg == null) continue;
-						System.out.println("Client sent: " + msg.replace("\n", ""));
-						out.write(msg);
-						out.flush();
-						break;
-					}
-				}
+				
+				out.close();
+			}catch(IOException e) {
+				e.printStackTrace();
 			}
-		}catch(Exception e) {
-			System.err.println("NE Error");
-			e.printStackTrace();
-		}
+		});
+		
+		Thread serverRecieveThread = new Thread(() -> {
+			try {
+				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				
+				while(!serverSocket.isClosed()) {
+					try {
+						String msg = in.readLine();
+						if(msg == null){
+							logic.notifyOppLeftListener();
+							break;
+						}
+						recieveQueue.offer(msg);
+						System.out.println("Server recieved " + msg);
+					}catch(SocketException e) {
+						break;
+					}
+				}
+				
+				in.close();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		Thread acceptT = new Thread(() -> {
+			try {
+				clientSocket = serverSocket.accept();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+			serverSendThread.start();
+			serverRecieveThread.start();
+			
+		});
+		
+		acceptT.start();
 	}
 	
+	/**
+	 * Konstruktor, falls man selbst der Client ist.
+	 * @param clientSocket Der Socket.
+	 * @param logic "Zurück-Referenz" auf das Logic Objekt.
+	 */
+	public NetworkThread(Socket clientSocket, Logic logic) {
+		this.logic = logic;
+		this.clientSocket = clientSocket;
+		recieveQueue = new LinkedBlockingQueue<>();
+		sendQueue = new LinkedBlockingQueue<>();
+		
+		Thread clientSendThread = new Thread(() -> {
+			try {
+				OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
+				
+				while(!clientSocket.isClosed()) {
+					try {
+						String msg = sendQueue.take();
+						out.write(msg);
+						out.flush();
+						System.out.println("Client sent " + msg);
+					}catch(Exception e) {
+						break;
+					}
+				}
+				
+				out.close();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		Thread clientRecieveThread = new Thread(() -> {
+			try {
+				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				
+				while(!clientSocket.isClosed()) {
+					try {
+						String msg = in.readLine();
+						if(msg == null){
+							logic.notifyOppLeftListener();
+							break;
+						}
+						recieveQueue.offer(msg);
+						System.out.println("Client recieved " + msg);
+					}catch(SocketException e) {
+						break;
+					}
+				}
+				
+				in.close();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		clientSendThread.start();
+		clientRecieveThread.start();
+	}
+	
+	/**
+	 * Sendet eine Nachricht. Es ist nicht gewährleistet, dass die Nachricht direkt gesendet wird.
+	 * @param message Die zu sendende Nachricht.
+	 * @return {@code true}, falls gesendet werden kann, sonst {@code false}.
+	 */
 	public synchronized boolean sendMessage(String message) {
 		return sendQueue.offer(message);
 	}
 	
+	/**
+	 * Empfängt eine Nachricht. Es ist nicht gewährleistet, dass beim Aufruf schon eine NAchricht zur verfügung steht.
+	 * @return Die empfangene Nachricht.
+	 */
 	public synchronized String recieveMessage() {
 		try {
 			return recieveQueue.take();
@@ -102,5 +176,27 @@ public class NetworkThread extends Thread {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @param winningPlayer {@inheritDoc}
+	 */
+	@Override
+	public void OnGameEnds(Player winningPlayer) {
+		try {
+			if(clientSocket != null)clientSocket.close();
+			if(serverSocket != null)serverSocket.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void OnOpponentLeft() {
+		OnGameEnds(null);
 	}
 }

@@ -1,24 +1,25 @@
 package gui;
 
+import network.Network;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class JOptionPaneConnect {
 	private Component parentComponent;
 	private Object[] options = {"Bestätigen", "Abbrechen"};
-	private JTextField textfield;
+	private JTextField ipTextField;
+	private JTextField portTextField;
+	private JTextField myIp;
 	private JLabel ip;
+	private JLabel port;
+	private JLabel myIpLable;
 	private String role = "server";
 	
 	public JOptionPaneConnect(Component parentComponent) {
@@ -38,9 +39,14 @@ public class JOptionPaneConnect {
 		serverButton.setSelected(true);
 		serverButton.addActionListener(arg0 -> {
 			role = "server";
-			textfield.setEnabled(false);
+			myIp.setEnabled(true);
+			myIpLable.setEnabled(true);
+			ipTextField.setEnabled(false);
 			ip.setEnabled(false);
-			textfield.setText("192.168.21.2");
+			ipTextField.setText("127.0.0.1");
+			portTextField.setEnabled(false);
+			port.setEnabled(false);
+			portTextField.setText(String.valueOf(Network.PORT));
 			panel.validate();
 			panel.repaint();
 		});
@@ -48,52 +54,79 @@ public class JOptionPaneConnect {
 		clientButton.setPreferredSize(new Dimension(210, 30));
 		clientButton.addActionListener(arg0 -> {
 			role = "client";
-			textfield.setEnabled(true);
+			myIp.setEnabled(false);
+			myIpLable.setEnabled(false);
+			ipTextField.setEnabled(true);
+			portTextField.setEnabled(true);
 			ip.setEnabled(true);
+			port.setEnabled(true);
 			panel.validate();
 			panel.repaint();
 		});
+		
+		myIp = new JFormattedTextField();
+		myIp.setEditable(false);
+		try {
+			myIp.setText(String.format("%s:%d", InetAddress.getLocalHost().getHostAddress(), Network.PORT));
+		}catch(UnknownHostException e) {
+			e.printStackTrace();
+		}
+		myIpLable = new JLabel("Eigene IP Adresse");
 		
 		ButtonGroup connectGroup = new ButtonGroup();
 		connectGroup.add(serverButton);
 		connectGroup.add(clientButton);
 		ip = new JLabel("IP-Adresse");
-		textfield = new JTextField("192.168.21.2");
-		textfield.addMouseListener(new MouseAdapter() {
+		ipTextField = new JTextField("127.0.0.1");
+		ipTextField.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (textfield.isEnabled()) textfield.setText("");
+				if (ipTextField.isEnabled()) ipTextField.setText("");
 			}
 		});
-		textfield.setEnabled(false);
+		ipTextField.setEnabled(false);
 		ip.setEnabled(false);
+
+		port = new JLabel("Port");
+		portTextField = new JTextField(String.valueOf(Network.PORT));
+		portTextField.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (portTextField.isEnabled()) portTextField.setText("");
+			}
+		});
+		portTextField.setEnabled(false);
+		port.setEnabled(false);
+
+
 		panel.add(Box.createVerticalGlue());
 		panel.add(serverButton);
 		panel.add(clientButton);
 		panel.add(Box.createVerticalStrut(15));
 		panel.add(ip);
-		panel.add(textfield);
+		panel.add(ipTextField);
+		panel.add(port);
+		panel.add(portTextField);
+		panel.add(myIpLable);
+		panel.add(myIp);
 		panel.add(Box.createVerticalGlue());
 		return panel;
 	}
 	
 	public String getIP() {
-		if (role.equals("server")) {
-			return null;
-		}
 		if (role.equals("client")) {
-			return textfield.getText();
+			return ipTextField.getText();
 		}
 		return null;
+	}
+
+	public int getPort(){
+		if (role.equals("client")){
+			return Integer.parseInt(portTextField.getText());
+		}
+		return -1;
 	}
 	
 	public String getRole() {
 		return role;
 	}
-	
-	public static void main(String[] args) {
-		JOptionPaneConnect connect = new JOptionPaneConnect(null);
-		connect.displayGui();
-	}
-	
 }
 
