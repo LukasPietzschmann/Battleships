@@ -1,7 +1,6 @@
 package logic;
 
 import ai.Difficulty;
-import ai.AI;
 import gui.MainWindow;
 
 import java.io.File;

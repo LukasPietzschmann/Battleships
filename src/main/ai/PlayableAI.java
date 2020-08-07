@@ -20,18 +20,6 @@ public abstract class PlayableAI implements Serializable{
 	protected Logic logic;
 	protected Map map;
 	protected int[][] enemyMap;
-	/**
-	 * Die letzte x-Koordinate an der getroffen wurde, oder -1, falls sie nicht existiert.
-	 */
-	protected int lastXPos = -1;
-	/**
-	 * Die letzte y-Koordinate an der getroffen wurde, oder -1, falls sie nicht existiert.
-	 */
-	protected int lastYPos = -1;
-	/**
-	 * Die letzte Richtung in die gegangen wurde, oder {@code null}, falls sie nicht existiert.
-	 */
-	protected Direction lastDir = null;
 	
 	protected Mission currMission = null;
 	

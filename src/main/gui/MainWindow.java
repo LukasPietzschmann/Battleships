@@ -8,9 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 
 import javax.swing.JFrame;
@@ -41,7 +39,6 @@ public class MainWindow {
 	 * Laden der Musikdatei.
 	 */
 	public void createMenu() {
-
 		URL musicURL = getClass().getClassLoader().getResource("sound.wav");
 		music = new Music(musicURL);
 		if (Launcher.soundPlaying) {

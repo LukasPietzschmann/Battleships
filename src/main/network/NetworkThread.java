@@ -12,15 +12,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Der NetworkThread empfängt und sendet durchgehend Nachrichten.
  */
 public class NetworkThread implements GameEndsListener {
-	private Logic logic;
-	
 	private Socket clientSocket;
 	private ServerSocket serverSocket;
 	private final BlockingQueue<String> recieveQueue;
@@ -32,7 +29,6 @@ public class NetworkThread implements GameEndsListener {
 	 * @param logic "Zurück-Referenz" auf das Logic Objekt.
 	 */
 	public NetworkThread(ServerSocket serverSocket, Logic logic) {
-		this.logic = logic;
 		this.serverSocket = serverSocket;
 		recieveQueue = new LinkedBlockingQueue<>();
 		sendQueue = new LinkedBlockingQueue<>();
@@ -102,7 +98,6 @@ public class NetworkThread implements GameEndsListener {
 	 * @param logic "Zurück-Referenz" auf das Logic Objekt.
 	 */
 	public NetworkThread(Socket clientSocket, Logic logic) {
-		this.logic = logic;
 		this.clientSocket = clientSocket;
 		recieveQueue = new LinkedBlockingQueue<>();
 		sendQueue = new LinkedBlockingQueue<>();

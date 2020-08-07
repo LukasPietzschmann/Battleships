@@ -21,7 +21,7 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 	private final String mode;
 	private final JPanel mainPanel = new JPanel();
 	private final JPanel gridHolder = new JPanel(new GridBagLayout());
-	JGameCanvas grid;
+	private JGameCanvas grid;
 	private final JPanel options = new JPanel();
 	private final JLabel title = new JLabel();
 	private final JPanel elements = new JPanel();
@@ -42,21 +42,21 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 	private int threeFieldElementCount = 0;
 	private int twoFieldElementCount = 0;
 	
-	int fiveRemaining;
-	int fourRemaining;
-	int threeRemaining;
-	int twoRemaining;
+	private int fiveRemaining;
+	private int fourRemaining;
+	private int threeRemaining;
+	private int twoRemaining;
 	
-	JLabel fiveFieldElementCountLabel;
-	JLabel fourFieldElementCountLabel;
-	JLabel threeFieldElementCountLabel;
-	JLabel twoFieldElementCountLabel;
+	private JLabel fiveFieldElementCountLabel;
+	private JLabel fourFieldElementCountLabel;
+	private JLabel threeFieldElementCountLabel;
+	private JLabel twoFieldElementCountLabel;
 	
-	static Color textColor = MainMenu.textColor;
-	static Color backgroundColor = MainMenu.backgroundColor;
-	Font font = new Font("Krungthep", Font.PLAIN, 20);
-	int elementSelected;
-	Direction direction = Direction.west;
+	private static Color textColor = MainMenu.textColor;
+	private static Color backgroundColor = MainMenu.backgroundColor;
+	private Font font = new Font("Krungthep", Font.PLAIN, 20);
+	private int elementSelected;
+	private Direction direction = Direction.west;
 	
 	private final Logic logic;
 	private final LocalPlayer player;
@@ -78,15 +78,6 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 		player.registerOnMapChangedListener(grid);
 		player.registerOnMapChangedListener(this);
 		logic.registerGameStartsListener(this);
-	}
-	
-	/**
-	 * Rücksprung ins Hauptmenü (wird derzeit nicht genutzt)
-	 */
-	public void backToMenu() {
-		frame.remove(mainPanel);
-		MainMenu menu = new MainMenu(frame);
-		menu.setUpMenu();
 	}
 	
 	/**
@@ -114,7 +105,7 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 		grid.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int panelsize = grid.getWidth();
-				double tilesize = (double) panelsize / (double) grid.groesse;
+				double tilesize = (double) panelsize / (double) grid.getGroesse();
 				int x = e.getX();
 				int y = e.getY();
 				int xGrid = (int) ((double) x / tilesize) - 1;
@@ -415,27 +406,7 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 	}
 	
 	/**
-	 * Sperrt die Möglichkeit Schiffe zu platzieren, graut die Schiffsicons aus und setzt die verbleibende Anzahl der zu
-	 * platzierenden Schiffe auf 0
-	 */
-	public void disableShipPlacement() {
-		elementSelected = 0;
-		fiveFieldElementCountLabel.setText(0 + "x");
-		fiveFieldElementIcon.setEnabled(false);
-		fiveFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-		fourFieldElementCountLabel.setText(0 + "x");
-		fourFieldElementIcon.setEnabled(false);
-		fourFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-		threeFieldElementCountLabel.setText(0 + "x");
-		threeFieldElementIcon.setEnabled(false);
-		threeFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-		twoFieldElementCountLabel.setText(0 + "x");
-		twoFieldElementIcon.setEnabled(false);
-		twoFieldElementIcon.setBorder(new EmptyBorder(3, 3, 3, 3));
-	}
-	
-	/**
-	 * Startet das eigentliche Spielfenster
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void OnStartGame() {
@@ -444,11 +415,18 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 		game.setUpGameWindow();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @param map Die geänderte Map.
+	 */
 	@Override
 	public void OnMapChanged(Map map) {
 		return;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void OnAllShipsPlaced() {
 		fiveRemaining = 0;
@@ -473,6 +451,10 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 		elementSelected = 0;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @param ship Das platzierte Schiff.
+	 */
 	@Override
 	public void OnShipPlaced(Ship ship) {
 		switch(ship.getSize()) {
@@ -515,6 +497,9 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void OnNotAllShipsPlaced() {
 		JOptionPane.showMessageDialog(frame, "Um zu starten müssen erst alle " + Launcher.themeIdentifierPlural

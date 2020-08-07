@@ -44,8 +44,8 @@ public abstract class Player implements Serializable {
 	 * @param hit {@code true}, falls es ein Treffer war, sonst {@code false}.
 	 */
 	protected void notifyOnHit(int x, int y, boolean hit){
-		for (GameListener g: gameListeners) {
-			g.OnHit(x, y, hit);
+		for (GameListener listener: gameListeners) {
+			listener.OnHit(x, y, hit);
 		}
 	}
 	

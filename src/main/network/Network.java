@@ -27,16 +27,6 @@ public class Network extends Player implements SaveListener {
 	
 	private Map map;
 	
-	public Network(Logic logic, long id) throws IOException {
-		super(logic);
-		networkThread = new NetworkThread(new ServerSocket(PORT), logic);
-		//networkThread.start();
-		logic.registerGameEndListener(networkThread);
-		networkThread.sendMessage(String.format("%s %d\n", LOAD, id));
-		Message m = new Message(networkThread.recieveMessage());
-		if(!m.getMessageType().equals(CONFIRM)) throw new UnexpectedMessageException(m);
-	}
-	
 	/**
 	 * Der Konstruktor, falls man selbst der Server ist.
 	 *
@@ -91,6 +81,7 @@ public class Network extends Player implements SaveListener {
 			shipCount = ships.size();
 		}else if(m.getMessageType().equals(LOAD)) {
 			//TODO implement
+			
 		}else throw new UnexpectedMessageException(m);
 	}
 	
@@ -208,6 +199,6 @@ public class Network extends Player implements SaveListener {
 	@Override
 	public void OnGameSaved(int id) {
 		System.out.println("Ja man");
-		networkThread.sendMessage(String.format("%s\n",SAVE));
+		networkThread.sendMessage(String.format("%s %d\n",SAVE, id));
 	}
 }

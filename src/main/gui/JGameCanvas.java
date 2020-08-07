@@ -5,7 +5,6 @@ import logic.*;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,9 +15,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.accessibility.AccessibleContext;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ * Die Klasse JGameCanvas stellt ein Spielfeld dar.
+ */
 public class JGameCanvas extends JPanel implements GameListener, MakeMoveListener, GameEndsListener {
 	private static final long serialVersionUID = 1L;
 	private static final int tW = 32; // tile width
@@ -40,12 +41,11 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	private int numberCounterVertical = 0;
 	
 	private static Image tileset;
-	int groesse;
-	
+	private int groesse;
 	private BlockingQueue<int[]> clickQueue;
 	
 	/**
-	 * Konstruktor, erstellt ein Spielfeld-Objekt
+	 * Konstruktor, erstellt ein Spielfeld-Objekt.
 	 *
 	 * @param size Größe des Spielfelds.
 	 */
@@ -109,7 +109,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	}
 	
 	/**
-	 * Füllt die Map nur mit Koordinaten und Hintergrund-Tiles, keine Schiffe
+	 * Füllt die Map nur mit Koordinaten und Hintergrund-Tiles. Es werden keine Schiffe platziert.
 	 */
 	public void initialGrid() {
 		for(int i = 0; i < groesse; i++) {
@@ -187,35 +187,33 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	}
 	
 	/**
-	 * Platziert ein Schiff
+	 * Zeigt ein neues Schiff an.
 	 *
-	 * @param ship Zu platzierendes Schiff.
+	 * @param ship Das neu platzierte Schiff.
 	 */
-	public void placeShip(Ship ship) {
+	private void placeShip(Ship ship) {
 		int length = ship.getSize();
 		Direction direction = ship.getDirection();
 		int x = ship.getXPos() + 1;
 		int y = ship.getYPos() + 1;
 		for(int i = 0; i < length; i++) {
 			
-			if(direction == Direction.north ) {
+			if(direction == Direction.north) {
 				if(length == 5) map[y][x] = fiveElementVertical[i];
 				if(length == 4) map[y][x] = fourElementVertical[i];
 				if(length == 3) map[y][x] = threeElementVertical[i];
 				if(length == 2) map[y][x] = twoElementVertical[i];
-			}else if(direction == Direction.south){
+			}else if(direction == Direction.south) {
 				if(length == 5) map[y][x] = fiveElementVertical[4 - i];
 				if(length == 4) map[y][x] = fourElementVertical[3 - i];
 				if(length == 3) map[y][x] = threeElementVertical[2 - i];
 				if(length == 2) map[y][x] = twoElementVertical[1 - i];
-			}
-			else if(direction == Direction.west) {
+			}else if(direction == Direction.west) {
 				if(length == 5) map[y][x] = fiveElementHorizontal[i];
 				if(length == 4) map[y][x] = fourElementHorizontal[i];
 				if(length == 3) map[y][x] = threeElementHorizontal[i];
 				if(length == 2) map[y][x] = twoElementHorizontal[i];
-			}
-			else if(direction == Direction.east) {
+			}else if(direction == Direction.east) {
 				if(length == 5) map[y][x] = fiveElementHorizontal[4 - i];
 				if(length == 4) map[y][x] = fourElementHorizontal[3 - i];
 				if(length == 3) map[y][x] = threeElementHorizontal[2 - i];
@@ -239,17 +237,28 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @param ship Das platzierte Schiff.
+	 */
 	@Override
 	public void OnShipPlaced(Ship ship) {
 		placeShip(ship);
 		repaint();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void OnAllShipsPlaced() {
 		return;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @param map Die geänderte Map.
+	 */
 	@Override
 	public void OnMapChanged(Map map) {
 		for(int x = 0; x < map.getSize(); x++) {
@@ -278,6 +287,12 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 		repaint();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @param x x Koordinate des Treffers.
+	 * @param y y Koordinate des Treffers.
+	 * @param hit {@code true}, falls ein Schiff getroffen wurde, sonst {@code false}.
+	 */
 	@Override
 	public void OnHit(int x, int y, boolean hit) {
 		if(hit) this.map[y + 1][x + 1] = Tile.HIT_WATER;
@@ -304,30 +319,50 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 		}
 	}
 	
+	/**
+	 * Gibt die größe des Spielfelds zurück.
+	 * @return
+	 */
+	public int getGroesse() {
+		return groesse;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void makeMove() {
 		myTurn = true;
 	}
 	
+	/**
+	 * Gibt die Queue mit den gemachten Mausklicks zurück.
+	 * @return Die Queue mit den gemachten Mausklicks.
+	 */
 	public BlockingQueue<int[]> getClickQueue() {
 		return clickQueue;
 	}
 	
-	@Override
-	public AccessibleContext getAccessibleContext() {
-		return super.getAccessibleContext();
-	}
-	
+	/**
+	 * {@inheritDoc}
+	 * @param winningPlayer Referenz auf den Spieler der gewonnen hat.
+	 */
 	@Override
 	public void OnGameEnds(Player winningPlayer) {
 		myTurn = false;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void OnNotAllShipsPlaced() {
 		return;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void OnOpponentLeft() {
 		myTurn = false;

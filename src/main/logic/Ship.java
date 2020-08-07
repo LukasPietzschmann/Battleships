@@ -109,31 +109,6 @@ public class Ship implements Serializable {
 	}
 	
 	/**
-	 * @return Die Anzahl der bereits erhaltenen Treffer.
-	 */
-	public int getHits() {
-		return hits;
-	}
-	
-	/**
-	 * Setzt die x-Koordinate des Schiffs.
-	 *
-	 * @param xPos Neue x-Koordinate des Schiffs.
-	 */
-	public void setXPos(int xPos) {
-		this.xPos = xPos;
-	}
-	
-	/**
-	 * Setzt die y-Koordinate des Schiffs.
-	 *
-	 * @param yPos Neue y-Koordinate des Schiffs.
-	 */
-	public void setYPos(int yPos) {
-		this.yPos = yPos;
-	}
-	
-	/**
 	 * Wird aufgerufen, wenn das Schiff getroffen wird.
 	 */
 	public void hit() {

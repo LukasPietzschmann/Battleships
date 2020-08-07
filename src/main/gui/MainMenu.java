@@ -2,6 +2,7 @@ package gui;
 
 import ai.Difficulty;
 import logic.*;
+import network.Role;
 
 import java.awt.*;
 import java.io.File;
@@ -13,9 +14,9 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * Die Klasse MainMenu bildet die Nutzeroberfläche für das Hauptmenü, in welchem der Spieler das Spielthema,
- * die Anzahl der Schiffe und die Größe des Spielfelds auswählen kann.
- * Hier kann der Spieler auch auswählen, welchen Spielmodus er spielen möchte.
+ * Die Klasse MainMenu bildet die Nutzeroberfläche für das Hauptmenü, in welchem der Spieler das Spielthema, die Anzahl
+ * der Schiffe und die Größe des Spielfelds auswählen kann. Hier kann der Spieler auch auswählen, welchen Spielmodus er
+ * spielen möchte.
  */
 public class MainMenu implements SetUpShipsListener, GameStartsListener, Serializable {
 	
@@ -79,7 +80,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 	private String threeFieldElementName;
 	private String twoFieldElementName;
 	
-	private String role;
+	private Role role;
 	private Difficulty difficulty;
 	private String clientIP;
 	
@@ -89,7 +90,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 	private ImageIcon themeBackground;
 	
 	private Logic logic;
-
+	
 	/**
 	 * Konstruktor, erstellt ein MainMenu-Objekt.
 	 *
@@ -99,19 +100,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		this.frame = frame;
 		loadThemeItems(Launcher.theme);
 	}
-
-	/**
-	 * Konstruktor, erstellt ein MainMenu-Objekt.
-	 *
-	 * @param frame Der übergebene Frame des MainWindow.
-	 * @param theme Das Spielthema (Battleships, Battlecars).
-	 */
-	public MainMenu(JFrame frame, String theme) {
-		this.frame = frame;
-		Launcher.theme = theme;
-		loadThemeItems(Launcher.theme);
-	}
-
+	
 	/**
 	 * Erstellt die grafische Benutzeroberfläche für das Hauptmenü.
 	 */
@@ -122,7 +111,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		panel.setOpaque(false);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 10, 30, 60));
 		panel.setSize(1130, 700);
-		panel.setLocation(0,0);
+		panel.setLocation(0, 0);
 		
 		// Panel Layout
 		panel.add(modes, BorderLayout.SOUTH);
@@ -142,7 +131,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		themeTitle.setText(Launcher.theme);
 		themeTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 		themeTitle.setForeground(textColor);
-		themeTitle.setBackground(new Color(35,35,35,180));
+		themeTitle.setBackground(new Color(35, 35, 35, 180));
 		themeTitle.setOpaque(true);
 		
 		// Title Layout
@@ -224,7 +213,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 					role = connect.getRole();
 					panel.setVisible(false);
 					layeredPane.setVisible(false);
-					int mode = role.equals("server") ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
+					int mode = role == Role.server ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
 					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), null, null);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
@@ -263,7 +252,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 					difficulty = connect.getDifficulty();
 					panel.setVisible(false);
 					layeredPane.setVisible(false);
-					int mode = role.equals("server") ? Launcher.NW_SV_AI : Launcher.NW_CL_AI;
+					int mode = role == Role.server ? Launcher.NW_SV_AI : Launcher.NW_CL_AI;
 					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), difficulty, null);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
@@ -302,26 +291,23 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			FileFilter filter = new FileNameExtensionFilter("SAVEGAME-Datei", "savegame");
 			JFileChooser chooser = new JFileChooser();
 			chooser.setDialogTitle("Spielstand laden");
-			chooser.setCurrentDirectory(new File(System.getProperty("user.home") +  "\\Documents\\Battleships_Spielstände\\"));
+			chooser.setCurrentDirectory(new File(System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\"));
 			chooser.addChoosableFileFilter(filter);
 			int returnValue = chooser.showOpenDialog(frame);
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
+			if(returnValue == JFileChooser.APPROVE_OPTION) {
 				String filename = chooser.getName(chooser.getSelectedFile());
 				try {
-					SaveData save = (SaveData)ResourceManager.getInstance().load(filename);
+					SaveData save = (SaveData) ResourceManager.getInstance().load(filename);
 					System.out.println("Modus: " + save.getMode());
 					System.out.println("Spielfeldgröße: " + save.getGridSize());
 					save.getMap1().dump();
-					System.out.println("");
+					System.out.print("\n");
 					save.getMap2().dump();
-//					logic = Logic.fromSaveGame(save);
 					logic = Launcher.startGame(Launcher.SG, 0, 0, 0, 0, "", 0, null, save);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startGame(true);
-
-				}
-				catch (Exception e){
+				}catch(Exception e) {
 					System.out.println("Laden fehlgeschlagen: " + e.getMessage());
 				}
 			}
@@ -473,8 +459,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		Font plusMinusCountersFont = new Font("Krungthep", Font.BOLD, 20);
 		
 		// fiveFieldElementText Label
-		fiveFieldElementText.setText(fiveFieldElementCount +
-						"x " + fiveFieldElementName);
+		fiveFieldElementText.setText(fiveFieldElementCount + "x " + fiveFieldElementName);
 		fiveFieldElementText.setPreferredSize(new Dimension(210, 30));
 		fiveFieldElementText.setFont(countersFont);
 		fiveFieldElementText.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -502,8 +487,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			}else {
 				fiveFieldElementCount = 0;
 			}
-			fiveFieldElementText.setText(fiveFieldElementCount +
-							"x " + fiveFieldElementName);
+			fiveFieldElementText.setText(fiveFieldElementCount + "x " + fiveFieldElementName);
 		});
 		
 		// fiveFieldElementCountDecrease Button
@@ -522,8 +506,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			}else {
 				fiveFieldElementCount = fiveFieldElementMaxCount;
 			}
-			fiveFieldElementText.setText(fiveFieldElementCount +
-							"x " + fiveFieldElementName);
+			fiveFieldElementText.setText(fiveFieldElementCount + "x " + fiveFieldElementName);
 		});
 		
 		// fiveFieldElementCountChange Layout
@@ -534,8 +517,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		fiveFieldElementCountChange.add(Box.createHorizontalGlue());
 		
 		// fourFieldElementText Label
-		fourFieldElementText.setText(fourFieldElementCount +
-						"x " + fourFieldElementName);
+		fourFieldElementText.setText(fourFieldElementCount + "x " + fourFieldElementName);
 		fourFieldElementText.setPreferredSize(new Dimension(210, 30));
 		fourFieldElementText.setFont(countersFont);
 		fourFieldElementText.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -563,8 +545,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			}else {
 				fourFieldElementCount = 0;
 			}
-			fourFieldElementText.setText(fourFieldElementCount +
-							"x " + fourFieldElementName);
+			fourFieldElementText.setText(fourFieldElementCount + "x " + fourFieldElementName);
 		});
 		
 		// fourFieldElementCountDecrease Button
@@ -583,8 +564,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			}else {
 				fourFieldElementCount = fourFieldElementMaxCount;
 			}
-			fourFieldElementText.setText(fourFieldElementCount +
-							"x " + fourFieldElementName);
+			fourFieldElementText.setText(fourFieldElementCount + "x " + fourFieldElementName);
 		});
 		
 		// fourFieldElementCountChange Layout
@@ -595,8 +575,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		fourFieldElementCountChange.add(Box.createHorizontalGlue());
 		
 		// threeFieldElementText Label
-		threeFieldElementText.setText(threeFieldElementCount +
-						"x " + threeFieldElementName);
+		threeFieldElementText.setText(threeFieldElementCount + "x " + threeFieldElementName);
 		threeFieldElementText.setPreferredSize(new Dimension(210, 30));
 		threeFieldElementText.setFont(countersFont);
 		threeFieldElementText.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -624,8 +603,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			}else {
 				threeFieldElementCount = 0;
 			}
-			threeFieldElementText.setText(threeFieldElementCount +
-							"x " + threeFieldElementName);
+			threeFieldElementText.setText(threeFieldElementCount + "x " + threeFieldElementName);
 		});
 		
 		//threeFieldElementCountDecrease Button
@@ -644,8 +622,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			}else {
 				threeFieldElementCount = threeFieldElementMaxCount;
 			}
-			threeFieldElementText.setText(threeFieldElementCount +
-							"x " + threeFieldElementName);
+			threeFieldElementText.setText(threeFieldElementCount + "x " + threeFieldElementName);
 		});
 		
 		// threeFieldElementCountChange Layout
@@ -656,8 +633,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		threeFieldElementCountChange.add(Box.createHorizontalGlue());
 		
 		// twoFieldElementText Label
-		twoFieldElementText.setText(twoFieldElementCount +
-						"x " + twoFieldElementName);
+		twoFieldElementText.setText(twoFieldElementCount + "x " + twoFieldElementName);
 		twoFieldElementText.setPreferredSize(new Dimension(210, 30));
 		twoFieldElementText.setFont(countersFont);
 		twoFieldElementText.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -685,8 +661,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			}else {
 				twoFieldElementCount = 0;
 			}
-			twoFieldElementText.setText(twoFieldElementCount +
-							"x " + twoFieldElementName);
+			twoFieldElementText.setText(twoFieldElementCount + "x " + twoFieldElementName);
 		});
 		
 		//twoFieldElementCountDecrease Button
@@ -705,8 +680,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			}else {
 				twoFieldElementCount = twoFieldElementMaxCount;
 			}
-			twoFieldElementText.setText(twoFieldElementCount +
-							"x " + twoFieldElementName);
+			twoFieldElementText.setText(twoFieldElementCount + "x " + twoFieldElementName);
 		});
 		
 		// twoFieldElementCountChange Layout
@@ -743,7 +717,6 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		gridSlider.addChangeListener(event -> {
 			Launcher.gridSize = gridSlider.getValue();
 			gridText.setText("Feldgröße: " + gridSlider.getValue() + "*" + gridSlider.getValue());
-
 		});
 		
 		// Counters Layout
@@ -821,24 +794,24 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		themes.add(battleshipsButton);
 		themes.add(battlecarsButton);
 		themes.add(Box.createVerticalGlue());
-
+		
 		// Background Panel
-//		JLabel backgroundPanel = new JLabel();
+		//		JLabel backgroundPanel = new JLabel();
 		backgroundPanel.setSize(1130, 700);
 		backgroundPanel.setIcon(themeBackground);
 		backgroundPanel.setLocation(0, 0);
-
+		
 		// LayeredPane Layout
 		layeredPane.add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);
 		layeredPane.add(panel, JLayeredPane.POPUP_LAYER);
-
+		
 		// Frame Settings
 		frame.getContentPane().add(layeredPane);
 		frame.setSize(1130, 728);
 		frame.setResizable(false);
 		frame.setVisible(true);
 	}
-
+	
 	/**
 	 * Wählt das aktuelle Spielthema aus.
 	 */
@@ -850,7 +823,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			battlecarsButton.setSelected(true);
 		}
 	}
-
+	
 	/**
 	 * Wirft eine Fehlermeldung aus.
 	 *
@@ -859,39 +832,29 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 	public void throwErrorMessage(int i) {
 		// Too many ships for the specific grid
 		if(i == 1) {
-			JOptionPane.showMessageDialog(panel, "Zu viele " + Launcher.themeIdentifierPlural + " für das gewählte Spielfeld.\nBelegungsfaktor beträgt über " +
-							Launcher.getFillFactor(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount) + "%, darf aber höchstens" +
-							" 25% betragen.\nAnzahl der " + Launcher.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.",
-							"Fehlermeldung: Zu viele " + Launcher.themeIdentifierPlural + "für das Spielfeld", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(panel, "Zu viele " + Launcher.themeIdentifierPlural + " für das gewählte Spielfeld.\nBelegungsfaktor beträgt über " + Launcher.getFillFactor(twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount) + "%, darf aber höchstens" + " 25% betragen.\nAnzahl der " + Launcher.themeIdentifierPlural + " senken oder das Spielfeld vergrößern.", "Fehlermeldung: Zu viele " + Launcher.themeIdentifierPlural + "für das Spielfeld", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		// No ships selected at all
 		if(i == 2) {
-			JOptionPane.showMessageDialog(panel, "Es wurden keine " + Launcher.themeIdentifierPlural + " ausgewählt!\nMindestens ein "
-											+ Launcher.themeIdentifierSingular + " auswählen, um fortzufahren.",
-							"Fehlermeldung: Keine Schiffe ausgewählt", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(panel, "Es wurden keine " + Launcher.themeIdentifierPlural + " ausgewählt!\nMindestens ein " + Launcher.themeIdentifierSingular + " auswählen, um fortzufahren.", "Fehlermeldung: Keine Schiffe ausgewählt", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-
+	
 	/**
 	 * Anzeigen einer Information über die Urheber des Spiels.
 	 */
 	public void showInfo() {
 		ImageIcon hsaalenIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("hsaalen.png"))).getImage().getScaledInstance(100, 70, Image.SCALE_SMOOTH));
-		JOptionPane.showOptionDialog(panel, "Dieses Spiel wurde als "
-										+ "Teil eines Programmierpraktikums\n"
-										+ "an der Hochschule Aalen geschrieben von:\n\n"
-										+ "Fabian Schwarz, Lukas Pietzschmann und Vincent Ugrai",
-						"About", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, hsaalenIcon,new String[] {}, null);
+		JOptionPane.showOptionDialog(panel, "Dieses Spiel wurde als " + "Teil eines Programmierpraktikums\n" + "an der Hochschule Aalen geschrieben von:\n\n" + "Fabian Schwarz, Lukas Pietzschmann und Vincent Ugrai", "About", JOptionPane.PLAIN_MESSAGE, JOptionPane.PLAIN_MESSAGE, hsaalenIcon, new String[] {}, null);
 	}
-
+	
 	/**
 	 * Laden eines Spielthemas.
 	 *
 	 * @param theme Name des Spielthemas ("Battleships", "Battlecars").
 	 */
 	public void loadThemeItems(String theme) {
-		
 		if(theme.equals("Battleships")) {
 			
 			frame.setTitle("Battleships");
@@ -910,7 +873,6 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			twoFieldElementIconFromSide = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("submarine.png"))).getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH));
 			
 			themeBackground = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("MB_Battleships.jpg"))).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH));
-			
 		}
 		
 		if(theme.equals("Battlecars")) {
@@ -933,21 +895,20 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 			themeBackground = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("MB_Battlecars.jpg"))).getImage().getScaledInstance(1130, 700, Image.SCALE_SMOOTH));
 		}
 	}
-
+	
 	/**
 	 * Prüft, ob keine Schiffe ausgewählt sind.
 	 *
-	 *  @return {@code false}, falls Schiffe ausgewählt sind, {@code true},falls keine Schiffe ausgewählt sind.
+	 * @return {@code false}, falls Schiffe ausgewählt sind, {@code true},falls keine Schiffe ausgewählt sind.
 	 */
 	public boolean noElementsSelected() {
 		return fiveFieldElementCount + fourFieldElementCount + threeFieldElementCount + twoFieldElementCount == 0;
 	}
-
+	
 	/**
 	 * Aktualisiert die Variablen des neu ausgewählten Spielthemas.
 	 */
 	public void updateThemeItems() {
-		
 		// Update Title
 		themeTitle.setText(Launcher.theme);
 		
@@ -974,9 +935,11 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		threeFieldElementCountDecrease.setToolTipText("Anzahl senken: " + threeFieldElementName);
 		twoFieldElementCountIncrease.setToolTipText("Anzahl erhöhen: " + twoFieldElementName);
 		twoFieldElementCountDecrease.setToolTipText("Anzahl senken: " + twoFieldElementName);
-
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onPlaceShips() {
 		logic.unregisterGameStartsListener(this);
@@ -985,6 +948,9 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		setUp.setUpPlaceWindow();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void OnStartGame() {
 		logic.unregisterSetupShipsListener(this);

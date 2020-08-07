@@ -1,6 +1,7 @@
 package gui;
 
 import network.Network;
+import network.Role;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -11,6 +12,9 @@ import java.net.UnknownHostException;
 
 import javax.swing.*;
 
+/**
+ * Diese Klasse zeigt einen Dialog zum Verbinden mit einem Server oder Client an.
+ */
 public class JOptionPaneConnect {
 	private Component parentComponent;
 	private Object[] options = {"Bestätigen", "Abbrechen"};
@@ -20,17 +24,29 @@ public class JOptionPaneConnect {
 	private JLabel ip;
 	private JLabel port;
 	private JLabel myIpLable;
-	private String role = "server";
+	private Role role = Role.server;
 	
+	/**
+	 * Erstellt den Dialog.
+	 * @param parentComponent Der Component, über dem der Dialog angezeigt wird.
+	 */
 	public JOptionPaneConnect(Component parentComponent) {
 		this.parentComponent = parentComponent;
 	}
 	
+	/**
+	 * Zeigt den tatsächlichen Dialog.
+	 * @return Einen Integer, der die Auswahl des Benutzers angibt.
+	 */
 	public int displayGui() {
 		return JOptionPane.showOptionDialog(parentComponent, getPanel(), "Weitere Einstellungen",
 				JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 	}
 	
+	/**
+	 * Gibt das JPanel des Dialogs zurück.
+	 * @return Das JPanel des Dialogs.
+	 */
 	private JPanel getPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -38,7 +54,7 @@ public class JOptionPaneConnect {
 		serverButton.setPreferredSize(new Dimension(210, 30));
 		serverButton.setSelected(true);
 		serverButton.addActionListener(arg0 -> {
-			role = "server";
+			role = Role.server;
 			myIp.setEnabled(true);
 			myIpLable.setEnabled(true);
 			ipTextField.setEnabled(false);
@@ -53,7 +69,7 @@ public class JOptionPaneConnect {
 		JRadioButton clientButton = new JRadioButton("Verbinden als Client");
 		clientButton.setPreferredSize(new Dimension(210, 30));
 		clientButton.addActionListener(arg0 -> {
-			role = "client";
+			role = Role.client;
 			myIp.setEnabled(false);
 			myIpLable.setEnabled(false);
 			ipTextField.setEnabled(true);
@@ -111,13 +127,21 @@ public class JOptionPaneConnect {
 		return panel;
 	}
 	
+	/**
+	 * Gibt die eingetragene IP zurück. Nur valide, falls {@link #getRole()} "client" zurückgibt.
+	 * @return Die eingetragene IP Adresse.
+	 */
 	public String getIP() {
 		if (role.equals("client")) {
 			return ipTextField.getText();
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Gibt den eingetragenen Port zurück. Nur valide, falls {@link #getRole()} "client" zurückgibt.
+	 * @return Den eingetragenen Port.
+	 */
 	public int getPort(){
 		if (role.equals("client")){
 			return Integer.parseInt(portTextField.getText());
@@ -125,7 +149,12 @@ public class JOptionPaneConnect {
 		return -1;
 	}
 	
-	public String getRole() {
+	/**
+	 * Gibt die Rolle des Spielers im Netzwert zurück.
+	 *
+	 * @return Die Rolle des Spielers im Netzwerl.
+	 */
+	public Role getRole() {
 		return role;
 	}
 }
