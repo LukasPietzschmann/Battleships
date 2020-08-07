@@ -199,7 +199,6 @@ public class Network extends Player implements SaveListener {
 	
 	@Override
 	public void OnGameSaved(int id) {
-		System.out.println("Ja man");
 		networkThread.sendMessage(String.format("%s %d\n", SAVE, id));
 	}
 }

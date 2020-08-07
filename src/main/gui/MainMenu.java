@@ -298,17 +298,12 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 				String filename = chooser.getName(chooser.getSelectedFile());
 				try {
 					SaveData save = (SaveData) ResourceManager.getInstance().load(filename);
-					System.out.println("Modus: " + save.getMode());
-					System.out.println("Spielfeldgröße: " + save.getGridSize());
-					save.getMap1().dump();
-					System.out.print("\n");
-					save.getMap2().dump();
 					logic = Launcher.startGame(Launcher.SG, 0, 0, 0, 0, "", 0, null, save);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startGame(true);
 				}catch(Exception e) {
-					System.out.println("Laden fehlgeschlagen: " + e.getMessage());
+					System.err.println("Laden fehlgeschlagen: " + e.getMessage());
 				}
 			}
 		});

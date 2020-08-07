@@ -43,7 +43,7 @@ public class NetworkThread implements GameEndsListener {
 						String msg = sendQueue.take();
 						out.write(msg);
 						out.flush();
-						System.out.println("Server sent " + msg);
+						//System.out.println("Server sent " + msg);
 					}catch(Exception e) {
 						break;
 					}
@@ -67,7 +67,7 @@ public class NetworkThread implements GameEndsListener {
 							break;
 						}
 						recieveQueue.offer(msg);
-						System.out.println("Server recieved " + msg);
+						//System.out.println("Server recieved " + msg);
 					}catch(SocketException e) {
 						break;
 					}
@@ -112,7 +112,7 @@ public class NetworkThread implements GameEndsListener {
 						String msg = sendQueue.take();
 						out.write(msg);
 						out.flush();
-						System.out.println("Client sent " + msg);
+						//System.out.println("Client sent " + msg);
 					}catch(Exception e) {
 						break;
 					}
@@ -136,7 +136,7 @@ public class NetworkThread implements GameEndsListener {
 							break;
 						}
 						recieveQueue.offer(msg);
-						System.out.println("Client recieved " + msg);
+						//System.out.println("Client recieved " + msg);
 					}catch(SocketException e) {
 						break;
 					}
