@@ -132,8 +132,7 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 		saveButton = new JButton("Spiel speichern");
 		ImageIcon loadIcon = new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("loadSaveIcon.png"))).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 		saveButton.setIcon(loadIcon);
-		saveButton.setHorizontalAlignment(SwingConstants.LEFT);
-		saveButton.setBorder(null);
+		saveButton.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		saveButton.setContentAreaFilled(false);
 		saveButton.setToolTipText("Spiel speichern");
 		saveButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -141,7 +140,6 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 		saveButton.setMaximumSize(new Dimension(50, 50));
 		saveButton.setPreferredSize(new Dimension(50, 50));
 		saveButton.addActionListener(arg0 -> {
-			saveButton.setVisible(false);
 			Random rnd = new Random();
 			int id = rnd.nextInt();
 			String filename = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + " " + id;
@@ -160,9 +158,8 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 				System.out.println("Speichern fehlgeschlagen: " + e.getMessage());
 			}
 			
-			int ret = JOptionPane.showOptionDialog(mainPanel, "Spiel wurde erfolgreich gespeichert unter:\n" + System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\" + filename + ".savegame\n\n" + "Das Spiel kann nun im Hauptmenü wieder geladen werden.\n\nMöchtest du nun zurück ins Hauptmenü oder möchtest du weiterspielen?", "Spiel wurde gespeichert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Ins Hauptmenü", "Weiter Spielen"}, "Ins Hauptmenü");
+			int ret = JOptionPane.showOptionDialog(mainPanel, "Spiel wurde erfolgreich gespeichert unter:\n" + System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\" + filename + ".savegame\n\n" + "Das Spiel kann nun im Hauptmenü wieder geladen werden.\n\nMöchtest du nun zurück ins Hauptmenü oder möchtest du weiterspielen?", "Spiel wurde gespeichert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Ins Hauptmenü", "Weiterspielen"}, "Ins Hauptmenü");
 			if(ret == 0) backToMenu();
-			saveButton.setVisible(true);
 		});
 		
 		// soundButton Button Settings
@@ -175,7 +172,7 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 		}else {
 			soundButton.setIcon(soundOffIcon);
 		}
-		soundButton.setBorder(null);
+		soundButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		soundButton.setContentAreaFilled(false);
 		soundButton.setToolTipText("Lautstärke anpassen");
 		soundButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
