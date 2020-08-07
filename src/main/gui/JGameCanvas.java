@@ -325,7 +325,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	/**
 	 * Gibt die größe des Spielfelds zurück.
 	 *
-	 * @return
+	 * @return Größe des Spielfelds.
 	 */
 	public int getGroesse() {
 		return groesse;
