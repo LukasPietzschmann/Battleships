@@ -160,8 +160,9 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 				System.out.println("Speichern fehlgeschlagen: " + e.getMessage());
 			}
 			
-			JOptionPane.showMessageDialog(mainPanel, "Spiel wurde erfolgreich gespeichert unter:\n" + System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\" + filename + ".savegame\n\n" + "Das Spiel kann nun im Hauptmenü wieder geladen werden.", "Spiel wurde gespeichert", JOptionPane.PLAIN_MESSAGE);
-			backToMenu();
+			int ret = JOptionPane.showOptionDialog(mainPanel, "Spiel wurde erfolgreich gespeichert unter:\n" + System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\" + filename + ".savegame\n\n" + "Das Spiel kann nun im Hauptmenü wieder geladen werden.\n\nMöchtest du nun zurück ins Hauptmenü oder möchtest du weiterspielen?", "Spiel wurde gespeichert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Ins Hauptmenü", "Weiter Spielen"}, "Ins Hauptmenü");
+			if(ret == 0) backToMenu();
+			saveButton.setVisible(true);
 		});
 		
 		// soundButton Button Settings

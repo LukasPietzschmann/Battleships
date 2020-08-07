@@ -81,7 +81,8 @@ public class Network extends Player implements SaveListener {
 			shipCount = ships.size();
 		}else if(m.getMessageType().equals(LOAD)) {
 			int id = m.getArgs()[Message.ID_POS];
-			//TODO laden
+			//ResourceManager.getInstance().load("");
+			//TODO load impl
 		}else throw new UnexpectedMessageException(m);
 	}
 	
