@@ -25,6 +25,7 @@ public class NetworkThread implements GameEndsListener {
 	
 	/**
 	 * Konstruktor, falls man selbst der Server ist.
+	 *
 	 * @param serverSocket Der Server Socket.
 	 * @param logic "Zurück-Referenz" auf das Logic Objekt.
 	 */
@@ -61,7 +62,7 @@ public class NetworkThread implements GameEndsListener {
 				while(!serverSocket.isClosed()) {
 					try {
 						String msg = in.readLine();
-						if(msg == null){
+						if(msg == null) {
 							logic.notifyOppLeftListener();
 							break;
 						}
@@ -86,7 +87,6 @@ public class NetworkThread implements GameEndsListener {
 			}
 			serverSendThread.start();
 			serverRecieveThread.start();
-			
 		});
 		
 		acceptT.start();
@@ -94,6 +94,7 @@ public class NetworkThread implements GameEndsListener {
 	
 	/**
 	 * Konstruktor, falls man selbst der Client ist.
+	 *
 	 * @param clientSocket Der Socket.
 	 * @param logic "Zurück-Referenz" auf das Logic Objekt.
 	 */
@@ -130,7 +131,7 @@ public class NetworkThread implements GameEndsListener {
 				while(!clientSocket.isClosed()) {
 					try {
 						String msg = in.readLine();
-						if(msg == null){
+						if(msg == null) {
 							logic.notifyOppLeftListener();
 							break;
 						}
@@ -153,6 +154,7 @@ public class NetworkThread implements GameEndsListener {
 	
 	/**
 	 * Sendet eine Nachricht. Es ist nicht gewährleistet, dass die Nachricht direkt gesendet wird.
+	 *
 	 * @param message Die zu sendende Nachricht.
 	 * @return {@code true}, falls gesendet werden kann, sonst {@code false}.
 	 */
@@ -162,6 +164,7 @@ public class NetworkThread implements GameEndsListener {
 	
 	/**
 	 * Empfängt eine Nachricht. Es ist nicht gewährleistet, dass beim Aufruf schon eine NAchricht zur verfügung steht.
+	 *
 	 * @return Die empfangene Nachricht.
 	 */
 	public synchronized String recieveMessage() {
@@ -175,13 +178,14 @@ public class NetworkThread implements GameEndsListener {
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param winningPlayer {@inheritDoc}
 	 */
 	@Override
 	public void OnGameEnds(Player winningPlayer) {
 		try {
-			if(clientSocket != null)clientSocket.close();
-			if(serverSocket != null)serverSocket.close();
+			if(clientSocket != null) clientSocket.close();
+			if(serverSocket != null) serverSocket.close();
 		}catch(IOException e) {
 			e.printStackTrace();
 		}

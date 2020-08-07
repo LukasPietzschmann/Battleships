@@ -22,6 +22,7 @@ public class Message {
 	
 	/**
 	 * Initialisiert die Message
+	 *
 	 * @param message Der Reine String der übers Netzwerk geschickt wurde.
 	 * @throws UnknownMessageException Falls die ankommende Nachricht nicht erkannt wurde.
 	 */
@@ -56,6 +57,7 @@ public class Message {
 	
 	/**
 	 * Gibt die Art der Nachricht zurück.
+	 *
 	 * @return Art der Nachricht
 	 */
 	public String getMessageType() {
@@ -64,6 +66,7 @@ public class Message {
 	
 	/**
 	 * Gibt die Argumente der Nachricht zurück.
+	 *
 	 * @return Ein Array an Argumenten.
 	 */
 	public int[] getArgs() {
@@ -72,6 +75,7 @@ public class Message {
 	
 	/**
 	 * Gibt die String Repräsentation der Nachricht zurück.
+	 *
 	 * @return String-Repräsentation der Nachricht.
 	 */
 	@Override

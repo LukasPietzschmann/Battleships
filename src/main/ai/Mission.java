@@ -6,13 +6,12 @@ import logic.Map;
 import java.util.Random;
 
 /**
- * Die Klasse Mission wird ausschließlich von der {@link MediumAI} und der {@link HardAI}
- * Klasse verwendet um ein bereits gefundenes Schiff zu versenken.
+ * Die Klasse Mission wird ausschließlich von der {@link MediumAI} und der {@link HardAI} Klasse verwendet um ein
+ * bereits gefundenes Schiff zu versenken.
  */
 class Mission {
 	private enum State {
-		firstHit,
-		someHits
+		firstHit, someHits
 	}
 	
 	private State state;
@@ -28,6 +27,7 @@ class Mission {
 	
 	/**
 	 * Konstruktor zum initialisieren einer Mission.
+	 *
 	 * @param startX Die x Koordinate an der ein Schiff gefunden wurde.
 	 * @param startY Die y Koordinate an der ein Schiff gefunden wurde.
 	 * @param map Das eigene Spielfeld, um die Größe zu bestimmen.
@@ -47,6 +47,7 @@ class Mission {
 	
 	/**
 	 * Berechnet den Punkt, auf den als nächstes geschossen werden soll.
+	 *
 	 * @param hit Gibt an, ob der letzte Schuss ein Treffer war.
 	 * @param enemyMap Das Spielfeld des Gegners.
 	 */
@@ -95,11 +96,12 @@ class Mission {
 	
 	/**
 	 * Gibt zurück, ob es logisch sinnvoll ist, in diese Richtung zu schießen.
-	 * @return {@code true}, falls es logisch Sinn macht, sonst {@code false}.
+	 *
 	 * @param dir Die Richtung in die geschossen werden soll.
 	 * @param x Die x Koordinate auf die geschossen werden soll.
 	 * @param y Die y Koordninate auf die geschossen werden soll.
 	 * @param enemyMap Die Karte des Gegners.
+	 * @return {@code true}, falls es logisch Sinn macht, sonst {@code false}.
 	 */
 	private boolean isValidDirection(Direction dir, int x, int y, int[][] enemyMap) {
 		int newX = getXInDirection(dir, x);
@@ -109,6 +111,7 @@ class Mission {
 	
 	/**
 	 * Gibt die nächste x Koordiante in der Richtung an.
+	 *
 	 * @param dir Die Richtung in die gegangen werden soll.
 	 * @param x Die x Koordinate von der aus gegangen werden soll.
 	 * @return Die nächste x Koordinate in der gegebenen Richtung.
@@ -126,6 +129,7 @@ class Mission {
 	
 	/**
 	 * Gibt die nächste y Koordiante in der Richtung an.
+	 *
 	 * @param dir Die Rcihtung in die gegangen werden soll.
 	 * @param y Die y Koordinate von der aus gegangen werden soll.
 	 * @return Die nächste y Koordinate in der gegebenen Richtung.
@@ -143,6 +147,7 @@ class Mission {
 	
 	/**
 	 * Spiegelt die Richtung.
+	 *
 	 * @param dir Die zu spiegelnde Richtung.
 	 * @return Die gespiegelte Richtung.
 	 */
@@ -163,6 +168,7 @@ class Mission {
 	
 	/**
 	 * Gibt die x Koordinate des nächsten Schusses zurück.
+	 *
 	 * @return Die x Koordinate des nächsten Schusses.
 	 */
 	public int getNextX() {
@@ -171,6 +177,7 @@ class Mission {
 	
 	/**
 	 * Gibt die y Koordinate des nächsten Schusses zurück.
+	 *
 	 * @return Die y Koordinate des nächsten Schusses.
 	 */
 	public int getNextY() {
@@ -178,8 +185,9 @@ class Mission {
 	}
 	
 	/**
-	 * Bestimmt, ob der letzte Schuss ein treffer war. Muss, falls eine aktuelle Mission besteht,
-	 * nach jedem Schuss aufgerufen werden.
+	 * Bestimmt, ob der letzte Schuss ein treffer war. Muss, falls eine aktuelle Mission besteht, nach jedem Schuss
+	 * aufgerufen werden.
+	 *
 	 * @param hit {@code true}, falls der Schuss ein Treffer war, sonst {@code false}.
 	 * @param enemyMap Das Spielfeld des Gegners.
 	 */

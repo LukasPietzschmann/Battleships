@@ -239,6 +239,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param ship Das platzierte Schiff.
 	 */
 	@Override
@@ -257,6 +258,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param map Die geänderte Map.
 	 */
 	@Override
@@ -289,6 +291,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param x x Koordinate des Treffers.
 	 * @param y y Koordinate des Treffers.
 	 * @param hit {@code true}, falls ein Schiff getroffen wurde, sonst {@code false}.
@@ -321,6 +324,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	
 	/**
 	 * Gibt die größe des Spielfelds zurück.
+	 *
 	 * @return
 	 */
 	public int getGroesse() {
@@ -337,6 +341,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	
 	/**
 	 * Gibt die Queue mit den gemachten Mausklicks zurück.
+	 *
 	 * @return Die Queue mit den gemachten Mausklicks.
 	 */
 	public BlockingQueue<int[]> getClickQueue() {
@@ -345,6 +350,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param winningPlayer Referenz auf den Spieler der gewonnen hat.
 	 */
 	@Override

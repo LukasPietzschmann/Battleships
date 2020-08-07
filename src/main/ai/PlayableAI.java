@@ -9,10 +9,10 @@ import logic.Ship;
 import java.io.Serializable;
 
 /**
- * Die Klasse PlayableAI modelliert eine AI. Diese Klasse dient als "zwischen-Klasse", da die
- * AI Klassen nicht von {@link Player} erben können.
+ * Die Klasse PlayableAI modelliert eine AI. Diese Klasse dient als "zwischen-Klasse", da die AI Klassen nicht von
+ * {@link Player} erben können.
  */
-public abstract class PlayableAI implements Serializable{
+public abstract class PlayableAI implements Serializable {
 	protected static final int WAIT_TIME = 500;
 	protected static final int ALREADY_SHOT = 1;
 	protected static final int NOT_SHOT = 0;
@@ -25,6 +25,7 @@ public abstract class PlayableAI implements Serializable{
 	
 	/**
 	 * Initialisiert die PlayableAI
+	 *
 	 * @param player Referenz auf den Tatsächlichen Spieler. Immer ein Objekt der Klasse {@link AI}.
 	 * @param logic "Zurück-Referenz" auf die {@link Logic}.
 	 * @param map Das eigene Spielfeld.
@@ -39,6 +40,7 @@ public abstract class PlayableAI implements Serializable{
 	
 	/**
 	 * Wird aufgerufen, sobald die AI dran ist ihren Zug zu machen.
+	 *
 	 * @return Das konkrete Schiff, falls getroffen wurde. {@code null}, falls nicht getroffen wurde.
 	 */
 	protected abstract Ship makeMove();

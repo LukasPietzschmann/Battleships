@@ -14,8 +14,10 @@ import java.util.Random;
 public class HardAI extends PlayableAI {
 	private int minSize = 2;
 	ArrayList<Ship> ships;
+	
 	/**
 	 * Initialisiert die HardAI
+	 *
 	 * @param player Referenz auf die von {@link Player} erbende Klasse. In diesem Fall meistens {@link AI}.
 	 * @param logic "zurück-Referenz" auf die {@link Logic}.
 	 * @param map Das eigene Spielfeld.
@@ -27,8 +29,8 @@ public class HardAI extends PlayableAI {
 	}
 	
 	/**
-	 * {@inheritDoc} Die HardAI schießt zufällig im Abstand vom kleinsten derzeit nicht versenkten Schiff.
-	 * Hat die AI ein Schiff gefunden, verstcht sie dieses gezielt zu zerstören.
+	 * {@inheritDoc} Die HardAI schießt zufällig im Abstand vom kleinsten derzeit nicht versenkten Schiff. Hat die AI ein
+	 * Schiff gefunden, verstcht sie dieses gezielt zu zerstören.
 	 *
 	 * @return {@inheritDoc}
 	 */
@@ -47,7 +49,7 @@ public class HardAI extends PlayableAI {
 				counter++;
 				x = rnd.nextInt(map.getSize());
 				y = rnd.nextInt(map.getSize());
-			}while((!isOnMinGrid(x,y) || enemyMap[y][x] != NOT_SHOT) && counter < Math.pow(logic.getSize(), 2) * 2);
+			}while((!isOnMinGrid(x, y) || enemyMap[y][x] != NOT_SHOT) && counter < Math.pow(logic.getSize(), 2) * 2);
 			
 			enemyMap[y][x] = ALREADY_SHOT;
 			Ship ship;
@@ -67,7 +69,7 @@ public class HardAI extends PlayableAI {
 		if(ship.isAlive()) currMission.wasHit(true, enemyMap);
 		else {
 			for(Ship s : ships) {
-				if(s.getSize() == ship.getSize()){
+				if(s.getSize() == ship.getSize()) {
 					ships.remove(s);
 					break;
 				}
@@ -89,12 +91,14 @@ public class HardAI extends PlayableAI {
 	}
 	
 	/**
-	 * Gibt an, ob die gewünschte Koordinate den Abstand des kleinsten nicht versenkten Schiffs zu jedem anderen Schuss einhält.
+	 * Gibt an, ob die gewünschte Koordinate den Abstand des kleinsten nicht versenkten Schiffs zu jedem anderen Schuss
+	 * einhält.
+	 *
 	 * @param x die gewünschte x Kooridnate.
 	 * @param y die gewünschte y Kooridnate.
 	 * @return {@code true}, falls der Abstand eingehalten wird, sonst {@code false}.
 	 */
-	private boolean isOnMinGrid(int x, int y){
+	private boolean isOnMinGrid(int x, int y) {
 		for(int i = 0; i < minSize; i++) {
 			if(y % minSize == i && x % minSize == i) return true;
 		}

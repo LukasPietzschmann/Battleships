@@ -1,4 +1,3 @@
-
 package gui;
 
 import logic.Launcher;
@@ -20,11 +19,11 @@ public class MainWindow {
 	private JFrame frame;
 	public static Music music;
 	public static Font font;
-
+	
 	/**
 	 * Erstellung des JFrames.
 	 */
-	public void setUpMainWindow(){
+	public void setUpMainWindow() {
 		frame = new JFrame(Launcher.theme);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(1130, 728));
@@ -32,16 +31,14 @@ public class MainWindow {
 		frame.setBackground(Color.DARK_GRAY);
 		createMenu();
 	}
-
+	
 	/**
-	 * Erstellung und Aufruf des Hauptmenüs.
-	 * Einbindung der Schriftart "Krungthep".
-	 * Laden der Musikdatei.
+	 * Erstellung und Aufruf des Hauptmenüs. Einbindung der Schriftart "Krungthep". Laden der Musikdatei.
 	 */
 	public void createMenu() {
 		URL musicURL = getClass().getClassLoader().getResource("sound.wav");
 		music = new Music(musicURL);
-		if (Launcher.soundPlaying) {
+		if(Launcher.soundPlaying) {
 			music.restartMusic();
 		}
 		
@@ -49,14 +46,14 @@ public class MainWindow {
 			URL fontURL = getClass().getClassLoader().getResource("Krungthep.ttf");
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, fontURL.openStream()));
-		} catch (IOException | FontFormatException e) {
+		}catch(IOException | FontFormatException e) {
 			e.printStackTrace();
 		}
-
+		
 		font = new Font("Krungthep", Font.PLAIN, 20);
-
+		
 		MainMenu menu = new MainMenu(frame);
-
+		
 		menu.setUpMenu();
 	}
 }

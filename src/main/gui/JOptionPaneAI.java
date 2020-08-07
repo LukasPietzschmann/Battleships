@@ -22,6 +22,7 @@ public class JOptionPaneAI {
 	
 	/**
 	 * Erstellt den Dialog.
+	 *
 	 * @param parentComponent Der Component, über dem der Dialog angezeigt wird.
 	 */
 	public JOptionPaneAI(Component parentComponent) {
@@ -30,15 +31,16 @@ public class JOptionPaneAI {
 	
 	/**
 	 * Zeigt den tatsächlichen Dialog.
+	 *
 	 * @return Einen Integer, der die Auswahl des Benutzers angibt.
 	 */
 	public int displayGui() {
-		return JOptionPane.showOptionDialog(parentComponent, getPanel(), "Weitere Einstellungen",
-				JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		return JOptionPane.showOptionDialog(parentComponent, getPanel(), "Weitere Einstellungen", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 	}
 	
 	/**
 	 * Gibt das JPanel des Dialogs zurück.
+	 *
 	 * @return Das JPanel des Dialogs.
 	 */
 	private JPanel getPanel() {
@@ -73,6 +75,7 @@ public class JOptionPaneAI {
 	
 	/**
 	 * Gibt die ausgewählte {@link Difficulty} zurück.
+	 *
 	 * @return Die ausgewählte Schwierigkeitsstufe der AI.
 	 */
 	public Difficulty getDifficulty() {

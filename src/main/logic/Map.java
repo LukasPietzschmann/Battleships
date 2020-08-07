@@ -14,7 +14,7 @@ public class Map implements Serializable {
 	public static final int DEFINITELY_NO_SHIP = 4;
 	private MapTile[][] map;
 	private int shipsNr;
-
+	
 	/**
 	 * Erstellt ein Spielfeld mit der spezifizierten Größe.
 	 *
@@ -31,9 +31,10 @@ public class Map implements Serializable {
 	
 	/**
 	 * Copy-Constructor
+	 *
 	 * @param map Die zu kopierende Map.
 	 */
-	public Map(Map map){
+	public Map(Map map) {
 		this.shipsNr = map.shipsNr;
 		this.map = new MapTile[map.getSize()][map.getSize()];
 		for(int i = 0; i < this.map.length; i++) {
@@ -42,7 +43,7 @@ public class Map implements Serializable {
 			}
 		}
 	}
-
+	
 	/**
 	 * Gibt das Spielfeld auf der Konsole aus.
 	 */
@@ -73,14 +74,14 @@ public class Map implements Serializable {
 			System.out.print("\n");
 		}
 	}
-
+	
 	/**
 	 * @return die Größe des Spielfelds.
 	 */
 	public int getSize() {
 		return map.length;
 	}
-
+	
 	/**
 	 * Schießt auf ein spezifiziertes Feld der Map.
 	 *
@@ -95,12 +96,12 @@ public class Map implements Serializable {
 		}else if(map[y][x].stat == SHIP) {
 			map[y][x].stat = SUCC_HIT;
 			map[y][x].ship.hit();
-
+			
 			if(!map[y][x].ship.isAlive()) {
 				shipsNr -= 1;
 				setDefinitelyNoShip(map[y][x].ship);
 			}
-
+			
 			return map[y][x].ship;
 		}else if(map[y][x].stat == SUCC_HIT) {
 			return null;
@@ -114,9 +115,10 @@ public class Map implements Serializable {
 	
 	/**
 	 * Umrandet ein versenktes Schiff mit Markierungen.
+	 *
 	 * @param ship Das zu umrandende Schiff.
 	 */
-	private void setDefinitelyNoShip(Ship ship){
+	private void setDefinitelyNoShip(Ship ship) {
 		int sx, sy, start, end;
 		sx = ship.getXPos();
 		sy = ship.getYPos();
@@ -223,34 +225,36 @@ public class Map implements Serializable {
 	
 	/**
 	 * Markiert die Zelle auf die geschossen wurde,
+	 *
 	 * @param x Die x Korrdinate der Zelle.
 	 * @param y Die y Korrdinate der Zelle.
 	 * @param succ {@code true}, falls getroffen wurde. Sonst {@code false}.
 	 */
-	public void setHit(int x, int y, boolean succ){
+	public void setHit(int x, int y, boolean succ) {
 		//map[y][x].stat = succ ? SUCC_HIT : UNSUCC_HIT;
 		if(succ) {
 			map[y][x].stat = SUCC_HIT;
-			if(map[y][x].ship == null) map[y][x].ship = Ship.defaultShip(x,y);
+			if(map[y][x].ship == null) map[y][x].ship = Ship.defaultShip(x, y);
 		}else map[y][x].stat = UNSUCC_HIT;
 	}
 	
 	/**
 	 * Umrandet ein Schiff.
+	 *
 	 * @param x Eine x Koordinate des versenkten Schiffs.
 	 * @param y Eine y Koordinate des versenkten Schiffs.
 	 */
-	public void surroundShip(int x, int y){
+	public void surroundShip(int x, int y) {
 		ArrayList<int[]> points = new ArrayList<>();
-		recFindShip(x,y, null, points);
+		recFindShip(x, y, null, points);
 		
 		Ship ship;
 		//ist x koordinate gleich
-		if(points.get(0)[0] == points.get(1)[0]){
+		if(points.get(0)[0] == points.get(1)[0]) {
 			int min = Integer.MAX_VALUE;
 			for(int[] point : points) if(point[1] < min) min = point[1];
 			ship = new Ship(points.get(0)[0], min, Direction.north, points.size());
-		}else/*ist y Koordinate gleich*/{
+		}else/*ist y Koordinate gleich*/ {
 			int min = Integer.MAX_VALUE;
 			for(int[] point : points) if(point[0] < min) min = point[0];
 			ship = new Ship(min, points.get(0)[1], Direction.west, points.size());
@@ -261,34 +265,35 @@ public class Map implements Serializable {
 	
 	/**
 	 * Hilfsmethode für {@link #surroundShip(int, int)} zum finden aller Koordinaten eines Schiffs.
+	 *
 	 * @param x Aktuelle x Koordinate.
 	 * @param y Aktuelle y Koordinate.
 	 * @param from Die Richtung aus der man kommt.
 	 * @param result Liste aller gefundenen Koordinaten.
 	 */
-	private void recFindShip(int x, int y, Direction from, ArrayList<int[]> result){
-		result.add(new int[]{x, y});
+	private void recFindShip(int x, int y, Direction from, ArrayList<int[]> result) {
+		result.add(new int[] {x, y});
 		//oben kucken
-		if(isInMap(x, y - 1) && map[y - 1][x].ship != null && from != Direction.north){
-			recFindShip(x,y - 1, Direction.south, result);
+		if(isInMap(x, y - 1) && map[y - 1][x].ship != null && from != Direction.north) {
+			recFindShip(x, y - 1, Direction.south, result);
 		}
 		
 		//unten kucken
-		if(isInMap(x, y + 1) && map[y + 1][x].ship != null && from != Direction.south){
-			recFindShip(x,y + 1, Direction.north, result);
+		if(isInMap(x, y + 1) && map[y + 1][x].ship != null && from != Direction.south) {
+			recFindShip(x, y + 1, Direction.north, result);
 		}
 		
 		//links kucken
-		if(isInMap(x - 1, y) && map[y][x - 1].ship != null && from != Direction.west){
-			recFindShip(x - 1,y, Direction.east, result);
+		if(isInMap(x - 1, y) && map[y][x - 1].ship != null && from != Direction.west) {
+			recFindShip(x - 1, y, Direction.east, result);
 		}
 		
 		//rechts kucken
-		if(isInMap(x + 1, y) && map[y][x + 1].ship != null && from != Direction.east){
-			recFindShip(x + 1,y, Direction.west, result);
+		if(isInMap(x + 1, y) && map[y][x + 1].ship != null && from != Direction.east) {
+			recFindShip(x + 1, y, Direction.west, result);
 		}
 	}
-
+	
 	/**
 	 * Gibt die Anzahl der noch nicht versenkten Schiffe zurück.
 	 *
@@ -297,7 +302,7 @@ public class Map implements Serializable {
 	public int shipsNr() {
 		return shipsNr;
 	}
-
+	
 	/**
 	 * Gibt das Schiff an der spezifizierten Position zurück.
 	 *
@@ -311,6 +316,7 @@ public class Map implements Serializable {
 	
 	/**
 	 * Gibt den Zustand der Zelle zurück.
+	 *
 	 * @param x x Koordinate der Zelle.
 	 * @param y y Koordinate der Zelle.
 	 * @return Der Zustand der Zelle.
@@ -318,7 +324,7 @@ public class Map implements Serializable {
 	public int getStat(int x, int y) {
 		return map[y][x].stat;
 	}
-
+	
 	/**
 	 * Platziert ein Schiff auf der Karte. Es wird nicht überprüft, ob das platzieren dieses Schiffs möglich, oder erlaubt
 	 * ist. Das muss der Benutzer selbst mit {@link #canShipBePlaced(Ship)} überprüfen.
@@ -354,7 +360,7 @@ public class Map implements Serializable {
 				break;
 		}
 	}
-
+	
 	/**
 	 * Entfernt ein Schiff aus der Map. Überprüft nicht, ob das Schiff tatsächlich auf der Karte vorhanden ist.
 	 *
@@ -389,7 +395,7 @@ public class Map implements Serializable {
 				break;
 		}
 	}
-
+	
 	/**
 	 * Überprüft, ob das Schiff regelkonform auf dem Spielfeld platziert werden darf. Muss vor der verwendung von {@link
 	 * #placeShip(Ship)} aufgerufen werden.
@@ -401,10 +407,10 @@ public class Map implements Serializable {
 		int x = ship.getXPos();
 		int y = ship.getYPos();
 		int shipSize = ship.getSize();
-
+		
 		switch(ship.getDirection()) {
 			case north:
-				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y + i)|| map[y + i][x].stat == SHIP) return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y + i) || map[y + i][x].stat == SHIP) return false;
 				for(int i = 0; i < shipSize; i++) {
 					//links
 					try {
@@ -439,7 +445,7 @@ public class Map implements Serializable {
 				}
 				break;
 			case south:
-				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y - i)|| map[y - i][x].stat == SHIP) return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x, y - i) || map[y - i][x].stat == SHIP) return false;
 				for(int i = 0; i < shipSize; i++) {
 					//links
 					try {
@@ -474,7 +480,7 @@ public class Map implements Serializable {
 				}
 				break;
 			case west:
-				for(int i = 0; i < shipSize; i++) if(!isInMap(x + i, y)|| map[y][x + i].stat == SHIP) return false;
+				for(int i = 0; i < shipSize; i++) if(!isInMap(x + i, y) || map[y][x + i].stat == SHIP) return false;
 				for(int i = 0; i < shipSize; i++) {
 					//oben
 					try {
@@ -544,10 +550,10 @@ public class Map implements Serializable {
 				}
 				break;
 		}
-
+		
 		return true;
 	}
-
+	
 	/**
 	 * Setzt das Spielfeld auf den Anfangszustand zurück. (Auf jedem Feld Wasser)
 	 */
@@ -565,6 +571,7 @@ public class Map implements Serializable {
 	
 	/**
 	 * Gibt an ob sich Koordinaten innerhalb des Spielfelds befinden.
+	 *
 	 * @param x Die zu untersuchende x Koordinate.
 	 * @param y Die zu untersuchende y Koordinate.
 	 * @return {@code true}, falls die Koordinate innerhalb des Spielfelds ist. Sonst {@code false}.
@@ -575,9 +582,10 @@ public class Map implements Serializable {
 	
 	/**
 	 * Gibt das Spielfelds des Gegners zurück, ohne die Position der Schiffe preiszugeben.
+	 *
 	 * @return Das Spielfeld des Gegners.
 	 */
-	public Map getEnemyPerspective(){
+	public Map getEnemyPerspective() {
 		Map enemyMap = new Map(this);
 		for(int i = 0; i < enemyMap.map.length; i++) {
 			for(int j = 0; j < enemyMap.map.length; j++) {
@@ -592,6 +600,7 @@ public class Map implements Serializable {
 	
 	/**
 	 * Gibt die aktuelle Anzahl der noch nicht versenkten Schiffe zurück.
+	 *
 	 * @return Die aktuelle Anzahl der noch nicht versenkten Schiffe.
 	 */
 	public int getShipsNr() {
@@ -601,10 +610,10 @@ public class Map implements Serializable {
 	/**
 	 * Nach Außen nicht sichtbare Hilfsklasse zur modellierung des Spielfelds.
 	 */
-	static class MapTile implements Serializable{
+	static class MapTile implements Serializable {
 		private int stat;
 		private Ship ship;
-
+		
 		/**
 		 * Erstellt einen Platz, der nur Wasser enthält.
 		 */
@@ -615,9 +624,10 @@ public class Map implements Serializable {
 		
 		/**
 		 * Copy-Constructor
+		 *
 		 * @param tile Das zu kopierende MapTile.
 		 */
-		private MapTile(MapTile tile){
+		private MapTile(MapTile tile) {
 			this.stat = tile.stat;
 			this.ship = tile.ship;
 		}

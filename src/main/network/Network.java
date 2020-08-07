@@ -80,13 +80,14 @@ public class Network extends Player implements SaveListener {
 			}
 			shipCount = ships.size();
 		}else if(m.getMessageType().equals(LOAD)) {
-			//TODO implement
-			
+			int id = m.getArgs()[Message.ID_POS];
+			//TODO laden
 		}else throw new UnexpectedMessageException(m);
 	}
 	
 	/**
 	 * Gibt die Größe des Spielfelds zurück. Wird nur verwendet falls man selbst der Client ist.
+	 *
 	 * @return Die größe des Spielfelds.
 	 */
 	public int getSize() {
@@ -95,6 +96,7 @@ public class Network extends Player implements SaveListener {
 	
 	/**
 	 * Gibt alle zu platzierenden Schiffe zurück. Wird nur verwendet falls man selbst der Client ist.
+	 *
 	 * @return Alle zu platzierenden Schiffe.
 	 */
 	public ArrayList<Ship> getShips() {
@@ -103,6 +105,7 @@ public class Network extends Player implements SaveListener {
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @return Rückgabe des Schiffs.
 	 */
 	@Override
@@ -124,14 +127,14 @@ public class Network extends Player implements SaveListener {
 		// wenn hier false dann muss auf pass gewartet werden
 		if(a == 0) {
 			m = new Message(networkThread.recieveMessage());
-			if(!m.getMessageType().equals(PASS))
-				throw new UnexpectedMessageException(m);
+			if(!m.getMessageType().equals(PASS)) throw new UnexpectedMessageException(m);
 		}
 		return ship;
 	}
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param x Die x-Koordinate des Schusses
 	 * @param y Die y-Koordinate des Schusses
 	 * @return {@inheritDoc}
@@ -140,28 +143,27 @@ public class Network extends Player implements SaveListener {
 	public Ship hit(int x, int y) {
 		networkThread.sendMessage(String.format("%s %d %d\n", SHOOT, y, x));
 		Message m = new Message(networkThread.recieveMessage());
-		if(!m.getMessageType().equals(ANSWER))
-			throw new UnexpectedMessageException(m);
+		if(!m.getMessageType().equals(ANSWER)) throw new UnexpectedMessageException(m);
 		
 		// wenn hier false dann pass senden
 		int answ = m.getArgs()[Message.ANSWER_POS];
 		if(answ == 0) {
-			map.setHit(x,y,false);
-			notifyOnHit(x,y,false);
-			notifyOnEnemyHit(x,y,false);
+			map.setHit(x, y, false);
+			notifyOnHit(x, y, false);
+			notifyOnEnemyHit(x, y, false);
 			networkThread.sendMessage(String.format("%s\n", PASS));
 			return null;
 		}
 		if(answ == 1) {
-			map.setHit(x,y,true);
-			notifyOnHit(x,y,true);
-			notifyOnEnemyHit(x,y,true);
+			map.setHit(x, y, true);
+			notifyOnHit(x, y, true);
+			notifyOnEnemyHit(x, y, true);
 			return Ship.defaultShip(x, y);
 		}
-		map.setHit(x,y,true);
-		map.surroundShip(x,y);
-		notifyOnHit(x,y,true);
-		notifyOnEnemyHit(x,y,true);
+		map.setHit(x, y, true);
+		map.surroundShip(x, y);
+		notifyOnHit(x, y, true);
+		notifyOnEnemyHit(x, y, true);
 		for(GameListener listener : enemyGameListeners) {
 			listener.OnMapChanged(map);
 		}
@@ -175,8 +177,7 @@ public class Network extends Player implements SaveListener {
 	@Override
 	public void placeShips() {
 		Message m = new Message(networkThread.recieveMessage());
-		if(!m.getMessageType().equals(CONFIRM))
-			throw new UnexpectedMessageException(m);
+		if(!m.getMessageType().equals(CONFIRM)) throw new UnexpectedMessageException(m);
 		logic.setShipsPlaced(this);
 	}
 	
@@ -199,6 +200,6 @@ public class Network extends Player implements SaveListener {
 	@Override
 	public void OnGameSaved(int id) {
 		System.out.println("Ja man");
-		networkThread.sendMessage(String.format("%s %d\n",SAVE, id));
+		networkThread.sendMessage(String.format("%s %d\n", SAVE, id));
 	}
 }

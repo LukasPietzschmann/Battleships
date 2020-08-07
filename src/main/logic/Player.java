@@ -13,6 +13,7 @@ public abstract class Player implements Serializable {
 	
 	/**
 	 * Initialisiert den Player.
+	 *
 	 * @param logic "Zurück-Referenz" auf das Logik Objekt. Typischerweise {@code this}.
 	 */
 	public Player(Logic logic) {
@@ -23,40 +24,44 @@ public abstract class Player implements Serializable {
 	
 	/**
 	 * Registriert einen {@link GameListener}.
+	 *
 	 * @param listener Der zu registrierende Listener.
 	 */
-	public void registerGameListener(GameListener listener){
+	public void registerGameListener(GameListener listener) {
 		gameListeners.add(listener);
 	}
 	
 	/**
 	 * Registriert einen {@link GameListener} für den Gegner.
+	 *
 	 * @param listener Der zu registrierende Listener.
 	 */
-	public void registerEnemyGameListener(GameListener listener){
+	public void registerEnemyGameListener(GameListener listener) {
 		enemyGameListeners.add(listener);
 	}
 	
 	/**
 	 * Wird aufgerufen, falls auf den Spieler geschossen wurde.
+	 *
 	 * @param x Die x Koordinate des Schusses.
 	 * @param y Die y Koordinate des Schusses.
 	 * @param hit {@code true}, falls es ein Treffer war, sonst {@code false}.
 	 */
-	protected void notifyOnHit(int x, int y, boolean hit){
-		for (GameListener listener: gameListeners) {
+	protected void notifyOnHit(int x, int y, boolean hit) {
+		for(GameListener listener : gameListeners) {
 			listener.OnHit(x, y, hit);
 		}
 	}
 	
 	/**
 	 * Wird aufgerufen, falls auf den Gegner geschossen wurde.
+	 *
 	 * @param x Die x Koordinate des Schusses.
 	 * @param y Die y Koordinate des Schusses.
 	 * @param hit {@code true}, falls es ein Treffer war, sonst {@code false}.
 	 */
-	protected void notifyOnEnemyHit(int x, int y, boolean hit){
-		for (GameListener listener: enemyGameListeners) {
+	protected void notifyOnEnemyHit(int x, int y, boolean hit) {
+		for(GameListener listener : enemyGameListeners) {
 			listener.OnHit(x, y, hit);
 		}
 	}
@@ -92,7 +97,7 @@ public abstract class Player implements Serializable {
 	/**
 	 * Wird aufgerufen, sobald der Gegner alle Schiffe platziert hat.
 	 */
-	public void oppPlacedShips(){
+	public void oppPlacedShips() {
 		return;
 	}
 }

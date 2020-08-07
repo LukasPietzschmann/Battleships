@@ -136,8 +136,8 @@ public class Logic extends Thread implements Serializable {
 		oppPlayer = new Network(this, size);
 	}
 	
-	public static Logic fromSaveGame(SaveData save){
-//		SaveGame saveGame = SaveGame.fromId(id);
+	public static Logic fromSaveGame(SaveData save) {
+		//		SaveGame saveGame = SaveGame.fromId(id);
 		//Hier den Modus setzen
 		Logic logic = new Logic(save.getMode());
 		logic.ownPlayer = save.getOwnPlayer();
@@ -202,7 +202,7 @@ public class Logic extends Thread implements Serializable {
 			
 			while(true) {
 				notifyPlayersTurnListener(currPlayer);
-				hit = Ship.defaultShip(0,0);
+				hit = Ship.defaultShip(0, 0);
 				while(hit != null) {
 					if(!otherPlayer.isAlive()) {
 						notifyGameEndsListener(currPlayer);
@@ -234,6 +234,7 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Gibt die Größe des Spielfelds zurück.
+	 *
 	 * @return Die Größe des Spielfelds.
 	 */
 	public int getSize() {
@@ -242,6 +243,7 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Gibt den eigenen Spieler zurück.
+	 *
 	 * @return Der eigene Spieler.
 	 */
 	public LocalPlayer getOwnPlayer() {
@@ -250,6 +252,7 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Gibt den Gegenspieler zurück.
+	 *
 	 * @return Der Gegenspieler.
 	 */
 	public Player getOppPlayer() {
@@ -258,6 +261,7 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Registriert einen {@link SetUpShipsListener}.
+	 *
 	 * @param listener Der zu registrierende Listener.
 	 */
 	public void registerSetupShipsListener(SetUpShipsListener listener) {
@@ -266,6 +270,7 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Hebt die Registrierung für einen {@link SetUpShipsListener} wierder auf.
+	 *
 	 * @param listener Der zu entferndende Listener.
 	 */
 	public void unregisterSetupShipsListener(SetUpShipsListener listener) {
@@ -274,6 +279,7 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Registriert einen {@link GameStartsListener}.
+	 *
 	 * @param listener Der zu registrierende Listener.
 	 */
 	public void registerGameStartsListener(GameStartsListener listener) {
@@ -282,6 +288,7 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Hebt die Registrierung für einen {@link GameStartsListener} wierder auf.
+	 *
 	 * @param listener Der zu entferndende Listener.
 	 */
 	public void unregisterGameStartsListener(GameStartsListener listener) {
@@ -290,6 +297,7 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Registriert einen {@link GameEndsListener}.
+	 *
 	 * @param listener Der zu registrierende Listener.
 	 */
 	public void registerGameEndListener(GameEndsListener listener) {
@@ -298,17 +306,19 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Registriert einen {@link GameEventListener}.
+	 *
 	 * @param listener Der zu registrierende Listener.
 	 */
-	public void registerGameEventListener(GameEventListener listener){
+	public void registerGameEventListener(GameEventListener listener) {
 		gameEventListeners.add(listener);
 	}
 	
 	/**
 	 * Beachrichtigt alle registrierten {@link GameEventListener}, dass ein Event ausgelöst wurde.
+	 *
 	 * @param event Das ausgelöste Event.
 	 */
-	private void notifyGameEventListener(int event){
+	private void notifyGameEventListener(int event) {
 		for(GameEventListener listener : gameEventListeners) {
 			listener.OnEventFired(event);
 		}
@@ -317,7 +327,7 @@ public class Logic extends Thread implements Serializable {
 	/**
 	 * Benachrichtigt alle registrierten {@link GameEndsListener}, dass der Gegner das Spiel verlassen hat.
 	 */
-	public void notifyOppLeftListener(){
+	public void notifyOppLeftListener() {
 		for(GameEndsListener listener : gameEndsListeners) {
 			listener.OnOpponentLeft();
 		}
@@ -325,9 +335,10 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Benachrichtigt alle registrierten {@link GameEventListener}, welcher Spieler nun dran ist.
+	 *
 	 * @param player Der SPieler, der nun am Zug ist.
 	 */
-	private void notifyPlayersTurnListener(Player player){
+	private void notifyPlayersTurnListener(Player player) {
 		for(GameEventListener listener : gameEventListeners) {
 			listener.OnPlayersTurn(player);
 		}
@@ -351,6 +362,7 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Benachrichtigt alle registrierten {@link GameEndsListener}, dass das Spiel zuende ist.
+	 *
 	 * @param winningPlayer Der Spieler der gewonnen hat.
 	 */
 	private void notifyGameEndsListener(Player winningPlayer) {
@@ -361,6 +373,7 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Muss von einem {@link Player} aufgerufen werden, falls all seine Schiffe platziert hat.
+	 *
 	 * @param player Spieler, der alle seine Schiffe platziert hat.
 	 */
 	public synchronized void setShipsPlaced(Player player) {
@@ -372,8 +385,8 @@ public class Logic extends Thread implements Serializable {
 		if(player == ownPlayer) ownPlayerShipsPlaced = true;
 		else oppPlayerShipsPlaced = true;
 	}
-
-	public int getMODE(){
+	
+	public int getMODE() {
 		return MODE;
 	}
 }

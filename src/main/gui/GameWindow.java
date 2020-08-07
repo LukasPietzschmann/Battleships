@@ -141,6 +141,7 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 		saveButton.setMaximumSize(new Dimension(50, 50));
 		saveButton.setPreferredSize(new Dimension(50, 50));
 		saveButton.addActionListener(arg0 -> {
+			saveButton.setVisible(false);
 			Random rnd = new Random();
 			int id = rnd.nextInt();
 			String filename = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + " " + id;
@@ -160,7 +161,6 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 			}
 			
 			JOptionPane.showMessageDialog(mainPanel, "Spiel wurde erfolgreich gespeichert unter:\n" + System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\" + filename + ".savegame\n\n" + "Das Spiel kann nun im Hauptmenü wieder geladen werden.", "Spiel wurde gespeichert", JOptionPane.PLAIN_MESSAGE);
-			
 			backToMenu();
 		});
 		
@@ -208,7 +208,7 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 		statsOptions.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 20));
 		options.setLayout(new BoxLayout(options, BoxLayout.X_AXIS));
 		options.setOpaque(false);
-
+		
 		statsOptions.add(options, BorderLayout.EAST);
 		
 		options.add(buttonsHolder);
@@ -231,6 +231,7 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param winningPlayer Referenz auf den Spieler der gewonnen hat.
 	 */
 	@Override
@@ -252,6 +253,7 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param event Die Art des Events. Entweder {@link #HIT}, {@link #MISS}, oder {@link #HIT_DEAD}.
 	 */
 	@Override
@@ -271,6 +273,7 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param player Der Spieler der nun am Zug ist.
 	 */
 	@Override

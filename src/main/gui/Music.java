@@ -1,4 +1,3 @@
-
 package gui;
 
 import java.net.URL;
@@ -13,21 +12,22 @@ import javax.sound.sampled.Clip;
 public class Music {
 	Clip clip;
 	long clipTimePosition;
-
+	
 	/**
 	 * Konstruktor, erstellt ein MainMenu-Objekt.
+	 *
 	 * @param musicURL URL der Musik-Datei.
 	 */
 	public Music(URL musicURL) {
 		try {
-				AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicURL);
-				clip = AudioSystem.getClip();
-				clip.open(audioInput);
-		} catch (Exception ex) {
+			AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicURL);
+			clip = AudioSystem.getClip();
+			clip.open(audioInput);
+		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * Stoppt die Musikwiedergabe und speichert die Position.
 	 */
@@ -35,7 +35,7 @@ public class Music {
 		clipTimePosition = clip.getMicrosecondPosition();
 		clip.stop();
 	}
-
+	
 	/**
 	 * Startet die Musikwiedergabe an der letzten gespeicherten Position, ansonsten von Anfang an.
 	 */

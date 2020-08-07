@@ -28,6 +28,7 @@ public class JOptionPaneConnect {
 	
 	/**
 	 * Erstellt den Dialog.
+	 *
 	 * @param parentComponent Der Component, über dem der Dialog angezeigt wird.
 	 */
 	public JOptionPaneConnect(Component parentComponent) {
@@ -36,15 +37,16 @@ public class JOptionPaneConnect {
 	
 	/**
 	 * Zeigt den tatsächlichen Dialog.
+	 *
 	 * @return Einen Integer, der die Auswahl des Benutzers angibt.
 	 */
 	public int displayGui() {
-		return JOptionPane.showOptionDialog(parentComponent, getPanel(), "Weitere Einstellungen",
-				JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		return JOptionPane.showOptionDialog(parentComponent, getPanel(), "Weitere Einstellungen", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 	}
 	
 	/**
 	 * Gibt das JPanel des Dialogs zurück.
+	 *
 	 * @return Das JPanel des Dialogs.
 	 */
 	private JPanel getPanel() {
@@ -96,23 +98,22 @@ public class JOptionPaneConnect {
 		ipTextField = new JTextField("127.0.0.1");
 		ipTextField.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (ipTextField.isEnabled()) ipTextField.setText("");
+				if(ipTextField.isEnabled()) ipTextField.setText("");
 			}
 		});
 		ipTextField.setEnabled(false);
 		ip.setEnabled(false);
-
+		
 		port = new JLabel("Port");
 		portTextField = new JTextField(String.valueOf(Network.PORT));
 		portTextField.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (portTextField.isEnabled()) portTextField.setText("");
+				if(portTextField.isEnabled()) portTextField.setText("");
 			}
 		});
 		portTextField.setEnabled(false);
 		port.setEnabled(false);
-
-
+		
 		panel.add(Box.createVerticalGlue());
 		panel.add(serverButton);
 		panel.add(clientButton);
@@ -129,10 +130,11 @@ public class JOptionPaneConnect {
 	
 	/**
 	 * Gibt die eingetragene IP zurück. Nur valide, falls {@link #getRole()} "client" zurückgibt.
+	 *
 	 * @return Die eingetragene IP Adresse.
 	 */
 	public String getIP() {
-		if (role.equals("client")) {
+		if(role.equals("client")) {
 			return ipTextField.getText();
 		}
 		return null;
@@ -140,10 +142,11 @@ public class JOptionPaneConnect {
 	
 	/**
 	 * Gibt den eingetragenen Port zurück. Nur valide, falls {@link #getRole()} "client" zurückgibt.
+	 *
 	 * @return Den eingetragenen Port.
 	 */
-	public int getPort(){
-		if (role.equals("client")){
+	public int getPort() {
+		if(role.equals("client")) {
 			return Integer.parseInt(portTextField.getText());
 		}
 		return -1;

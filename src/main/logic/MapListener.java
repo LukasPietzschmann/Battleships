@@ -5,11 +5,13 @@ import logic.Map;
 public interface MapListener {
 	/**
 	 * Wird aufgerufen, wenn sich die Map verändert.
+	 *
 	 * @param map Die geänderte Map.
 	 */
 	void OnMapChanged(Map map);
 	/**
 	 * Wird aufgerufen, wenn ein Schiff platziert wurde.
+	 *
 	 * @param ship Das platzierte Schiff.
 	 */
 	void OnShipPlaced(Ship ship);

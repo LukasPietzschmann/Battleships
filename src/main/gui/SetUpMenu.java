@@ -417,6 +417,7 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param map Die geänderte Map.
 	 */
 	@Override
@@ -453,6 +454,7 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 	
 	/**
 	 * {@inheritDoc}
+	 *
 	 * @param ship Das platzierte Schiff.
 	 */
 	@Override
@@ -502,8 +504,7 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 	 */
 	@Override
 	public void OnNotAllShipsPlaced() {
-		JOptionPane.showMessageDialog(frame, "Um zu starten müssen erst alle " + Launcher.themeIdentifierPlural
-				+ " platziert werden!", "Platzierung nicht abgeschlossen", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(frame, "Um zu starten müssen erst alle " + Launcher.themeIdentifierPlural + " platziert werden!", "Platzierung nicht abgeschlossen", JOptionPane.ERROR_MESSAGE);
 	}
 }
 
