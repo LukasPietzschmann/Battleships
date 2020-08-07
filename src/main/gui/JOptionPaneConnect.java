@@ -134,7 +134,7 @@ public class JOptionPaneConnect {
 	 * @return Die eingetragene IP Adresse.
 	 */
 	public String getIP() {
-		if(role.equals("client")) {
+		if(role == Role.client) {
 			return ipTextField.getText();
 		}
 		return null;
@@ -146,7 +146,7 @@ public class JOptionPaneConnect {
 	 * @return Den eingetragenen Port.
 	 */
 	public int getPort() {
-		if(role.equals("client")) {
+		if(role == Role.client) {
 			return Integer.parseInt(portTextField.getText());
 		}
 		return -1;
