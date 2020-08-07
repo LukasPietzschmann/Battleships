@@ -1,6 +1,5 @@
 package ai;
 
-import logic.Direction;
 import logic.Logic;
 import logic.Map;
 import logic.Player;

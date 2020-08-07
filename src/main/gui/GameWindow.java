@@ -43,10 +43,9 @@ public class GameWindow implements GameEndsListener, GameEventListener, Serializ
 	 * Konstruktor, erstellt ein GameWindow-Objekt.
 	 *
 	 * @param frame Der übergebene Frame des MainWindow
-	 * @param mode Der Spielmodus
 	 * @param logic Rückverweis auf die Logik
 	 */
-	public GameWindow(JFrame frame, String mode, Logic logic) {
+	public GameWindow(JFrame frame, Logic logic) {
 		this.frame = frame;
 		this.logic = logic;
 		this.ownPlayer = logic.getOwnPlayer();

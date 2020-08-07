@@ -13,7 +13,6 @@ import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.accessibility.AccessibleContext;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -325,7 +324,7 @@ public class JGameCanvas extends JPanel implements GameListener, MakeMoveListene
 	/**
 	 * Gibt die größe des Spielfelds zurück.
 	 *
-	 * @return Größe des Spielfelds.
+	 * @return Die Größe des Spieldelds.
 	 */
 	public int getGroesse() {
 		return groesse;

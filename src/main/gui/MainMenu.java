@@ -939,7 +939,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 	public void onPlaceShips() {
 		logic.unregisterGameStartsListener(this);
 		frame.remove(panel);
-		SetUpMenu setUp = new SetUpMenu(frame, "pvc", logic);
+		SetUpMenu setUp = new SetUpMenu(frame, logic);
 		setUp.setUpPlaceWindow();
 	}
 	
@@ -950,7 +950,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 	public void OnStartGame() {
 		logic.unregisterSetupShipsListener(this);
 		frame.remove(panel);
-		GameWindow game = new GameWindow(frame, "pvc", logic);
+		GameWindow game = new GameWindow(frame, logic);
 		game.setUpGameWindow();
 	}
 }

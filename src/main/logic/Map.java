@@ -69,7 +69,7 @@ public class Map implements Serializable {
 						s = "X";
 						break;
 				}
-				System.out.print(String.format("%s|", s));
+				System.out.printf("%s|", s);
 			}
 			System.out.print("\n");
 		}

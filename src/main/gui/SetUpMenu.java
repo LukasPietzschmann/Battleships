@@ -18,7 +18,6 @@ import java.util.Objects;
  */
 public class SetUpMenu implements GameStartsListener, MapListener, Serializable {
 	private final JFrame frame;
-	private final String mode;
 	private final JPanel mainPanel = new JPanel();
 	private final JPanel gridHolder = new JPanel(new GridBagLayout());
 	private JGameCanvas grid;
@@ -65,13 +64,11 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 	 * Konstruktor, erstellt ein SetUpMenu-Objekt in welchem der lokale Spieler seine Schiffe platzieren kann
 	 *
 	 * @param frame Der übergebene Frame des MainWindow
-	 * @param mode Der Spielmodus
 	 * @param logic Rückverweis auf die Logik
 	 */
-	public SetUpMenu(JFrame frame, String mode, Logic logic) {
+	public SetUpMenu(JFrame frame, Logic logic) {
 		this.frame = frame;
 		this.frame.setResizable(true);
-		this.mode = mode;
 		this.logic = logic;
 		grid = new JGameCanvas(logic.getSize());
 		player = logic.getOwnPlayer();
@@ -411,7 +408,7 @@ public class SetUpMenu implements GameStartsListener, MapListener, Serializable 
 	@Override
 	public void OnStartGame() {
 		frame.remove(mainPanel);
-		GameWindow game = new GameWindow(frame, mode, logic);
+		GameWindow game = new GameWindow(frame, logic);
 		game.setUpGameWindow();
 	}
 	
