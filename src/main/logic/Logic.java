@@ -164,6 +164,8 @@ public class Logic extends Thread implements Serializable {
 	
 	/**
 	 * Startet das Spiel.
+	 *
+	 * @param loaded Spiel geladen oder nicht.
 	 */
 	public void startGame(boolean loaded) {
 		Thread t = new Thread(() -> {

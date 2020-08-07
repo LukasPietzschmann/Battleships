@@ -32,6 +32,7 @@ public class Launcher {
 	 * @param ip Die IP des Servers.
 	 * @param port Der Port des Servers.
 	 * @param diff Die Schwierigkeit der AI.
+	 * @param data Der Spielstand, falls ein Spiel geladen werden soll.
 	 * @return Die Logic, die das Spiel ab sofort steuert.
 	 */
 	public static Logic startGame(int mode, int ship2Count, int ship3Count, int ship4Count, int ship5Count, String ip, int port, Difficulty diff, SaveData data) {
