@@ -176,7 +176,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 					panel.setVisible(false);
 					layeredPane.setVisible(false);
 					//logic = Launcher.startGame(Launcher.AI_AI, "AI1", "AI2", twoFieldElementCount,threeFieldElementCount,fourFieldElementCount, fiveFieldElementCount, "", difficulty, Difficulty.medium, 0);
-					logic = Launcher.startGame(Launcher.PL_AI, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", 0, difficulty, null);
+					logic = Launcher.startGame(Launcher.PL_AI, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, "", 0, difficulty, 0);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startGame(false);
@@ -214,7 +214,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 					panel.setVisible(false);
 					layeredPane.setVisible(false);
 					int mode = role == Role.server ? Launcher.PL_NW_SV : Launcher.PL_NW_CL;
-					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), null, null);
+					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), null, 0);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startGame(false);
@@ -253,7 +253,7 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 					panel.setVisible(false);
 					layeredPane.setVisible(false);
 					int mode = role == Role.server ? Launcher.NW_SV_AI : Launcher.NW_CL_AI;
-					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), difficulty, null);
+					logic = Launcher.startGame(mode, twoFieldElementCount, threeFieldElementCount, fourFieldElementCount, fiveFieldElementCount, clientIP, connect.getPort(), difficulty, 0);
 					logic.registerSetupShipsListener(this);
 					logic.registerGameStartsListener(this);
 					logic.startGame(false);
@@ -288,24 +288,26 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 		loadButton.setMaximumSize(new Dimension(50, 50));
 		loadButton.setPreferredSize(new Dimension(50, 50));
 		loadButton.addActionListener(arg0 -> {
-			FileFilter filter = new FileNameExtensionFilter("SAVEGAME-Datei", "savegame");
-			JFileChooser chooser = new JFileChooser();
-			chooser.setDialogTitle("Spielstand laden");
-			chooser.setCurrentDirectory(new File(System.getProperty("user.home") + "\\Documents\\Battleships_Spielstände\\"));
-			chooser.addChoosableFileFilter(filter);
-			int returnValue = chooser.showOpenDialog(frame);
-			if(returnValue == JFileChooser.APPROVE_OPTION) {
-				String filename = chooser.getName(chooser.getSelectedFile());
-				try {
-					SaveData save = (SaveData) ResourceManager.getInstance().load(filename);
-					logic = Launcher.startGame(Launcher.SG, 0, 0, 0, 0, "", 0, null, save);
-					logic.registerSetupShipsListener(this);
-					logic.registerGameStartsListener(this);
-					logic.startGame(true);
-				}catch(Exception e) {
-					System.err.println("Laden fehlgeschlagen: " + e.getMessage());
-				}
+			File dir = new File(System.getProperty("user.home") + "/Documents/");
+			File[] files = dir.listFiles(pathname -> pathname.isFile() && pathname.getName().endsWith(SaveGameProvider.FILE_TYPE));
+			String[] fileNames = new String[files.length];
+			
+			for(int i = 0; i < files.length; i++)
+				fileNames[i] = files[i].getName().substring(0, files[i].getName().length() - 3);
+			
+			String selectedFile;
+			
+			if(!(files == null || files.length == 0))
+				selectedFile = JOptionPane.showInputDialog(null, "Choose the Save-Game", "The Choice of a Lifetime", JOptionPane.QUESTION_MESSAGE, null, fileNames, fileNames[0]).toString();
+			else {
+				JOptionPane.showMessageDialog(null, "You do not have any Save-Games :(", "No Save-Games", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
+			
+			logic = Launcher.startGame(Launcher.SG, 0, 0, 0, 0, "", 0, null, Long.parseLong(selectedFile));
+			logic.registerSetupShipsListener(this);
+			logic.registerGameStartsListener(this);
+			logic.startGame(true);
 		});
 		
 		// Themes Button
@@ -949,7 +951,8 @@ public class MainMenu implements SetUpShipsListener, GameStartsListener, Seriali
 	@Override
 	public void OnStartGame() {
 		logic.unregisterSetupShipsListener(this);
-		frame.remove(panel);
+		frame.getContentPane().removeAll();
+		frame.repaint();
 		GameWindow game = new GameWindow(frame, logic);
 		game.setUpGameWindow();
 	}
