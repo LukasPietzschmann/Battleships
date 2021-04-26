@@ -7,6 +7,8 @@ A clone of the game **Battleships** in Java by:
 This game was implemented as part of a lecture at Aalen University within four months.  
 Partly the code is still a bit rough around it's edges, but most things work just fine.
 
+<div style="text-align:center"><img src="https://github.com/LukasPietzschmann/Battleships/blob/master/Startup%20Screen.png" /><div>
+
 ## Features
 The game supports:
 * Two players on the same machine
